@@ -1,0 +1,206 @@
+****Modules****
+
+    #1Employee Management
+        User Registration/Login
+        Role Management
+        Permission Management
+
+    #2Asset Management
+        Asset Creation and Updates
+        Asset Categorization
+        Asset Tracking and Assignment
+
+    #3Reporting and Analytics
+        Custom Reports Generation
+        Dashboard Analytics
+
+    #4Request Management
+        Requesting Assets
+        Approval Workflow
+
+    #5Audit and Compliance
+        Audit Trails
+        Compliance Reporting
+
+****User Stories****
+
+    As an Admin:
+        I want to manage users, so I can control who has access to the system.
+        I want to create and update assets, so the inventory is always up to date.
+        I want to generate reports on asset usage, so I can analyze trends.
+
+    As a Technician:
+        I want to track the status of assets, so I know which assets are available or checked out.
+        I want to perform audits, so I can ensure compliance with asset management policies.
+
+    As a User:
+        I want to log in securely, to access my asset requests and information.
+        I want to view the assets assigned to me, so I can manage my responsibilities.
+
+Models
+User Model
+
+    Fields:
+        class User(AbstractUser):
+    # exclude fields from AbstractUser
+    date_joined = None
+    last_login = None
+    email = None
+
+    GENDER = (
+        ("MALE", "MALE"),
+        ("FEMALE", "FEMALE"),
+    )
+    ROLE = (
+        ("DEV", "DEV"),
+        ("USER", "USER"),
+        ("ADMIN", "ADMIN"),
+        ("IS_SUPPORT", "IS_SUPPORT"),
+    )
+    USER_STATUS = (
+        ("ACTIVE", "ACTIVE"),
+        ("ON_LEAVE", "ON_LEAVE"),
+        ("ON_PAUSE", "ON_PAUSE"),
+        ("BUFFER", "BUFFER"),
+        ("SECONDMENT", "SECONDMENT"),
+        ("TERMINATED", "TERMINATED"),
+    )
+    ACCOUNT_STATUS = (
+        ("ACTIVE", "ACTIVE"),
+        ("INACTIVE", "INACTIVE"),
+    )
+    CONTRACT_TYPE = (
+        ("FIXED", "FIXED"),
+        ("MNO", "MNO"),
+        ("BUFFER", "BUFFER"),
+    )
+
+    organisation = models.ForeignKey(
+        Organisation, blank=True, null=True, on_delete=models.CASCADE
+    )
+    first_name = models.CharField(max_length=150, blank=True, null=True)
+    last_name = models.CharField(max_length=150, blank=True, null=True)
+    username = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    role = models.CharField(max_length=25, blank=True, null=True, choices=ROLE)
+    gender = models.CharField(max_length=15, blank=True, null=True, choices=GENDER)
+    email = models.EmailField(blank=True, null=True)
+    company_email = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=25, blank=True, null=True)
+    national_id = models.CharField(max_length=100, blank=True, null=True)
+    nationality = models.CharField(max_length=255, blank=True, null=True)
+    province = models.CharField(max_length=255, blank=True, null=True)
+    home_address = models.CharField(max_length=255, blank=True, null=True)
+    job_title = models.CharField(max_length=150, blank=True, null=True)
+    current_location = models.CharField(max_length=155, blank=True, null=True)
+    department = models.ForeignKey(
+        Department, blank=True, null=True, on_delete=models.CASCADE
+    )
+    user_status = models.CharField(
+        max_length=150, blank=True, null=True, choices=USER_STATUS
+    )
+    account_status = models.CharField(
+        max_length=150, blank=True, null=True, choices=ACCOUNT_STATUS
+    )
+    profile_picture = models.ImageField(
+        upload_to="user_profile_pictures", blank=True, null=True
+    )
+
+    date_created = models.DateField(
+        auto_now_add=True,
+        blank=True,
+        null=True,
+        help_text="The date the employee was enrolled on the organisation's system",
+    )
+    last_updated = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    USERNAME_FIELD = "username"
+    EMAIL_FIELD = "email"
+
+Role Model
+
+    Fields:
+        name: CharField
+        permissions: ManyToManyField (to Permission model)
+
+Permission Model
+
+    Fields:
+        name: CharField
+
+Asset Model
+
+    Fields:
+        name: CharField
+        description: TextField
+        category: ForeignKey (to Category model)
+        serial_number: CharField
+        status: CharField (choices: available, checked out, under maintenance)
+        location: CharField
+        assigned_to: ForeignKey (to User model, null=True)
+        created_at: DateTimeField
+        updated_at: DateTimeField
+
+Category Model
+
+    Fields:
+        name: CharField
+        description: TextField
+
+Request Model
+
+    Fields:
+        user: ForeignKey (to User model)
+        asset: ForeignKey (to Asset model)
+        request_date: DateTimeField
+        status: CharField (choices: pending, approved, denied)
+        approved_by: ForeignKey (to User model, null=True)
+
+Audit Model
+
+    Fields:
+        asset: ForeignKey (to Asset model)
+        action: CharField (choices: created, updated, deleted, checked out)
+        user: ForeignKey (to User model)
+        timestamp: DateTimeField
+
+User Roles and Fields
+
+    Admin
+        Fields: All fields from User Model
+        Permissions: Full access to all modules and features.
+
+    Technician
+        Fields: All fields from User Model
+        Permissions: Asset tracking, auditing, and management.
+
+    Analyst
+        Fields: All fields from User Model
+        Permissions: Access to reports and analytics.
+
+    General User
+        Fields: All fields from User Model
+        Permissions: Request assets and view their own assigned assets.
+
+User Capacity
+
+    Total Number of Users: Generally can be configured based on your server capacity and licensing.
+    User Fields: As outlined in the User Model.
+
+
+
+
+***Department****
+
+#Department
+	-pk
+	-name
+	-organisation
+	-date_created
+	-last_updated
+
+#user stories
+-create
+-get
+-get-all
+-update
+-get-all-by-organisation-id
