@@ -1,14 +1,3 @@
-/*!
-=========================================================
-* Muse Ant Design Dashboard - v1.0.0
-=========================================================
-* Product Page: https://www.creative-tim.com/product/muse-ant-design-dashboard
-* Copyright 2021 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://github.com/creativetimofficial/muse-ant-design-dashboard/blob/main/LICENSE.md)
-* Coded by Creative Tim
-=========================================================
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
 body {
   padding: 0 0 30px 0;
   background-color: #fafafa;
@@ -37,11 +26,11 @@ body {
   width: 250px;
   position: fixed;
   left: 0;
-  z-index: 99;
+  z-index: 0;
   height: 100vh;
   overflow: auto;
   margin: 0;
-  padding: 33px 20px;
+  padding: 0px 0px;
 }
 .layout-dashboard .ant-layout-sider.sider-primary .brand img {
   height: 30px;
@@ -148,14 +137,15 @@ body {
   .ant-menu-submenu.ant-menu-item-selected
   .active,
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu .active {
-  background-color: #fff;
+  background-color: #f8f1f6;
   box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
-  font-weight: 600;
+  font-weight: 700;
+  color: #097afc;
 }
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item a,
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu a {
   padding: 10px 16px;
-  color: #141414;
+  color: #d3caca;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -172,7 +162,8 @@ body {
   .ant-menu-item
   .active
   .icon {
-  background-color: #1890ff;
+  background-color: #1a8ffc;
+  color: white;
 }
 .layout-dashboard
   .ant-layout-sider.sider-primary
@@ -190,7 +181,7 @@ body {
   .ant-menu-submenu
   .active
   .icon {
-  background-color: #1890ff;
+  background-color: #82bff8;
 }
 
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item .icon,
@@ -198,7 +189,7 @@ body {
   display: inline-flex;
   width: 32px;
   height: 32px;
-  background-color: #fff;
+  background-color: #ffffff;
   box-shadow: 0 4px 6px rgb(0 0 0 / 12%);
   border-radius: 6px;
   justify-content: center;
@@ -207,40 +198,14 @@ body {
   vertical-align: middle;
 }
 
-.layout-dashboard
-  .ant-layout-sider.sider-primary
-  .ant-menu-item.ant-menu-item-selected
-  .active
-  svg
-  path,
-.layout-dashboard
-  .ant-layout-sider.sider-primary
-  .ant-menu-item
-  .active
-  svg
-  path,
-.layout-dashboard
-  .ant-layout-sider.sider-primary
-  .ant-menu-submenu.ant-menu-item-selected
-  .active
-  svg
-  path,
-.layout-dashboard
-  .ant-layout-sider.sider-primary
-  .ant-menu-submenu
-  .active
-  svg
-  path {
-  fill: #fff;
-}
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item svg path,
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu svg path {
-  fill: #bfbfbf;
+  fill: transparent;
 }
 
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-item a:hover,
 .layout-dashboard .ant-layout-sider.sider-primary .ant-menu-submenu a:hover {
-  color: #141414;
+  color: #1897f9;
 }
 
 .layout-dashboard
@@ -248,8 +213,8 @@ body {
   .ant-menu-inline
   .ant-menu-item.menu-item-header {
   padding: 10px 16px !important;
-  color: #8c8c8c;
-  font-weight: 700;
+  color: #d3d3d3;
+  font-weight: 900;
   font-size: 13px;
   text-transform: uppercase;
   display: block;
@@ -266,78 +231,6 @@ body {
   padding: 33px 0;
 }
 
-.layout-dashboard.has-sidebar .ant-layout-sider.sider-primary .aside-footer {
-  display: block;
-}
-.layout-dashboard
-  .ant-layout-sider.sider-primary.ant-layout-sider-primary
-  .footer-box {
-  background-color: #1890ff;
-  color: #fff;
-  box-shadow: none;
-}
-.layout-dashboard .ant-layout-sider.sider-primary .footer-box {
-  background-color: #fff;
-  color: #141414;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 20px 27px rgb(0 0 0 / 5%);
-  margin-bottom: 8px;
-}
-
-.layout-dashboard
-  .ant-layout-sider.sider-primary.ant-layout-sider-primary
-  .footer-box
-  .icon {
-  background-color: #fff;
-}
-.layout-dashboard .ant-layout-sider.sider-primary .footer-box .icon {
-  display: inline-flex;
-  width: 32px;
-  height: 32px;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 12%);
-  border-radius: 6px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  background-color: #1890ff;
-}
-
-.layout-dashboard
-  .ant-layout-sider.sider-primary.ant-layout-sider-primary
-  .footer-box
-  h6 {
-  color: #fff;
-}
-.layout-dashboard .ant-layout-sider.sider-primary .footer-box h6 {
-  font-weight: 600;
-  font-size: 16px;
-  color: #141414;
-  margin-bottom: 0;
-}
-.layout-dashboard
-  .ant-layout-sider.sider-primary.ant-layout-sider-primary
-  .footer-box
-  p {
-  color: #f5f5f5;
-}
-.layout-dashboard .ant-layout-sider.sider-primary .footer-box p {
-  color: #8c8c8c;
-  font-weight: 600;
-}
-
-.layout-dashboard
-  .ant-layout-sider.sider-primary.ant-layout-sider-primary
-  .footer-box
-  button {
-  background-color: #fff;
-  border-color: #f0f0f0;
-  color: #141414;
-}
-
-.layout-dashboard .ant-layout-sider.sider-primary .footer-box button {
-  margin: 0;
-}
 .ant-btn-sm,
 .ant-radio-group-small .ant-radio-button-wrapper {
   height: 34px;
@@ -403,8 +296,8 @@ body {
   margin-top: 0;
 }
 .layout-dashboard .ant-page-header-heading .ant-page-header-heading-title {
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 800;
+  font-size: 25px;
   line-height: 20px;
   margin-top: 4px;
 }
@@ -553,16 +446,16 @@ h4 {
   width: 213px;
   margin: 0 7px 0 0;
   border-radius: 6px;
-  height: 40px;
-  border: 1px solid #d9d9d9;
+  height: 45px;
+  border: 1px solid #2C5282;
 }
 
 .layout-dashboard .header-control .anticon.anticon-search svg {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
 }
 .layout-dashboard .header-control .header-search svg path {
-  fill: #8c8c8c;
+  fill: #4A5568;
 }
 
 .settings-drawer .drawer-content > hr {
@@ -725,21 +618,6 @@ ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
   color: #fff;
 }
 
-/* ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav li:hover {
-  box-shadow: 0px 20px 27px #0000000d;
-  border-radius: 8px;
-  background: #fff;
-  border: 0px;
-  font-weight: 600;
-}
-
-ul.ant-menu.ant-menu-root.ant-menu-inline.ant-menu-light.left-nav
-  li:hover
-  span.anticon {
-  background: #1890ff;
-  color: #fff;
-} */
-
 .divder {
   display: table;
   width: 100%;
@@ -874,70 +752,6 @@ button.ant-btn.bell strong {
   font-weight: normal;
   color: #fff;
 }
-.ant-dropdown-menu.ant-dropdown-menu-split.list-notifaction {
-  width: 336px;
-}
-
-.list-notifaction ul {
-  padding: 5px 10px;
-  margin: 0px;
-}
-
-.list-notifaction ul li {
-  display: block;
-  width: 100%;
-
-  clear: both;
-  font-weight: 400;
-  color: #67748e;
-  text-align: inherit;
-  white-space: nowrap;
-  background-color: transparent;
-  border: 0;
-}
-
-.list-notifaction ul li a {
-  display: block;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.list-notifaction ul li a:hover {
-  color: #252f40;
-  background-color: #e9ecef;
-}
-
-.list-notifaction ul span.ant-avatar.ant-avatar-image {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.75rem;
-}
-
-.list-notifaction ul li {
-  padding: 0px;
-}
-.ant-dropdown-menu.ant-dropdown-menu-split.list-notifaction {
-  border-radius: 0.75rem;
-}
-.list-notifaction .ant-list-item-meta-title {
-  font-weight: bold;
-  color: #141414;
-}
-.list-notifaction .ant-list-item-meta-title {
-  font-weight: bold;
-  color: #141414;
-}
-
-.list-notifaction .ant-avatar.ant-avatar-circle {
-  width: 48px;
-  height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.list-notifaction ul li a span.ant-avatar-string {
-  line-height: normal;
-}
 .bnb2 {
   color: #52c41a;
   font-weight: 700;
@@ -966,8 +780,8 @@ button.ant-btn.bell strong {
   width: 48px;
   height: 48px;
   text-align: center;
-  background: #1890ff;
-  color: #fff;
+  background: hsl(216, 45%, 98%);
+  color: #002147;
   border-radius: 0.5rem;
   margin-left: auto;
   line-height: 55px;
@@ -983,7 +797,7 @@ button.ant-btn.bell strong {
 }
 .bar-chart {
   background: transparent
-    linear-gradient(62deg, #00369e 0%, #005cfd 53%, #a18dff 100%) 0% 0%
+    linear-gradient(62deg, #032057 0%, #013897 53%, #6746fc 100%) 0% 0%
     no-repeat padding-box;
   box-shadow: 0px 4px 6px #0000001f;
 
@@ -1070,33 +884,6 @@ span.blue {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.antd-pro-pages-dashboard-analysis-style-salesExtra a {
-  display: inline-block;
-  padding: 7px 10px;
-  color: #595959;
-  border: 1px solid #d9d9d9;
-  text-align: center;
-  border-right: 1px solid transparent;
-}
-
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:last-child {
-  border-right: 1px solid #d9d9d9;
-  border-radius: 0px 5px 5px 0px;
-}
-
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:first-child {
-  border-radius: 5px 0px 0px 5px;
-}
-
-.antd-pro-pages-dashboard-analysis-style-salesExtra a:hover {
-  color: #1890ff;
-  border: 1px solid #1890ff;
-}
-.antd-pro-pages-dashboard-analysis-style-salesExtra a.active {
-  color: #1890ff;
-  border: 1px solid #1890ff;
 }
 
 .ant-list-box th {
@@ -3044,5 +2831,11 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   .anticon-search
   svg
   path {
-  fill: #8c8c8c;
+  fill: #4A5568;
+}
+
+
+.layout-dashboard .header-control .header-dropdown-btn:hover {
+  background-color: #163d69; 
+  color: #EDF2F7;
 }

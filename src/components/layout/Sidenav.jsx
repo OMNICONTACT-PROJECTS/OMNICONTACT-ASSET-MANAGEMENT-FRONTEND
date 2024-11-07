@@ -11,7 +11,7 @@ import {
   CheckCircle,
   FileSearch,
 } from "lucide-react";
-import logo from "../../assets/images/omni-logos/blue-logo.png";
+import logo from "../../assets/images/omni-logos/omnicontact-logo-white.png";
 import authService from "../../services/auth.service";
 
 const Sidenav = ({ color }) => {
@@ -23,11 +23,11 @@ const Sidenav = ({ color }) => {
     <>
       {
         ROLE === "ADMIN" && (
-          <Menu className="top-0 left-0 bg-slate-900" theme="light" mode="inline" defaultSelectedKeys={["2"]}>
+          <Menu className="top-0 left-0" theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
-              <NavLink to="/">
-                <img className="h-14" src={logo} alt="Logo" />
-              </NavLink>
+              <span to="/">
+                <img className="" src={logo} alt="Logo" />
+              </span>
             </Menu.Item>
 
             {/* Dashboard */}
@@ -145,11 +145,11 @@ const Sidenav = ({ color }) => {
 
       {
         ROLE === "IS_SUPPORT" && (
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["2"]}>
+          <Menu theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
-              <NavLink to="/">
-                <img className="h-14" src={logo} alt="Logo" />
-              </NavLink>
+              <span to="/">
+                <img className="" src={logo} alt="Logo" />
+              </span>
             </Menu.Item>
 
             {/* Dashboard */}

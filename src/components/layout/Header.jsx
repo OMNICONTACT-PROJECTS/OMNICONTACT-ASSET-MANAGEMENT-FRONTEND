@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
@@ -10,7 +11,6 @@ import {
   Drawer,
   Typography,
   Switch,
-  Menu,
 } from "antd";
 import {
   SearchOutlined,
@@ -51,13 +51,11 @@ const Header = ({
   subName,
   onPress,
   handleSidenavColor,
-  handleSidenavType,
   handleFixedNavbar,
 }) => {
   const { Title, Text } = Typography;
 
   const [visible, setVisible] = useState(false);
-  const [sidenavType, setSidenavType] = useState("transparent");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -78,7 +76,7 @@ const Header = ({
     {
       key: '1',
       label: (
-        <Link to="/settings">
+        <Link onClick={() => showDrawer()}>
           <SettingOutlined /> Settings
         </Link>
       ),
@@ -103,10 +101,10 @@ const Header = ({
       key: 'name',
     },
   ];
-
+  const fullName = authService.getFullName()
   return (
     <>
-      <Row gutter={[24, 0]}>
+      <Row style={{ marginTop: "-20px", marginLeft: "-10px" }} className="bg-[#ffffff] py-2 rounded-lg" gutter={[24, 0]}>
         <Col span={24} md={6}>
           <Breadcrumb items={breadcrumbItems} />
           <div className="ant-page-header-heading">
@@ -122,13 +120,13 @@ const Header = ({
           <Drawer
             className="settings-drawer"
             mask={true}
-            width={360}
+            width={260}
             onClose={hideDrawer}
             open={visible}
           >
             <div layout="vertical">
               <div className="header-top">
-                <Title level={4}>Configurator</Title>
+                <Title level={4}>Settings Config</Title>
                 <Text className="subtitle">See our dashboard options.</Text>
               </div>
 
@@ -143,25 +141,6 @@ const Header = ({
                     <Button type="black" onClick={() => handleSidenavColor("#111")}>1</Button>
                   </ButtonContainer>
                 </div>
-
-                <div className="sidebarnav-color mb-2">
-                  <Title level={5}>Sidenav Type</Title>
-                  <Text>Choose between 2 different sidenav types.</Text>
-                  <ButtonContainer>
-                    <Button type={sidenavType === "transparent" ? "primary" : "default"} onClick={() => {
-                      handleSidenavType("transparent");
-                      setSidenavType("transparent");
-                    }}>
-                      TRANSPARENT
-                    </Button>
-                    <Button type={sidenavType === "white" ? "primary" : "default"} onClick={() => {
-                      handleSidenavType("white");
-                      setSidenavType("white");
-                    }}>
-                      WHITE
-                    </Button>
-                  </ButtonContainer>
-                </div>
                 <div className="fixed-nav mb-2">
                   <Title level={5}>Navbar Fixed</Title>
                   <Switch onChange={handleFixedNavbar} />
@@ -170,14 +149,14 @@ const Header = ({
             </div>
           </Drawer>
           <Dropdown menu={{ items }} trigger={["click"]}>
-            <Button type="link" className="rounded-full bg-gray-400 px-3 py-1">
-              Jeremiah Muchazondida
+            <Button style={{ boxShadow: "20px", color: "#FFFFFF", fontSize: "16px" }} type="link" className="header-dropdown-btn px-3 py-1 bg-[#2C5282]">
+              {fullName}
               <UserOutlined className="mr-0 py-2" />
             </Button>
           </Dropdown>
-          <div className="setting-drawer" onClick={showDrawer}>
-            <Button type="link" icon={<SettingOutlined />} />
-          </div>
+          {/* <div className="border-spacing-3">
+            <Button type="link" icon={<MessageOutlined />} />
+          </div> */}
           <Input className="header-search" placeholder="Type here..." prefix={<SearchOutlined />} />
         </Col>
       </Row>
