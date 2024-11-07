@@ -1,4 +1,4 @@
-import { Layout, Drawer, Affix, Spin } from "antd";
+import { Layout, Affix, Spin } from "antd";
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import Sidenav from "./Sidenav";
@@ -11,8 +11,8 @@ const { Header: AntHeader, Content, Sider } = Layout;
 
 function Main() {
   const [visible, setVisible] = useState(false);
-  const [sidenavColor, setSidenavColor] = useState("#1890ff");
-  const [sidenavType, setSidenavType] = useState("transparent");
+  const [sidenavColor, setSidenavColor] = useState("#002147");
+  const [sidenavType, setSidenavType] = useState("white");
   const [fixed, setFixed] = useState(false);
 
   const openDrawer = () => setVisible(!visible);
@@ -81,7 +81,6 @@ function Main() {
   if (!token || !ROLE) {
     console.error('Invalid token')
     return <LoginPage setToken={setToken} />
-    // navigate("/login")
   }
 
   return (
@@ -89,24 +88,6 @@ function Main() {
       {
         token && ROLE && (
           <Layout className={`layout-dashboard ${pathname === "profile" ? "layout-profile" : ""}`}>
-            <Drawer
-              title={false}
-              closable={false}
-              onClose={() => setVisible(false)}
-              open={visible}
-              width={250}
-              className={`drawer-sidebar`}
-            >
-              <Sider
-                trigger={null}
-                width={250}
-                theme="light"
-                className={`sider-primary ant-layout-sider-primary ${sidenavType === "#fff" ? "active-route" : ""}`}
-                style={{ background: sidenavType }}
-              >
-                <Sidenav color={sidenavColor} token={token} ROLE={ROLE} />
-              </Sider>
-            </Drawer>
             <Sider
               breakpoint="lg"
               collapsedWidth="0"
@@ -114,7 +95,7 @@ function Main() {
               width={250}
               theme="light"
               className={`sider-primary ant-layout-sider-primary ${sidenavType === "#fff" ? "active-route" : ""}`}
-              style={{ background: sidenavType }}
+              style={{ background: sidenavType, height: "100vh", overflow: "hidden", overflowY: "scroll", scrollbarWidth: "none", backgroundColor: "#002147" }}
             >
               <Sidenav color={sidenavColor} />
             </Sider>
@@ -144,8 +125,10 @@ function Main() {
                   />
                 </AntHeader>
               )}
-              <Content className="content-ant">
-                {navigation.state === "loading" ? <Loader /> : <Outlet />}
+              <Content className="content-ant bg-[#ffffff] px-5 rounded-t-lg">
+                <div className="p-5">
+                  {navigation.state === "loading" ? <Loader /> : <Outlet />}
+                </div>
               </Content>
             </Layout>
           </Layout>
