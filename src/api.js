@@ -1,9 +1,9 @@
 import axios from "axios";
 import authHeader from "./services/auth-header.js";
-import { API_URL } from "./apiConfig.js";
+import { RENDER_URL } from "./apiConfig.js";
 
 const instance = axios.create({
-    baseURL: API_URL,
+    baseURL: RENDER_URL,
     headers: {
         "Content-Type": "application/json",
         ...authHeader()
@@ -11,7 +11,7 @@ const instance = axios.create({
 })
 
 export const formsRequestInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: RENDER_URL,
     headers: {
         "Content-Type": "multipart/form-data",
         ...authHeader()
