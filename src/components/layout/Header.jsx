@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import {
@@ -10,7 +11,6 @@ import {
   Drawer,
   Typography,
   Switch,
-  Menu,
 } from "antd";
 import {
   SearchOutlined,
@@ -103,7 +103,7 @@ const Header = ({
       key: 'name',
     },
   ];
-
+  const fullName = authService.getFullName()
   return (
     <>
       <Row gutter={[24, 0]}>
@@ -171,7 +171,7 @@ const Header = ({
           </Drawer>
           <Dropdown menu={{ items }} trigger={["click"]}>
             <Button type="link" className="rounded-full bg-gray-400 px-3 py-1">
-              Jeremiah Muchazondida
+              {fullName}
               <UserOutlined className="mr-0 py-2" />
             </Button>
           </Dropdown>

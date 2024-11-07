@@ -86,17 +86,16 @@ function Main() {
 
   return (
     <>
-      {console.log('token in Main: ', token, "ROLE: ", ROLE)}
       {
         token && ROLE && (
-          <Layout className={`layout-dashboard ${pathname === "profile" ? "layout-profile" : ""} ${pathname === "rtl" ? "layout-dashboard-rtl" : ""}`}>
+          <Layout className={`layout-dashboard ${pathname === "profile" ? "layout-profile" : ""}`}>
             <Drawer
               title={false}
               closable={false}
               onClose={() => setVisible(false)}
               open={visible}
               width={250}
-              className={`drawer-sidebar ${pathname === "rtl" ? "drawer-sidebar-rtl" : ""}`}
+              className={`drawer-sidebar`}
             >
               <Sider
                 trigger={null}
