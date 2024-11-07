@@ -36,7 +36,7 @@ const Home = () => {
       label: "New Assets",
       value: "+1,200",
       change: "-20%",
-      icon: <Heart className="text-red-500" />,
+      icon: <Heart />,
       className: "redtext",
     },
     {
@@ -49,17 +49,17 @@ const Home = () => {
   ];
 
   return (
-    <div className="layout-content">
+    <d>
       <Row className="rowgap-vbox" gutter={[24, 0]}>
         {counts.map((count, index) => (
           <Col key={index} xs={24} sm={24} md={12} lg={6} xl={6} className="mb-24">
-            <Card bordered={false} className="criclebox">
+            <Card style={{ backgroundColor: "#002147", color: "red" }} bordered={false} className="criclebox">
               <div className="number">
                 <Row align="middle" gutter={[24, 0]}>
                   <Col xs={18}>
-                    <span>{count.label}</span>
-                    <Title level={3}>
-                      {count.value} <small className={count.className}>{count.change}</small>
+                    <span style={{ color: "#cfcbcb" }}>{count.label}</span>
+                    <Title style={{ color: "white", fontWeight: "900" }} level={3}>
+                      {count.value}
                     </Title>
                   </Col>
                   <Col xs={6}>
@@ -84,7 +84,7 @@ const Home = () => {
           </Card>
         </Col>
       </Row>
-    </div>
+    </d>
   );
 };
 
