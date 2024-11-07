@@ -23,7 +23,7 @@ const Sidenav = ({ color }) => {
     <>
       {
         ROLE === "ADMIN" && (
-          <Menu className="top-0 left-0 bg-slate-900" theme="light" mode="inline" defaultSelectedKeys={["2"]}>
+          <Menu className="top-0 left-0" theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
               <NavLink to="/">
                 <img className="h-14" src={logo} alt="Logo" />
@@ -145,7 +145,7 @@ const Sidenav = ({ color }) => {
 
       {
         ROLE === "IS_SUPPORT" && (
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["2"]}>
+          <Menu theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
               <NavLink to="/">
                 <img className="h-14" src={logo} alt="Logo" />
