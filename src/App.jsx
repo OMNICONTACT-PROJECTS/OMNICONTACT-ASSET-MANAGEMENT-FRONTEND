@@ -4,11 +4,11 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { LandingPage } from "./pages/auth/LandingPage";
-import { Error404 } from "./pages/pageNotFound/ErrorPage";
 import EmployeeView from "./pages/admin/employeeManagement/EmployeeView";
 import authService from "./services/auth.service";
-import UnauthorizedAccessErrorPage from "./pages/pageNotFound/UnauthorizedAccessErrorPage";
 import MainHome from "./pages/MainHome";
+import { Error404 } from "./pages/page_not_found/ErrorPage";
+import UnauthorizedAccessErrorPage from "./pages/page_not_found/UnauthorizedAccessErrorPage";
 
 const router = createBrowserRouter([
   {
