@@ -15,7 +15,7 @@ import {
 
 const { Title } = Typography;
 
-const EmployeeHome = () => {
+const IsSupportHome = () => {
 
   const counts = [
     {
@@ -36,7 +36,7 @@ const EmployeeHome = () => {
       label: "New Assets",
       value: "+1,200",
       change: "-20%",
-      icon: <Heart className="text-red-500" />,
+      icon: <Heart />,
       className: "redtext",
     },
     {
@@ -88,4 +88,4 @@ const EmployeeHome = () => {
   );
 };
 
-export default EmployeeHome;
+export default IsSupportHome;
