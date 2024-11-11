@@ -4,6 +4,7 @@ import "./assets/styles/main.css";
 import "./assets/styles/responsive.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { LandingPage } from "./pages/auth/LandingPage";
+import EmployeeOnboarding from "./pages/admin/employeeManagement/employeeOnboarding/EmployeeOnboarding";
 import EmployeeView from "./pages/admin/employeeManagement/EmployeeView";
 import authService from "./services/auth.service";
 import MainHome from "./pages/MainHome";
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/admin/employees",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeeView />
+      },
+      {
+        path: "/admin/onboarding",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeeOnboarding />
       },
     ],
   },
