@@ -172,6 +172,7 @@ Asset Model
     Table Name: AssetRequest
     Fields:
         id (Primary Key)
+	asset_requested
         category (Foreign Key referencing category)
         requested_by (Foreign Key referencing employees)
 	request_date: DateField 
