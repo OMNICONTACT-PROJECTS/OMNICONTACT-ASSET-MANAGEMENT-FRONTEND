@@ -1,6 +1,6 @@
 ****Modules****
 
-    #1Employee Management
+    #Employee Management
         User Registration/Login
         Role Management
         Permission Management
@@ -116,91 +116,83 @@ User Model
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
 
-Role Model
 
-    Fields:
-        name: CharField
-        permissions: ManyToManyField (to Permission model)
 
-Permission Model
+*******************  Asset Module ***************************
 
-    Fields:
-        name: CharField
+
+##user stories####
+#Admin
+-To add asset categories
+-add asset items
+-approve asset requests
+-edit, view, delete assets
+
+#isSpport
+-To add asset categories
+-add asset items
+-allocate approved asset requests
+-edit, view, delete assets
+
+#general users
+-request assets allocation
+-view assets request
+-view assets
+
+
+*******************  Asset Model ***************************
 
 Asset Model
-
     Fields:
+	organisation(fk)
         name: CharField
         description: TextField
         category: ForeignKey (to Category model)
         serial_number: CharField
-        status: CharField (choices: available, checked out, under maintenance)
+        status: CharField (choices: AVAILABLE, ALLOCATED, 	UNDER_MAINTAINENCE, RESERVED, LOST, DISCARDED, TRANSFERED, 	OBSOLETE )
+	value: int
         location: CharField
-        assigned_to: ForeignKey (to User model, null=True)
+        allocated_to: ForeignKey (to User model, null=True)
+	acquired_date: DateField
         created_at: DateTimeField
         updated_at: DateTimeField
 
-Category Model
 
+1.2 Asset Category Model
+
+    Table Name: AssetCategory
     Fields:
-        name: CharField
-        description: TextField
+	organisation(fk)
+        id (Primary Key)
+        name
+        description
 
-Request Model
+1.3 Request Model
 
+    Table Name: AssetRequest
     Fields:
-        user: ForeignKey (to User model)
-        asset: ForeignKey (to Asset model)
-        request_date: DateTimeField
-        status: CharField (choices: pending, approved, denied)
-        approved_by: ForeignKey (to User model, null=True)
+        id (Primary Key)
+	asset_requested
+        category (Foreign Key referencing category)
+        requested_by (Foreign Key referencing employees)
+	request_date: DateField 
+	approved_by: ForeignKey (to User model, null=True)(Only admin can approve)
+	allocated_by: ForeignKey (to User model, null=True)
+        request_status: (choices: PENDING, APPROVED, DENIED)
+	allocation_status: (choices: PENDING, ALLOCATED, DENIED)
+	date_approved: DateField
+        created_at: DateTimeField
+	updated_at: DateTimeField
+	comments: TextField
 
-Audit Model
 
+1.4 Asset Allocation Model
+
+    Table Name: AssetAllocation
     Fields:
-        asset: ForeignKey (to Asset model)
-        action: CharField (choices: created, updated, deleted, checked out)
-        user: ForeignKey (to User model)
-        timestamp: DateTimeField
-
-User Roles and Fields
-
-    Admin
-        Fields: All fields from User Model
-        Permissions: Full access to all modules and features.
-
-    Technician
-        Fields: All fields from User Model
-        Permissions: Asset tracking, auditing, and management.
-
-    Analyst
-        Fields: All fields from User Model
-        Permissions: Access to reports and analytics.
-
-    General User
-        Fields: All fields from User Model
-        Permissions: Request assets and view their own assigned assets.
-
-User Capacity
-
-    Total Number of Users: Generally can be configured based on your server capacity and licensing.
-    User Fields: As outlined in the User Model.
-
-
-
-
-***Department****
-
-#Department
-	-pk
-	-name
-	-organisation
-	-date_created
-	-last_updated
-
-#user stories
--create
--get
--get-all
--update
--get-all-by-organisation-id
+        id (Primary Key)
+        asset (Foreign Key referencing assets)
+	asset_request(Foreign key)
+        allocated_to (Foreign Key referencing employees)
+        date_allocated: DateField
+        return_date: DateField
