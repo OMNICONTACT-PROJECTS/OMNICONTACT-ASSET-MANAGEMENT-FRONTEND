@@ -5,11 +5,12 @@ import "./assets/styles/responsive.css";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { LandingPage } from "./pages/auth/LandingPage";
 import EmployeeOnboarding from "./pages/admin/employeeManagement/EmployeeOnboarding";
-import EmployeeView from "./pages/admin/employeeManagement/EmployeeView";
 import authService from "./services/auth.service";
 import MainHome from "./pages/MainHome";
 import { Error404 } from "./pages/page_not_found/ErrorPage";
 import UnauthorizedAccessErrorPage from "./pages/page_not_found/UnauthorizedAccessErrorPage";
+import UsersTab from "./pages/admin/employeeManagement/UsersTab";
+import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmployeesView";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/admin/employees",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeeView />
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UsersTab />,
+        loader: AllEmployeesViewLoader
       },
       {
         path: "/admin/onboarding",
