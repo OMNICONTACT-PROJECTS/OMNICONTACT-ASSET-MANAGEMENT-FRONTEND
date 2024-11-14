@@ -1,0 +1,53 @@
+.formContainer {
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 90vw;
+    max-width: 1150px;
+    margin: auto;
+    margin-top: 24px;
+    color: black;
+    background-color: #fff;
+}
+
+.registerForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3px 15px;
+}
+
+.registerForm .ant-form-item {
+    margin-bottom: 16px;
+}
+
+.formContainer label {
+    color: #002147;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.registerForm .ant-input,
+.registerForm .ant-select-selector {
+    border-radius: 8px;
+    padding: 8px;
+    border-color: #ccc;
+    transition: border-color 0.3s;
+    width: 100%;
+}
+
+.registerForm .ant-input:focus,
+.registerForm .ant-select-selector:focus {
+    border-color: #007bff !important;
+    outline: none;
+}
+
+@media (max-width: 768px) {
+    .formContainer {
+        width: 85vw;
+    }
+
+    .registerForm {
+        grid-template-columns: 1fr;
+    }
+}
