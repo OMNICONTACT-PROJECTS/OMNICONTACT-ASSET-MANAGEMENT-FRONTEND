@@ -10,7 +10,7 @@ class EmployeeService {
     }
 
     createGeneralUser(data) {
-        return instance.post('users/general-user/', data)
+        return instance.post('users/general-users/', data)
     }
 
     getAllByOrganisationId(organisation_id) {
