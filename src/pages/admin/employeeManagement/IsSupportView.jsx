@@ -1,6 +1,6 @@
 import { Space, Table, Input, Button, Modal, Form, Input as AntdInput } from 'antd';
 import { useState } from 'react';
-import { Edit3, Trash2, User } from 'lucide-react';
+import { Edit3, Trash2 } from 'lucide-react';
 
 const IsSupportView = () => {
     const [searchText, setSearchText] = useState('');
@@ -306,7 +306,7 @@ const IsSupportView = () => {
                 okText="Yes, Delete"
                 cancelText="Cancel"
             >
-                <p>Are you sure you want to delete {selectedEmployee?.firstName}'s details?</p>
+                <p>Are you sure you want to delete {selectedEmployee?.firstName}&apos;s details?</p>
             </Modal>
         </>
     );

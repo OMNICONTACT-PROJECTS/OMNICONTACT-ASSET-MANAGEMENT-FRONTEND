@@ -50,9 +50,9 @@ const EditEmployee = ({ open, close, selectedEmployee }) => {
                     <Form.Item label="Province">
                         <Input defaultValue={selectedEmployee?.current_location} />
                     </Form.Item>
-                    {/* <Form.Item label="Department">
+                    <Form.Item label="Department">
                         <Input defaultValue={selectedEmployee?.department.name} />
-                    </Form.Item> */}
+                    </Form.Item>
                 </Form>
             </Modal>
         </>
@@ -70,7 +70,7 @@ EditEmployee.propTypes = {
         phone_number: PropTypes.string,
         company_email: PropTypes.string,
         current_location: PropTypes.string,
-        // department: PropTypes.string,
+        department: PropTypes.string,
     }),
 };
 
