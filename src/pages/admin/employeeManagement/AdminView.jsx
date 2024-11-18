@@ -306,7 +306,7 @@ const AdminView = () => {
                 okText="Yes, Delete"
                 cancelText="Cancel"
             >
-                <p>Are you sure you want to delete {selectedEmployee?.firstName}'s details?</p>
+                <p>Are you sure you want to delete {selectedEmployee?.firstName}&apos;s details?</p>
             </Modal>
         </>
     );
