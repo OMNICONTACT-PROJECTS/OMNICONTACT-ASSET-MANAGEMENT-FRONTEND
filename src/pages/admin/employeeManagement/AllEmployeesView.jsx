@@ -6,13 +6,14 @@ import authService from '../../../services/auth.service';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { refreshPage } from '../../../common';
 import EditEmployee from './EditEmployee';
+import { responsiveArray } from 'antd/es/_util/responsiveObserver';
 
 export async function AllEmployeesViewLoader() {
   try {
     const employeeResponse = await employeeService.getAllByOrganisationId(
       authService.getUserOrganisationId()
     );
-
+    console.log("employeeData: ", employeeResponse.data)
     if (employeeResponse.status !== 200) {
       console.log("No employees found.");
     }
@@ -116,7 +117,7 @@ const AllEmployeesView = () => {
         <Space size="small">
           <Tooltip title="More details">
             <Button
-              className="text-light border-0 p-1"
+              className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
               onClick={() => {
                 navigate(
@@ -127,7 +128,7 @@ const AllEmployeesView = () => {
           </Tooltip>
           <Tooltip title="Edit Employee">
             <Button
-              className="text-light border-0 p-1"
+              className="p-1 border-0 text-light"
               icon={<Edit3 size={18} />}
               onClick={() => editEmployee(record)}
             />
