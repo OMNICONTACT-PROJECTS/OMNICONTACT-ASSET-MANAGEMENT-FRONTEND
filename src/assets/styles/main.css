@@ -2833,9 +2833,11 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   path {
   fill: #4A5568;
 }
+.profile-icon{
+  color: white !important;
+}
 
 
 .layout-dashboard .header-control .header-dropdown-btn:hover {
-  background-color: #163d69; 
-  color: #EDF2F7;
+  background-color: #2C5282;
 }
