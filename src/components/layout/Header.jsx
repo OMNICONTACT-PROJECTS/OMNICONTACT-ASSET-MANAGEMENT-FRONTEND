@@ -97,7 +97,7 @@ const Header = ({
       key: 'pages',
     },
     {
-      title: name.replace("/", ""),
+      title: name.replace("/", " / "),
       key: 'name',
     },
   ];
@@ -109,7 +109,7 @@ const Header = ({
           <Breadcrumb items={breadcrumbItems} />
           <div className="ant-page-header-heading">
             <span className="ant-page-header-heading-title" style={{ textTransform: "capitalize" }}>
-              {subName.replace("/", "")}
+              {subName.replace("/", " ")}
             </span>
           </div>
         </Col>
@@ -132,7 +132,7 @@ const Header = ({
 
               <div className="sidebar-color">
                 <Title level={5}>Sidebar Color</Title>
-                <div className="theme-color mb-2">
+                <div className="mb-2 theme-color">
                   <ButtonContainer>
                     <Button type="primary" onClick={() => handleSidenavColor("#1890ff")}>1</Button>
                     <Button type="success" onClick={() => handleSidenavColor("#52c41a")}>1</Button>
@@ -141,7 +141,7 @@ const Header = ({
                     <Button type="black" onClick={() => handleSidenavColor("#111")}>1</Button>
                   </ButtonContainer>
                 </div>
-                <div className="fixed-nav mb-2">
+                <div className="mb-2 fixed-nav">
                   <Title level={5}>Navbar Fixed</Title>
                   <Switch onChange={handleFixedNavbar} />
                 </div>
@@ -149,9 +149,9 @@ const Header = ({
             </div>
           </Drawer>
           <Dropdown menu={{ items }} trigger={["click"]}>
-            <Button style={{ boxShadow: "20px", color: "#FFFFFF", fontSize: "16px" }} type="link" className="header-dropdown-btn px-3 py-1 bg-[#2C5282]">
+            <Button style={{ boxShadow: "20px", color: "#FFFFFF", fontSize: "16px" }} type="link" className="header-dropdown-btn px-3 py-1 bg-[#163d69]">
               {fullName}
-              <UserOutlined className="mr-0 py-2" />
+              <UserOutlined color="#FFFFF" className="py-2 mr-0"/>
             </Button>
           </Dropdown>
           {/* <div className="border-spacing-3">
