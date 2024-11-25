@@ -9,8 +9,8 @@ class DepartmentService {
         return instance.get(`departments/${id}/`)
     }
 
-    update(id) {
-        return instance.put(`departments/update/${id}/`)
+    update(id, data) {
+        return instance.put(`departments/update/${id}/`, data);
     }
 
     getAll() {
@@ -20,6 +20,11 @@ class DepartmentService {
     getAllByOrganisationId(organisation_id) {
         return instance.get(`departments/get-all-by-organisation-id/${organisation_id}/`)
     }
+
+    delete(id) {
+        return instance.delete(`departments/${id}/`)
+    }
+
 }
 
 export default new DepartmentService();
