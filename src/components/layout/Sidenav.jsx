@@ -6,6 +6,7 @@ import {
   CreditCard,
   User,
   UserPlus,
+  Building,
   LayoutDashboard,
   Users,
   CheckCircle,
@@ -40,6 +41,15 @@ const Sidenav = ({ color }) => {
                   <LayoutDashboard color={color} />
                 </span>
                 <span className="label">Dashboard</span>
+              </NavLink>
+            </Menu.Item>
+            
+            <Menu.Item key="4">
+              <NavLink to="/admin/departments">
+                <span className="icon" style={{ background: page === "departments" ? color : "" }}>
+                  <Building color={color} />
+                </span>
+                <span className="label">Departments</span>
               </NavLink>
             </Menu.Item>
 
