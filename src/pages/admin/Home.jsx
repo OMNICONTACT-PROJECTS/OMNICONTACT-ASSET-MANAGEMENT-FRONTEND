@@ -16,7 +16,6 @@ import LineChart from "../../components/chart/LineChart";
 const { Title } = Typography;
 
 const Home = () => {
-
   const counts = [
     {
       label: "Today’s Tickets",
@@ -49,7 +48,7 @@ const Home = () => {
   ];
 
   return (
-    <d>
+    <div>
       <Row className="rowgap-vbox" gutter={[24, 0]}>
         {counts.map((count, index) => (
           <Col key={index} xs={24} sm={24} md={12} lg={6} xl={6} className="mb-24">
@@ -74,17 +73,17 @@ const Home = () => {
 
       <Row gutter={[24, 0]}>
         <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
-          <Card bordered={false} className="criclebox h-full">
+          <Card bordered={false} className="h-full criclebox">
             <Echart />
           </Card>
         </Col>
         <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24">
-          <Card bordered={false} className="criclebox h-full">
+          <Card bordered={false} className="h-full criclebox">
             <LineChart />
           </Card>
         </Col>
       </Row>
-    </d>
+    </div>
   );
 };
 
