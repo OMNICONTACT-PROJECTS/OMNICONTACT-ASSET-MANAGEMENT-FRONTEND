@@ -6,7 +6,6 @@ import authService from '../../../services/auth.service';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { refreshPage } from '../../../common';
 import EditEmployee from './EditEmployee';
-import { responsiveArray } from 'antd/es/_util/responsiveObserver';
 
 export async function AllEmployeesViewLoader() {
   try {

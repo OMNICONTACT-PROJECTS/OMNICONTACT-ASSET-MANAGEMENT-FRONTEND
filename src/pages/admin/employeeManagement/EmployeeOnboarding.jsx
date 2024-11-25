@@ -42,7 +42,6 @@ const EmployeeOnboarding = () => {
       const response = await employeeService.createGeneralUser(data);
 
       if (response.status === 201) {
-        console.log('Form submitted:', data);
         message.success('Employee onboarding successful');
         refreshPage();
       } else {
