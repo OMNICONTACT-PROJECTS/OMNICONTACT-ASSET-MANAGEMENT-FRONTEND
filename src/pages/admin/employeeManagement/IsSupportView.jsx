@@ -133,11 +133,7 @@ const IsSupportView = () => {
             <Button
               className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
-              onClick={() => {
-                navigate(
-                  `#`
-                );
-              }}
+              onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
             />
           </Tooltip>
           <Tooltip title="Edit Employee">

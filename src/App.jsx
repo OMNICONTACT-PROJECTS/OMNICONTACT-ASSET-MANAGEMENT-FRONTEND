@@ -13,6 +13,7 @@ import UnauthorizedAccessErrorPage from "./pages/page_not_found/UnauthorizedAcce
 import UsersTab from "./pages/admin/employeeManagement/UsersTab";
 import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmployeesView";
 import { AllDepartmentsViewLoader } from "./pages/admin/departments/Departments";
+import EmployeePage, { EmployeePageLoader } from "./pages/admin/employeeManagement/EmployeePage";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
       {
         path: "/admin/onboarding",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeeOnboarding />
+      },
+      {
+        path: "/admin/employees/:id/details",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeePage />,
+        loader: EmployeePageLoader
       },
     ],
   },

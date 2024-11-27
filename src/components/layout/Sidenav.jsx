@@ -43,7 +43,7 @@ const Sidenav = ({ color }) => {
                 <span className="label">Dashboard</span>
               </NavLink>
             </Menu.Item>
-            
+
             <Menu.Item key="4">
               <NavLink to="/admin/departments">
                 <span className="icon" style={{ background: page === "departments" ? color : "" }}>
@@ -57,7 +57,7 @@ const Sidenav = ({ color }) => {
             <Menu.Item className="menu-item-header" key="3">
               Employee Management
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key="40">
               <NavLink to="/admin/onboarding">
                 <span className="icon" style={{ background: page === "onboarding" ? color : "" }}>
                   <UserPlus color={color} />
@@ -197,7 +197,7 @@ const Sidenav = ({ color }) => {
             </Menu.Item>
 
             {/* Request Management */}
-            <Menu.Item className="menu-item-header" key="14">
+            <Menu.Item className="menu-item-header" key="15">
               Ticket Management
             </Menu.Item>
             <Menu.Item key="15">

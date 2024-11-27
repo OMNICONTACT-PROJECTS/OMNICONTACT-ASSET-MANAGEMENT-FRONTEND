@@ -3,25 +3,24 @@ import { useEffect, useState } from 'react';
 import { Form, Input, Modal, Select, message } from 'antd';
 import authService from "../../../services/auth.service";
 import employeeService from "../../../services/employee.service"; 
-import departmentService from "../../../services/department.service";  // Assuming the department service is available
+import departmentService from "../../../services/department.service";
 import { refreshPage } from "../../../common";
 
 const { Option } = Select;
 
 const EditEmployee = ({ open, close, selectedEmployee }) => {
     const [form] = Form.useForm();
-    const [departmentData, setDepartmentData] = useState([]); // State to hold department data
+    const [departmentData, setDepartmentData] = useState([]);
 
     useEffect(() => {
         getDepartmentData();
     }, []);
 
-    // Fetch departments
     const getDepartmentData = async () => {
         try {
             const response = await departmentService.getAllByOrganisationId(authService.getUserOrganisationId());
             if (response.status === 200) {
-                setDepartmentData(response.data);
+                setDepartmentData(response?.data);
             }
         } catch (e) {
             message.error("Failed to load department data");
