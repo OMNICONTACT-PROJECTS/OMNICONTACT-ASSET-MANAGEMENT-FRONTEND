@@ -8,25 +8,14 @@ import {
 } from "@ant-design/icons";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { Button, Divider, Popconfirm, Space, Table, Tag, Tooltip, Typography } from "antd";
-import bus from "../../../../Assets/images/vehicles/bus.svg";
-import car from "../../../../Assets/images/vehicles/car.svg";
-import truck from "../../../../Assets/images/vehicles/truck.svg";
-import tractor from "../../../../Assets/images/vehicles/tractor.svg";
-import carOther from "../../../../Assets/images/vehicles/car-other.svg";
+import bus from "../../.././assets/images/svgs/laptop.svg";
+import car from "../../.././assets/images/svgs/laptop.svg";
+import truck from "../../.././assets/images/svgs/laptop.svg";
+import tractor from "../../.././assets/images/svgs/laptop.svg";
+import carOther from "../../.././assets/images/svgs/laptop.svg";
 import { useState } from "react";
-import NewVehicle from "./NewVehicle";
-import { deleteColor, editColor, toHumanDate, toHumanDateTime, toYear } from "../../../../common";
-import NewTrip from "./Trips/NewTrip";
-import NewVehicleDamage from "./Damages/NewVehicleDamage";
-import NewVehicleService from "./Services/NewVehicleService";
-import TripService from "../../../../services/trip.service";
-import VehicleDamageService from "../../../../services/vehicle-damage.service";
-import VehicleServiceService from "../../../../services/vehicle-service.service";
-import EditTrip from "./Trips/EditTrip";
-import VehicleInsuranceService from "../../../../services/vehicle-insurance.service";
-import NewVehicleInsurance from "./Insurance/NewVehicleInsurance";
 
-export const vehiclePageLoader = async ({ params }) => {
+export const EmployeePageLoader = async ({ params }) => {
     const vehicleId = params.id
     try {
         const vehicleResponse = await VehicleService.getVehicleById(vehicleId)
@@ -50,7 +39,7 @@ export const vehiclePageLoader = async ({ params }) => {
     }
 }
 
-const VehiclePage = () => {
+const EmployeePage = () => {
     const [editVehicleModal, setEditVehicleModal] = useState(false);
     const [newTripModal, setNewTripModal] = useState(false);
     const [editTripModal, setEditTripModal] = useState(false);
@@ -555,4 +544,4 @@ const VehiclePage = () => {
     );
 }
 
-export default VehiclePage;
+export default EmployeePage;
