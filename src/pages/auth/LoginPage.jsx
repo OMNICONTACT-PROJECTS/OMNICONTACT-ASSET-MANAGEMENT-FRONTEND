@@ -109,7 +109,7 @@ export const LoginPage = () => {
 
           <button
             type="button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/landing-page')}
             className="w-full text-center text-sm text-gray-300 hover:text-white transition-colors mt-4 pb-3"
           >
             ← Back to home

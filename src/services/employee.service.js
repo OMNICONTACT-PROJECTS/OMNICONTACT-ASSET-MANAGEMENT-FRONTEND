@@ -36,6 +36,10 @@ class EmployeeService {
         return instance.get(`users/${id}/`)
     }
 
+    update(id, data) {
+        return instance.put(`users/update/${id}/`, data);
+    }
+
     delete(id) {
         return instance.delete(`users/${id}/`)
     }
