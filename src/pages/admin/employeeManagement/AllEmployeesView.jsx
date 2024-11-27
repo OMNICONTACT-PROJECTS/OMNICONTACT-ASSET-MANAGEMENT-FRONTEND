@@ -1,4 +1,4 @@
-import { Space, Table, Input, Button, Popconfirm, Tooltip, message, Modal } from 'antd';
+import { Space, Table, Input, Button, Popconfirm, Tooltip, message } from 'antd';
 import { useState } from 'react';
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import employeeService from '../../../services/employee.service';
@@ -31,7 +31,6 @@ const AllEmployeesView = () => {
   const [searchText, setSearchText] = useState('');
   const [editEmployeeModal, setEditEmployeeModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [viewEmployeeModal, setViewEmployeeModal] = useState(false);
 
   const columns = [
     {
@@ -133,7 +132,7 @@ const AllEmployeesView = () => {
             <Button
               className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
-              onClick={() => showEmployeeDetails(record)}
+            onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
             />
           </Tooltip>
           <Tooltip title="Edit Employee">
@@ -180,16 +179,6 @@ const AllEmployeesView = () => {
     }
   };
 
-  const showEmployeeDetails = (employee) => {
-    setSelectedEmployee(employee);
-    setViewEmployeeModal(true);
-  };
-
-  const closeViewEmployeeModal = () => {
-    setViewEmployeeModal(false);
-    setSelectedEmployee(null);
-  };
-
   const handleSearch = () => {
     const filteredData = employeeData.filter(
       (item) =>
@@ -211,38 +200,6 @@ const AllEmployeesView = () => {
         Search
       </Button>
       <Table className='table-responsive' columns={columns} dataSource={handleSearch()} />
-
-      {/* Employee Details Modal */}
-      <Modal
-        title="Employee Details"
-        visible={viewEmployeeModal}
-        onCancel={closeViewEmployeeModal}
-        footer={null}
-        width={800}
-      >
-        {selectedEmployee && (
-          <div>
-            <p><strong>Profile Picture:</strong> {selectedEmployee.profile_picture}</p>
-            <p><strong>First Name:</strong> {selectedEmployee.first_name}</p>
-            <p><strong>Last Name:</strong> {selectedEmployee.last_name}</p>
-            <p><strong>Gender:</strong> {selectedEmployee.gender}</p>
-            <p><strong>National ID:</strong> {selectedEmployee.id}</p>
-            <p><strong>Phone Number:</strong> {selectedEmployee.phone_number}</p>
-            <p><strong>Username:</strong> {selectedEmployee.username}</p>
-            <p><strong>Role:</strong> {selectedEmployee.role}</p>
-            <p><strong>Personal Email:</strong> {selectedEmployee.personal_email}</p>
-            <p><strong>Company Email:</strong> {selectedEmployee.company_email}</p>
-            <p><strong>Organisation:</strong> {selectedEmployee.organisation.organisation_name}</p>
-            <p><strong>Location:</strong> {selectedEmployee.current_location}</p>
-            <p><strong>Department:</strong> {selectedEmployee.department?.name}</p>
-            <p><strong>Job Title:</strong> {selectedEmployee.job_title}</p>
-            <p><strong>Employee Status:</strong> {selectedEmployee.employee_status}</p>
-            <p><strong>Account Status:</strong> {selectedEmployee.account_status}</p>
-            <p><strong>Date Created:</strong> {selectedEmployee.date_created}</p>
-            <p><strong>Last Updated:</strong> {selectedEmployee.last_updated}</p>
-          </div>
-        )}
-      </Modal>
 
       {/* Edit Employee Modal */}
       <EditEmployee

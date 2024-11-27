@@ -15,25 +15,25 @@ const GeneralEmployeeView = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeeData, setEmployeeData] = useState([])
 
-  const fetchGeneralEmployeeData = async() => {
-   try {
-     const employeeResponse = await employeeService.getAllGeneralUsersByOrganisationId(
-       authService.getUserOrganisationId()
-     );
- 
-     if (employeeResponse.status == 200) {
-       setEmployeeData(employeeResponse?.data)
-     }
-   } catch (e) {
-     console.log(e);
-     message.error("No employees found")
-   }
- }
+  const fetchGeneralEmployeeData = async () => {
+    try {
+      const employeeResponse = await employeeService.getAllGeneralUsersByOrganisationId(
+        authService.getUserOrganisationId()
+      );
 
-   useEffect(() => {
+      if (employeeResponse.status == 200) {
+        setEmployeeData(employeeResponse?.data)
+      }
+    } catch (e) {
+      console.log(e);
+      message.error("No employees found")
+    }
+  }
+
+  useEffect(() => {
     fetchGeneralEmployeeData()
-   }, [])
-   
+  }, [])
+
   const columns = [
     {
       title: (
@@ -134,11 +134,7 @@ const GeneralEmployeeView = () => {
             <Button
               className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
-              onClick={() => {
-                navigate(
-                  `#`
-                );
-              }}
+              onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
             />
           </Tooltip>
           <Tooltip title="Edit Employee">

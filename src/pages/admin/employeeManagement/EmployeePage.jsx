@@ -1,547 +1,271 @@
-import VehicleService from "../../../../services/vehicle.service";
+import employeeService from "../../../services/employee.service";
 import {
     ArrowLeftOutlined,
     CheckCircleOutlined,
-    CloseCircleOutlined, DeleteOutlined,
-    EditOutlined, EyeOutlined,
-    PlusCircleOutlined
+    CloseCircleOutlined,
+    EyeOutlined,
 } from "@ant-design/icons";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
-import { Button, Divider, Popconfirm, Space, Table, Tag, Tooltip, Typography } from "antd";
-import bus from "../../.././assets/images/svgs/laptop.svg";
-import car from "../../.././assets/images/svgs/laptop.svg";
-import truck from "../../.././assets/images/svgs/laptop.svg";
-import tractor from "../../.././assets/images/svgs/laptop.svg";
-import carOther from "../../.././assets/images/svgs/laptop.svg";
-import { useState } from "react";
+import { Button, Divider, Space, Table, Tag, Tooltip } from "antd";
 
 export const EmployeePageLoader = async ({ params }) => {
-    const vehicleId = params.id
+    const id = params.id;
     try {
-        const vehicleResponse = await VehicleService.getVehicleById(vehicleId)
-        const tripsResponse = await TripService.getTripsByVehicleId(vehicleId)
-        const damagesResponse = await VehicleDamageService.getDamagesByVehicleId(vehicleId)
-        const servicesResponse = await VehicleServiceService.getServicesByVehicleId(vehicleId)
-        const insurancesResponse = await VehicleInsuranceService.getInsurancesByVehicleId(vehicleId)
-
+        const userResponse = await employeeService.get(id);
         return {
-            vehicle: vehicleResponse.data,
-            trips: tripsResponse.data,
-            damages: damagesResponse.data,
-            services: servicesResponse.data,
-            insurances: insurancesResponse.data,
-        }
+            userData: userResponse?.data,
+            assetRequests: [],
+            assetAllocations: [],
+        };
     } catch (e) {
-        console.log(e)
+        console.error(e);
         return {
-            vehicle: {}
-        }
+            userData: {},
+            assetRequests: [],
+            assetAllocations: [],
+        };
     }
-}
+};
 
 const EmployeePage = () => {
-    const [editVehicleModal, setEditVehicleModal] = useState(false);
-    const [newTripModal, setNewTripModal] = useState(false);
-    const [editTripModal, setEditTripModal] = useState(false);
-    const [newDamageModal, setNewDamageModal] = useState(false);
-    const [newVehicleService, setNewVehicleService] = useState(false)
-    const [newVehicleInsurance, setNewVehicleInsurance] = useState(false)
-
-    const [selectedDamage, setSelectedDamage] = useState(null)
-    const [selectedVehicleService, setSelectedVehicleService] = useState(null)
-    const [selectedVehicleInsurance, setSelectedVehicleInsurance] = useState(null)
-    const [selectedTrip, setSelectedTrip] = useState(null)
-
+    const { userData, assetRequests, assetAllocations } = useLoaderData();
     const navigate = useNavigate();
-    const { vehicle, trips, damages, services, insurances } = useLoaderData();
 
-    const getSrc = () => {
-        let src;
-        switch (vehicle?.type) {
-            case "BUS":
-                src = bus;
-                break;
-            case "CAR":
-                src = car;
-                break;
-            case "TRUCK":
-                src = truck;
-                break;
-            case "TRACTOR":
-                src = tractor;
-                break;
-            default:
-                src = carOther;
-        }
-        return src
-    }
-
-    const editDamage = (damage) => {
-        setSelectedDamage(damage)
-        setNewDamageModal(true)
-    }
-
-    const editService = (service) => {
-        setSelectedVehicleService(service)
-        setNewVehicleService(true)
-    }
-
-    const editInsurance = (insurance) => {
-        setSelectedVehicleInsurance(insurance)
-        setNewVehicleService(true)
-    }
-
-    const editTrip = (trip) => {
-        setSelectedTrip(trip)
-        setEditTripModal(true)
-    }
-
-    const tripTableColumns = [
+    const requestTableColumns = [
         {
-            title: "Destination",
-            dataIndex: "destination",
-            key: "destination"
+            title: "Category",
+            dataIndex: ["category", "name"],
+            key: "category",
         },
         {
-            title: "Return Date",
-            key: "return_date",
-            render: (record) => `${toHumanDateTime(record?.return_date)}`
+            title: "Request Date",
+            dataIndex: "request_date",
+            key: "request_date",
         },
         {
-            title: "Type",
-            dataIndex: "trip_type",
-            key: "trip_type"
-        },
-        {
-            title: "Driver",
-            key: "driver",
-            responsive: ['xxl'],
-            render: (record) => `${record?.driver?.firstName} ${record?.driver?.lastName}`
-        },
-        {
-            title: "Distance traveled (Km)",
-            key: "distance",
-            responsive: ['xxl'],
-            render: (record) => `${record?.millageAtStart - record?.millageAtFinish}`
-        },
-        {
-            title: "Fuel Used (L)",
-            dataIndex: "fuel_used",
-            responsive: ['xxl'],
-            key: "fuel_used",
-        },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Trip">
-                        <Button
-                            type="primary"
-                            icon={<EyeOutlined />}
-                        // onClick={() => {
-                        //     navigate(
-                        //         `/admin/trip/${record?.id}/`
-                        //     );
-                        // }}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Edit Trip">
-                        <Button
-                            type="primary"
-                            style={{ background: editColor }}
-                            icon={<EditOutlined />}
-                            onClick={() => editTrip(record)}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Delete Trip">
-                        <Popconfirm
-                            title="Delete Trip"
-                            description="Are you sure you want to delete this trip?"
-                            // onConfirm={() => deleteTrip(record)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button
-                                type="danger"
-                                style={{ color: deleteColor }}
-                                icon={<DeleteOutlined />}
-                            />
-                        </Popconfirm>
-                    </Tooltip>
-                </Space>
-            )
-        }
-    ]
-
-    const damageTableColumns = [
-        {
-            title: "Severity",
-            dataIndex: "damage_severity",
-            key: "damage_severity"
-        },
-        {
-            title: "Date",
-            key: "damage_date",
-            render: (record) => `${toHumanDate(record?.damage_date)}`
-        },
-        {
-            title: "Repair Status",
-            dataIndex: "repair_status",
-            key: "repair_status"
-        },
-        {
-            title: "description",
-            dataIndex: "description",
-            key: "description",
-            responsive: ['xxl'],
-        },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Damage">
-                        <Button
-                            type="primary"
-                            icon={<EyeOutlined />}
-                        // onClick={() => {
-                        //     navigate(
-                        //         `/admin/damage/${record.id}/`
-                        //     );
-                        // }}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Edit Damage">
-                        <Button
-                            type="primary"
-                            style={{ backgroundColor: editColor }}
-                            icon={<EditOutlined />}
-                            onClick={() => editDamage(record)}
-                        />
-                    </Tooltip>
-                </Space>
-            )
-        }
-    ]
-
-    const serviceTableColumns = [
-        {
-            title: "Service Type",
-            dataIndex: "service_type",
-            key: "serviceType"
-        },
-        {
-            title: "Date",
-            key: "dateOfService",
-            render: (record) => `${toHumanDate(record.date_of_service)}`
-        },
-        {
-            title: "Cost",
-            key: "cost",
-            render: (record) => record.currency + record.cost
-        },
-        {
-            title: "Notes",
-            dataIndex: "notes",
-            key: "notes",
-            responsive: ['xxl'],
-        },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Service">
-                        <Button
-                            type="primary"
-                            icon={<EyeOutlined />}
-                        // onClick={() => {
-                        //     navigate(
-                        //         `/admin/damage/${record.id}/`
-                        //     );
-                        // }}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Edit Service">
-                        <Button
-                            type="primary"
-                            style={{ backgroundColor: editColor }}
-                            icon={<EditOutlined />}
-                            onClick={() => editService(record)}
-                        />
-                    </Tooltip>
-                </Space>
-            )
-        }
-    ]
-
-    const insuranceTableColumns = [
-        {
-            title: "Purchased Date",
-            key: "purchased_date",
-            render: (record) => `${toHumanDate(record?.purchased_date)}`
-        },
-        {
-            title: "Expiry Date",
-            key: "expiry_date",
-            render: (record) => `${toHumanDate(record?.expiry_date)}`
-        },
-        {
-            title: "Cost",
-            key: "estimated_insurance_cost",
-            render: (record) => record.currency + record.amount,
+            title: "Request Status",
+            dataIndex: "request_status",
+            key: "request_status",
         },
         {
             title: "Description",
-            key: "description",
-            render: (record) => (
-                <Typography.Paragraph ellipsis={{ rows: 2, expandable: true, symbol: "more" }} className="mt-2">
-                    {record.description}
-                </Typography.Paragraph>
-            ),
-            responsive: ["xl"],
+            dataIndex: "request_description",
+            key: "request_description",
+        },
+        {
+            title: "Allocation Status",
+            dataIndex: "allocation_status",
+            key: "allocation_status",
         },
         {
             title: "Actions",
             key: "actions",
             render: (record) => (
                 <Space size="middle">
-                    <Tooltip title="View Trip">
-                        <Button
-                            type="primary"
-                            icon={<EyeOutlined />}
-                            onClick={() => {
-                                navigate(
-                                    `/admin/insurance/${record.id}/`
-                                );
-                            }}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Edit Insurance">
-                        <Button
-                            type="primary"
-                            style={{ backgroundColor: editColor }}
-                            icon={<EditOutlined />}
-                            onClick={() => editInsurance(record)}
-                        />
+                    <Tooltip title="View Request">
+                        <Button type="primary" icon={<EyeOutlined />} />
                     </Tooltip>
                 </Space>
-            )
-        }
-    ]
+            ),
+        },
+    ];
+
+    const allocationTableColumns = [
+        {
+            title: "Asset Name",
+            dataIndex: ["asset", "model_name"],
+            key: "asset",
+        },
+        {
+            title: "Asset Number",
+            dataIndex: ["asset", "asset_number"],
+            key: "asset_number",
+        },
+        {
+            title: "Serial Number",
+            dataIndex: ["asset", "serial_number"],
+            key: "serial_number",
+        },
+        {
+            title: "Date Allocated",
+            dataIndex: "date_allocated",
+            key: "date_allocated",
+        },
+        {
+            title: "Return Date",
+            dataIndex: "return_date",
+            key: "return_date",
+        },
+        {
+            title: "Actions",
+            key: "actions",
+            render: (record) => (
+                <Space size="middle">
+                    <Tooltip title="View Allocation">
+                        <Button type="primary" icon={<EyeOutlined />} />
+                    </Tooltip>
+                </Space>
+            ),
+        },
+    ];
 
     return (
         <>
-            <div className="h-100">
-                <Link to={'..'}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        navigate(-1);
-                    }}
-                    className='text-muted text-decoration-none mb-2'
-                >
-                    <ArrowLeftOutlined /> Back
-                </Link>
-                <div className="d-flex justify-content-between align-items-center">
-                    <h1>Vehicle Page</h1>
-                    <Button
-                        type="primary"
-                        onClick={() => setEditVehicleModal(true)}
-                        icon={<EditOutlined />}
-                    >
-                        Edit Vehicle
-                    </Button>
+            <Link
+                to=".."
+                onClick={(e) => {
+                    e.preventDefault();
+                    navigate(-1);
+                }}
+                className="text-gray-600 hover:text-gray-800 mb-4 flex items-center gap-2"
+            >
+                <ArrowLeftOutlined /> Back
+            </Link>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-semibold text-gray-800">Employee Details</h1>
+            </div>
+            <Divider />
+
+            <div className="bg-white shadow rounded-md p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 className="text-lg font-medium text-gray-700 mb-4">Main Details</h3>
+                        <div className="space-y-3">
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">First Name:</span>
+                                <strong className="text-gray-900">{userData?.first_name}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Last Name:</span>
+                                <strong className="text-gray-900">{userData?.last_name}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Gender:</span>
+                                <strong className="text-gray-900">{userData?.gender}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Role:</span>
+                                <strong className="text-gray-900">{userData?.role}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Job Title:</span>
+                                <strong className="text-gray-900">{userData?.job_title}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Current Location:</span>
+                                <strong className="text-gray-900">{userData?.current_location}</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 className="text-lg font-medium text-gray-700 mb-4">Account Details</h3>
+                        <div className="space-y-3">
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Username:</span>
+                                <strong className="text-gray-900">{userData?.username}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Account Status:</span>
+                                <Tag
+                                    icon={
+                                        userData?.account_status === "ACTIVE" ? (
+                                            <CheckCircleOutlined />
+                                        ) : (
+                                            <CloseCircleOutlined />
+                                        )
+                                    }
+                                    color={userData?.account_status === "ACTIVE" ? "green" : "red"}
+                                >
+                                    {userData?.account_status}
+                                </Tag>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Employee Status:</span>
+                                <strong className="text-gray-900">{userData?.employee_status}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Is Superuser:</span>
+                                <strong className="text-gray-900">{userData?.is_superuser ? "Yes" : "No"}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Is Staff:</span>
+                                <strong className="text-gray-900">{userData?.is_staff ? "Yes" : "No"}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Is Active:</span>
+                                <strong className="text-gray-900">{userData?.is_active ? "Yes" : "No"}</strong>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <Divider />
 
-                <div className="row mb-5">
-                    <div className="col-lg-7 px-4">
-                        <div className="d-flex justify-content-between align-items-center">
-                            <h3>{vehicle?.name}</h3>
-                            <Tag
-                                icon={vehicle?.availability === "AVAILABLE" ? <CheckCircleOutlined /> :
-                                    <CloseCircleOutlined />}
-                                color={vehicle?.availability === "AVAILABLE" ? "green" : "red"}
-                            >
-                                {vehicle?.availability}
-                            </Tag>
-                        </div>
-                        <div className="d-flex">
-                            <img src={getSrc()} alt={vehicle?.name} style={{ width: "40%" }} />
-                            <div className="ml-4">
-                                <h4>{vehicle?.manufacturer} {vehicle?.model}</h4>
-                                <Typography.Title level={5} type="success">{vehicle?.numberplate}</Typography.Title>
-                                <p>{vehicle?.description}</p>
-                                <strong>{vehicle?.type}</strong>
-                            </div>
-                        </div>
-
-                        <div className="section mt-5">
-                            <h4 className="mb-3">Financial</h4>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>Purchase Price:</span>
-                                        <strong>{vehicle?.currency} {vehicle?.purchase_price}</strong></p>
-                                    <p className="table-row"><span>Depreciation Rate:</span>
-                                        <strong>{vehicle?.depreciation}</strong></p>
-                                    <p className="table-row"><span>Purchase Date:</span>
-                                        <strong>{toHumanDate(vehicle?.purchased_date)}</strong></p>
-                                </div>
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>User estimated current valuation:</span>
-                                        <strong>{vehicle?.currency}{vehicle?.user_estimated_latest_valuation}</strong>
-                                    </p>
-                                    <p className="table-row"><span>System Estimated Current valuation:</span>
-                                        <strong>{vehicle?.system_estimated_latest_valuation}</strong></p>
-                                    <p className="table-row"><span>Purchase Millage:</span>
-                                        <strong>{vehicle?.purchase_millage}</strong></p>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div className="section mt-5">
-                            <h4 className="mb-3">Operation Information</h4>
-                            <div className="row gx-4">
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>Net Weight:</span>
-                                        <strong>{vehicle?.net_weight}</strong></p>
-                                    <p className="table-row"><span>Fuel Capacity:</span>
-                                        <strong>{vehicle?.fuel_capacity}</strong></p>
-                                    <p className="table-row"><span>Seating Capacity:</span>
-                                        <strong>{vehicle?.number_of_seats}</strong></p>
-                                    <p className="table-row"><span>Transmission:</span>
-                                        <strong>{vehicle?.transmission}</strong></p>
-                                </div>
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>Carry Weight:</span>
-                                        <strong>{vehicle?.carry_weight}</strong></p>
-                                    <p className="table-row"><span>Fuel Type:</span>
-                                        <strong>{vehicle?.fuel_type}</strong></p>
-                                    <p className="table-row"><span>Drive:</span> <strong>{vehicle?.drive}</strong></p>
-                                    <p className="table-row"><span>Current Millage:</span>
-                                        <strong>{vehicle?.current_millage}</strong></p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="section mt-5">
-                            <h4 className="mb-3">Key information</h4>
-                            <div className="row gx-4">
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>Registration Number:</span>
-                                        <strong>{vehicle?.registration_number}</strong></p>
-                                    <p className="table-row"><span>Chassis Number:</span>
-                                        <strong>{vehicle?.chassis_number}</strong></p>
-                                    <p className="table-row"><span>Engine Number:</span>
-                                        <strong>{vehicle?.engine_number}</strong></p>
-                                </div>
-                                <div className="col-md-6">
-                                    <p className="table-row"><span>Production Year:</span>
-                                        <strong>{toYear(vehicle?.production_year)}</strong></p>
-                                    <p className="table-row"><span>Vin:</span>
-                                        <strong>{vehicle?.vin}</strong></p>
-                                    <p className="table-row"><span>Engine Size:</span>
-                                        <strong>{vehicle?.engine_size} CC</strong></p>
-                                </div>
-                            </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 className="text-lg font-medium text-gray-700 mb-4">Contact Information</h3>
+                        <div className="space-y-3">
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Personal Email:</span>
+                                <strong className="text-gray-900">{userData?.personal_email}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Company Email:</span>
+                                <strong className="text-gray-900">{userData?.company_email}</strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Phone Number:</span>
+                                <strong className="text-gray-900">{userData?.phone_number}</strong>
+                            </p>
                         </div>
                     </div>
-
-                    <div className="col-lg-5 p-3" style={{ background: "#e3e1df" }}>
-                        <div className="mb-3">
-                            <h5>
-                                Vehicle Trips
-                                <Button
-                                    type="text"
-                                    icon={<PlusCircleOutlined />}
-                                    onClick={() => setNewTripModal(true)}
-                                />
-                            </h5>
-                            <Table columns={tripTableColumns} dataSource={trips} rowKey="id" />
-                        </div>
-
-                        <div className="mb-3">
-                            <h5>
-                                Vehicle Damages
-                                <Button
-                                    type="text"
-                                    icon={<PlusCircleOutlined />}
-                                    onClick={() => setNewDamageModal(true)}
-                                />
-                            </h5>
-                            <Table columns={damageTableColumns} dataSource={damages} rowKey="id" />
-                        </div>
-
-                        <div className="mb-3">
-                            <h5>
-                                Vehicle Services
-                                <Button
-                                    type="text"
-                                    icon={<PlusCircleOutlined />}
-                                    onClick={() => setNewVehicleService(true)}
-                                />
-                            </h5>
-                            <Table columns={serviceTableColumns} dataSource={services} rowKey="id" />
-                        </div>
-
-                        <div className="mb-3">
-                            <h5>
-                                Vehicle Insurances
-                                <Button
-                                    type="text"
-                                    icon={<PlusCircleOutlined />}
-                                    onClick={() => setNewVehicleInsurance(true)}
-                                />
-                            </h5>
-                            <Table columns={insuranceTableColumns} dataSource={insurances} rowKey="id" />
+                    <div>
+                        <h3 className="text-lg font-medium text-gray-700 mb-4">Other Details</h3>
+                        <div className="space-y-3">
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Date Created:</span>
+                                <strong className="text-gray-900">
+                                    {new Date(userData?.date_created).toLocaleString()}
+                                </strong>
+                            </p>
+                            <p className="flex justify-between border-b py-2">
+                                <span className="text-gray-600">Last Updated:</span>
+                                <strong className="text-gray-900">
+                                    {new Date(userData?.last_updated).toLocaleString()}
+                                </strong>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <NewVehicle
-                open={editVehicleModal}
-                close={() => setEditVehicleModal(false)}
-                vehicle={vehicle}
-            />
+            <Divider />
 
-            <NewTrip
-                open={newTripModal}
-                close={() => setNewTripModal(false)}
-                vehicle={vehicle}
-            />
-
-            <EditTrip
-                open={editTripModal}
-                close={() => setEditTripModal(false)}
-                trip={selectedTrip}
-            />
-
-            <NewVehicleDamage
-                open={newDamageModal}
-                close={() => setNewDamageModal(false)}
-                vehicleId={vehicle.id}
-                vehicleDamage={selectedDamage}
-            />
-
-            <NewVehicleService
-                open={newVehicleService}
-                close={() => setNewVehicleService(false)}
-                vehicleId={vehicle.id}
-                vehicleService={selectedVehicleService}
-            />
-
-            <NewVehicleInsurance
-                open={newVehicleInsurance}
-                close={() => setNewVehicleInsurance(false)}
-                vehicleId={vehicle.id}
-                vehicleService={selectedVehicleInsurance}
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 className="text-lg font-medium text-gray-700 mb-4 pr-5">Asset Request History</h3>
+                    <Divider />
+                    <Table
+                        columns={requestTableColumns}
+                        dataSource={assetRequests}
+                        rowKey="id"
+                        pagination={{ pageSize: 5 }}
+                    />
+                </div>
+                <div>
+                    <h3 className="text-lg font-medium text-gray-700 mb-4 mr-5">Asset Allocation History</h3>
+                    <Divider />
+                    <Table
+                        columns={allocationTableColumns}
+                        dataSource={assetAllocations}
+                        rowKey="id"
+                        pagination={{ pageSize: 5 }}
+                    />
+                </div>
+            </div>
         </>
     );
-}
+};
 
 export default EmployeePage;
