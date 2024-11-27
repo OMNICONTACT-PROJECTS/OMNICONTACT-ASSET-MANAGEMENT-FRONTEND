@@ -777,14 +777,14 @@ button.ant-btn.bell strong {
   font-size: 14px;
 }
 .icon-box {
-  width: 48px;
-  height: 48px;
-  text-align: center;
-  background: hsl(216, 45%, 98%);
-  color: #002147;
-  border-radius: 0.5rem;
-  margin-left: auto;
-  line-height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%; 
+  width: 50px; 
+  height: 50px; 
+  color: #002147; 
 }
 
 .icon-box span {
@@ -2833,9 +2833,11 @@ section.ant-layout.ant-layout-has-sider.layout-dashboard.layout-profile
   path {
   fill: #4A5568;
 }
+.profile-icon{
+  color: white !important;
+}
 
 
 .layout-dashboard .header-control .header-dropdown-btn:hover {
-  background-color: #163d69; 
-  color: #EDF2F7;
+  background-color: #2C5282;
 }
