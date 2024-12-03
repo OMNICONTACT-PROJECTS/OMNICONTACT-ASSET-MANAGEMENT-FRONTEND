@@ -15,7 +15,9 @@ import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmpl
 import { AllDepartmentsViewLoader } from "./pages/admin/departments/Departments";
 import EmployeePage, { EmployeePageLoader } from "./pages/admin/employeeManagement/EmployeePage";
 import UserProfile, { userProfileLoader } from "./pages/admin/employeeManagement/UserProfile";
-import AssetCategoryList from "./pages/admin/assetManagement/AssetCategory/AssetCategoryList";
+import AssetCategoryList, { assetCategoryLoader } from "./pages/admin/assetManagement/AssetCategory/AssetCategoryList";
+import AssetItemsList, { assetItemsLoader } from "./pages/admin/assetManagement/AssetItems/AssetItemsList";
+import AssetList, { assetLoader } from "./pages/admin/assetManagement/Assets/AssetList";
 
 const router = createBrowserRouter([
   {
@@ -65,6 +67,17 @@ const router = createBrowserRouter([
       {
         path: "/admin/asset-categories",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetCategoryList />,
+        loader: assetCategoryLoader
+      },
+      {
+        path: "/admin/asset-category/:id/asset-items",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetItemsList />,
+        loader: assetItemsLoader
+      },
+      {
+        path: "/admin/assets",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetList />,
+        loader: assetLoader
       },
     ],
   },

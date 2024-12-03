@@ -16,7 +16,7 @@ import employeeService from "../../../../services/employee.service";
 
 const { Option } = Select;
 
-const NewAssetItem = ({ visible, onClose, onSuccess, category }) => {
+const NewAsset = ({ visible, onClose, onSuccess, category }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
@@ -179,11 +179,11 @@ const NewAssetItem = ({ visible, onClose, onSuccess, category }) => {
   );
 };
 
-NewAssetItem.propTypes = {
+NewAsset.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired,
   category: PropTypes.string.isRequired,
 };
 
-export default NewAssetItem;
+export default NewAsset;

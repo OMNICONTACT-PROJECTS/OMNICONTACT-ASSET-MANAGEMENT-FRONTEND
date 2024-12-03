@@ -10,6 +10,10 @@ class AssetService {
         return instance.get(`assets/get-all-by-organisation-id/${organisation_id}/`)
     }
 
+    getAllByCategoryId(category_id) {
+        return instance.get(`assets/get-all-by-category-id/${category_id}/`)
+    }
+
     getAll() {
         return instance.get('assets/get-all/')
     }

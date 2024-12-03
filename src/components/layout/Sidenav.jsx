@@ -87,11 +87,11 @@ const Sidenav = ({ color }) => {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="8">
-              <NavLink to="/admin/asset-items">
+              <NavLink to="/admin/assets">
                 <span className="icon" style={{ background: page === "asset-items" ? color : "" }}>
                   <Table color={color} />
                 </span>
-                <span className="label">Asset Items</span>
+                <span className="label">All Assets</span>
               </NavLink>
             </Menu.Item>
             <Menu.Item key="10">

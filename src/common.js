@@ -1,5 +1,5 @@
 export const refreshPage = () => {
-    setTimeout(()=>{
+    setTimeout(() => {
         window.location.reload();
     }, 500);
 }

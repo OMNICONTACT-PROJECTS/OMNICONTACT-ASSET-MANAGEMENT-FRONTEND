@@ -1,160 +1,113 @@
-import { Button, Divider, Form, Modal, message, Select, AutoComplete } from "antd";
+import { Modal, Form, AutoComplete, Input, message } from "antd";
 import { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
-import authenticationService from "../../../../../services/authentication.service";
-import generalAssetsServices from "../../../../../services/general-assets.services";
-import { refreshPage } from "../../../../../common";
+import authService from "../../../../services/auth.service";
+import assetCategoriesServices from "../../../../services/asset-categories.services";
+import { refreshPage } from "../../../../common";
+import PropTypes from "prop-types";
 
 const NewAssetCategory = ({ open, close }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [formData, setFormData] = useState({
-    name: ""
-  });
 
-  const tenant = authenticationService.getUserTenantId();
+  const organisation = authService.getUserOrganisationId();
 
-  const handleFormChange = (field, value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [field]: value,
-    }));
-  };
-
-  const handleFormSubmit = async () => {
+  const handleSubmit = async () => {
     try {
+      const values = await form.validateFields();
+      const data = { ...values, organisation };
+      console.log("Request data:", data);
       setLoading(true);
-      setDisabled(true);
-
-      const { name } = formData;
-      const data = {
-        name,
-        tenant,
-      };
-      console.log("form data: ", data);
-
-      const response = await generalAssetsServices.createAssetCategory(data);
-
-      if (response.status === 201) {
-        refreshPage()
-        message.success("New Asset Category Added Successfully");
+      const response = await assetCategoriesServices.create(data);
+      if (response?.status === 201) {
+        message.success("Asset category added successfully");
+        form.resetFields();
+        close();
+        refreshPage();
       } else {
-        console.log("Request was not successful. Status:", response.status);
-        message.error("An error occurred, please check your network.");
+        message.error("Failed to add asset category, please try again later");
       }
     } catch (error) {
-      console.error("Error creating new asset category:", error);
-      message.error(error ? error?.response?.data?.error : "An error occured, please check your network");
+      console.error("Failed to submit form:", error);
+      message.error("An error occurred while adding the asset category");
     } finally {
       setLoading(false);
-      setDisabled(false);
-      close();
     }
   };
 
   return (
-    <>
-      <Modal
-        title="Add New Asset Category"
-        visible={open}
-        onCancel={close}
-        okButtonProps={{
-          className: "d-none",
-        }}
-        cancelButtonProps={{
-          className: "d-none",
-        }}
-      >
-        <Form layout="vertical" form={form} onFinish={handleFormSubmit}>
-          <Form.Item
-            label="Asset category name"
-            name="name"
-            rules={[{ required: true, message: "Term name is required!" }]}
-          >
-            <AutoComplete
-              size="large"
-              placeholder="Select term"
-              onChange={(value) => handleFormChange("name", value)}
-              filterOption={(inputValue, option) =>
-                option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-              }
-              showSearch
-              options={[
-                { label: "CHAIRS", value: "CHAIRS" },
-                { label: "DESKS", value: "DESKS" },
-                { label: "TABLES", value: "TABLES" },
-                { label: "BOOKS", value: "BOOKS" },
-                { label: "SPORTS EQUIPMENT", value: "SPORTS EQUIPMENT" },
-                { label: "ART SUPPLIES", value: "ART SUPPLIES" },
-                { label: "FURNITURE", value: "FURNITURE" },
-                { label: "LOCKERS", value: "LOCKERS" },
-                { label: "CABINETS", value: "CABINETS" },
-                { label: "BOOKSHELVES", value: "BOOKSHELVES" },
-                { label: "AIR CONDITIONERS", value: "AIR CONDITIONERS" },
-                { label: "HEATERS", value: "HEATERS" },
-                { label: "STORAGE BINS", value: "STORAGE BINS" },
-                { label: "SMART BOARDS", value: "SMART BOARDS" },
-                { label: "SCREENS", value: "SCREENS" },
-                { label: "TENNIS TABLES", value: "TENNIS TABLES" },
-                { label: "FOOTBALLS", value: "FOOTBALLS" },
-                { label: "BASKETBALLS", value: "BASKETBALLS" },
-                { label: "VOLLEYBALLS", value: "VOLLEYBALLS" },
-                { label: "CRICKET EQUIPMENT", value: "CRICKET EQUIPMENT" },
-                { label: "SWIMMING POOL EQUIPMENT", value: "SWIMMING POOL EQUIPMENT" },
-                { label: "SCHOOL UNIFORMS", value: "SCHOOL UNIFORMS" },
-                { label: "TEACHER SUPPLIES", value: "TEACHER SUPPLIES" },
-                { label: "STUDENT SUPPLIES", value: "STUDENT SUPPLIES" },
-                { label: "CLEANING SUPPLIES", value: "CLEANING SUPPLIES" },
-                { label: "TOYS", value: "TOYS" },
-                { label: "KITCHEN APPLIANCES", value: "KITCHEN APPLIANCES" },
-                { label: "CRAFT MATERIALS", value: "CRAFT MATERIALS" },
-                { label: "FIRST AID SUPPLIES", value: "FIRST AID SUPPLIES" },
-                { label: "MATTRESSES", value: "MATTRESSES" },
-                { label: "PENCILS", value: "PENCILS" },
-                { label: "PENS", value: "PENS" },
-                { label: "ERASERS", value: "ERASERS" },
-                { label: "RULERS", value: "RULERS" },
-                { label: "SCISSORS", value: "SCISSORS" },
-                { label: "GLUE", value: "GLUE" },
-                { label: "PAINTS", value: "PAINTS" },
-                { label: "BRUSHES", value: "BRUSHES" },
-                { label: "GLOBES", value: "GLOBES" },
-                { label: "MAPS", value: "MAPS" },
-                { label: "CHEMICALS", value: "CHEMICALS" },
-                { label: "TEST TUBES", value: "TEST TUBES" },
-                { label: "BUNSEN BURNERS", value: "BUNSEN BURNERS" },
-                { label: "MICROSCOPE SLIDES", value: "MICROSCOPE SLIDES" },
-                { label: "PAINTBRUSHES", value: "PAINTBRUSHES" },
-                { label: "CANVAS", value: "CANVAS" },
-                { label: "MUSICAL SCORES", value: "MUSICAL SCORES" },
-                { label: "DRUMS", value: "DRUMS" },
-                { label: "GUITARS", value: "GUITARS" },
-                { label: "PIANOS", value: "PIANOS" },
-                { label: "TRUMPETS", value: "TRUMPETS" },
-                { label: "VIOLINS", value: "VIOLINS" },
-                { label: "PLAYGROUND EQUIPMENT", value: "PLAYGROUND EQUIPMENT" },
-              ]}
-            />
-          </Form.Item>
-          <Divider type="horizontal" />
-
-          <Button
-            type="primary"
+    <Modal
+      title="Add New Asset Category"
+      open={open}
+      onCancel={close}
+      onOk={handleSubmit}
+      confirmLoading={loading}
+      okText="Add"
+      cancelText="Cancel"
+      width={600}
+      maskClosable
+      destroyOnClose
+    >
+      <Form layout="vertical" form={form}>
+        <Form.Item
+          label="Asset category name"
+          name="name"
+          rules={[{ required: true, message: "Asset category name is required!" }]}
+        >
+          <AutoComplete
             size="large"
-            className="mt-3"
-            loading={loading}
-            disabled={disabled}
-            icon={<PlusOutlined />}
-            block
-            htmlType="submit"
-          >
-            Add new asset category
-          </Button>
-        </Form>
-      </Modal>
-    </>
+            placeholder="Select category"
+            filterOption={(inputValue, option) =>
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            }
+            showSearch
+            options={[
+              { label: "LAPTOP", value: "LAPTOP" },
+              { label: "DESKTOP", value: "DESKTOP" },
+              { label: "HEADSET", value: "HEADSET" },
+              { label: "PRINTER", value: "PRINTER" },
+              { label: "KEYBOARD", value: "KEYBOARD" },
+              { label: "MOUSE", value: "MOUSE" },
+              { label: "MONITOR", value: "MONITOR" },
+              { label: "TABLET", value: "TABLET" },
+              { label: "SMARTPHONE", value: "SMARTPHONE" },
+              { label: "PROJECTOR", value: "PROJECTOR" },
+              { label: "WEBCAM", value: "WEBCAM" },
+              { label: "SCANNER", value: "SCANNER" },
+              { label: "SERVER", value: "SERVER" },
+              { label: "ROUTER", value: "ROUTER" },
+              { label: "SWITCH", value: "SWITCH" },
+              { label: "UPS", value: "UPS" },
+              { label: "EXTERNAL HARD DRIVE", value: "EXTERNAL_HARD_DRIVE" },
+              { label: "USB FLASH DRIVE", value: "USB_FLASH_DRIVE" },
+              { label: "DOCKING STATION", value: "DOCKING_STATION" },
+              { label: "MICROPHONE", value: "MICROPHONE" },
+              { label: "SPEAKERS", value: "SPEAKERS" },
+              { label: "NETWORK CABLE", value: "NETWORK_CABLE" },
+              { label: "HEADPHONES", value: "HEADPHONES" },
+              { label: "SMART WATCH", value: "SMART_WATCH" },
+              { label: "VIRTUAL REALITY HEADSET", value: "VR_HEADSET" },
+              { label: "DRONE", value: "DRONE" },
+              { label: "CCTV CAMERA", value: "CCTV_CAMERA" },
+              { label: "ACCESS CONTROL DEVICE", value: "ACCESS_CONTROL_DEVICE" },
+              { label: "3D PRINTER", value: "3D_PRINTER" },
+              { label: "E-READER", value: "E_READER" },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: "Description is required!" }]}
+        >
+          <Input.TextArea rows={3} placeholder="Enter a brief description" />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
+};
+NewAssetCategory.propTypes = {
+  open: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 export default NewAssetCategory;

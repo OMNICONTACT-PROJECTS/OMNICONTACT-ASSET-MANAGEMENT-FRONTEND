@@ -11,7 +11,7 @@ const BackButton = () => {
                 e.preventDefault();
                 navigate(-1);
             }}
-            className="inline-flex items-center gap-2 px-3 text-sm font-medium bg-blue-600 border border-blue-800 rounded-md shadow-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="inline-flex items-center gap-1 px-3 text-sm font-medium bg-blue-600 border border-blue-800 rounded-md shadow-sm hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
             <span className="text-white"><ArrowLeftOutlined /> Back</span>
         </Link>

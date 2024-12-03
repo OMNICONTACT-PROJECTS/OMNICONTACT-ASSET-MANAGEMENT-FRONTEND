@@ -1,152 +1,137 @@
-import {
-  Button,
-  Form,
-  Modal,
-  message,
-  Select,
-} from "antd";
-import { useState } from "react";
-import generalAssetsServices from "../../../../../services/general-assets.services";
+import { Modal, Form, AutoComplete, Input, message } from "antd";
+import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import authService from "../../../../services/auth.service";
+import assetCategoriesServices from "../../../../services/asset-categories.services";
+import { refreshPage } from "../../../../common";
 
-
-const EditAssetCategory = ({ open, close, record }) => {
+const EditAssetCategory = ({ open, close, selectedRecord }) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [formData, setFormData] = useState({
-    name: record ? record?.name : "",
-  });
 
-  const handleFormChange = (field, value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [field]: value,
-    }));
-  };
+  const organisation = authService.getUserOrganisationId();
 
-  const handleFormSubmit = async () => {
+  useEffect(() => {
+    if (selectedRecord) {
+      form.setFieldsValue({
+        name: selectedRecord?.name || "",
+        description: selectedRecord?.description || "",
+      });
+    }
+  }, [selectedRecord, form]);
+
+  const handleSubmit = async () => {
     try {
+      if (!selectedRecord?.id) {
+        message.error("No valid asset category selected for editing.");
+        return;
+      }
+
+      const values = await form.validateFields();
+      const data = { ...values, organisation };
+
       setLoading(true);
-      setDisabled(true);
-
-      const { name } = formData;
-      const data = {
-        name: name || record?.name,
-      };
-
-      const id = record?.id;
-      console.log("form data: ", data, record?.is_active,);
-
-      const response = await generalAssetsServices.updateAssetCategory(id, data);
-
-      if (response.status === 200) {
+      const response = await assetCategoriesServices.update(selectedRecord.id, data);
+      if (response?.status === 200) {
         message.success("Asset category updated successfully");
-        window.location.reload();
+        form.resetFields();
+        close();
+        refreshPage()
       } else {
-        message.error("An error occurred, please check your network.");
+        message.error("Failed to update asset category, please try again later");
       }
     } catch (error) {
-      console.error("Error updating term:", error);
-      message.error(error ? error?.response?.data?.error : "An error occured while updating, please check your network");
+      console.error("Failed to submit form:", error);
+      message.error("An error occurred while updating the asset category");
     } finally {
       setLoading(false);
-      setDisabled(false);
-      close();
     }
   };
 
   return (
-    <>
-      <Modal
-        title="Update Asset Category"
-        visible={open}
-        onCancel={close}
-        okButtonProps={{
-          className: "d-none",
-        }}
-        cancelButtonProps={{
-          className: "d-none",
-        }}
-      >
-        <Form layout="vertical">
-          <Form.Item label="Asset category">
-            <Select
-              size="large"
-              defaultValue={record ? record?.name : "please select category"}
-              onChange={(value) => handleFormChange("name", value)}
-              showSearch
-              options={[
-                { label: "CHAIRS", value: "CHAIRS" },
-                { label: "DESKS", value: "DESKS" },
-                { label: "TABLES", value: "TABLES" },
-                { label: "BOOKS", value: "BOOKS" },
-                { label: "SPORTS EQUIPMENT", value: "SPORTS EQUIPMENT" },
-                { label: "ART SUPPLIES", value: "ART SUPPLIES" },
-                { label: "FURNITURE", value: "FURNITURE" },
-                { label: "LOCKERS", value: "LOCKERS" },
-                { label: "CABINETS", value: "CABINETS" },
-                { label: "BOOKSHELVES", value: "BOOKSHELVES" },
-                { label: "AIR CONDITIONERS", value: "AIR CONDITIONERS" },
-                { label: "HEATERS", value: "HEATERS" },
-                { label: "STORAGE BINS", value: "STORAGE BINS" },
-                { label: "SMART BOARDS", value: "SMART BOARDS" },
-                { label: "SCREENS", value: "SCREENS" },
-                { label: "TENNIS TABLES", value: "TENNIS TABLES" },
-                { label: "FOOTBALLS", value: "FOOTBALLS" },
-                { label: "BASKETBALLS", value: "BASKETBALLS" },
-                { label: "VOLLEYBALLS", value: "VOLLEYBALLS" },
-                { label: "CRICKET EQUIPMENT", value: "CRICKET EQUIPMENT" },
-                { label: "SWIMMING POOL EQUIPMENT", value: "SWIMMING POOL EQUIPMENT" },
-                { label: "SCHOOL UNIFORMS", value: "SCHOOL UNIFORMS" },
-                { label: "TEACHER SUPPLIES", value: "TEACHER SUPPLIES" },
-                { label: "STUDENT SUPPLIES", value: "STUDENT SUPPLIES" },
-                { label: "CLEANING SUPPLIES", value: "CLEANING SUPPLIES" },
-                { label: "TOYS", value: "TOYS" },
-                { label: "KITCHEN APPLIANCES", value: "KITCHEN APPLIANCES" },
-                { label: "CRAFT MATERIALS", value: "CRAFT MATERIALS" },
-                { label: "FIRST AID SUPPLIES", value: "FIRST AID SUPPLIES" },
-                { label: "MATTRESSES", value: "MATTRESSES" },
-                { label: "PENCILS", value: "PENCILS" },
-                { label: "PENS", value: "PENS" },
-                { label: "ERASERS", value: "ERASERS" },
-                { label: "RULERS", value: "RULERS" },
-                { label: "SCISSORS", value: "SCISSORS" },
-                { label: "GLUE", value: "GLUE" },
-                { label: "PAINTS", value: "PAINTS" },
-                { label: "BRUSHES", value: "BRUSHES" },
-                { label: "GLOBES", value: "GLOBES" },
-                { label: "MAPS", value: "MAPS" },
-                { label: "CHEMICALS", value: "CHEMICALS" },
-                { label: "TEST TUBES", value: "TEST TUBES" },
-                { label: "BUNSEN BURNERS", value: "BUNSEN BURNERS" },
-                { label: "MICROSCOPE SLIDES", value: "MICROSCOPE SLIDES" },
-                { label: "PAINTBRUSHES", value: "PAINTBRUSHES" },
-                { label: "CANVAS", value: "CANVAS" },
-                { label: "MUSICAL SCORES", value: "MUSICAL SCORES" },
-                { label: "DRUMS", value: "DRUMS" },
-                { label: "GUITARS", value: "GUITARS" },
-                { label: "PIANOS", value: "PIANOS" },
-                { label: "TRUMPETS", value: "TRUMPETS" },
-                { label: "VIOLINS", value: "VIOLINS" },
-                { label: "PLAYGROUND EQUIPMENT", value: "PLAYGROUND EQUIPMENT" },
-              ]}
-            />
-          </Form.Item>
-         
-          <Button
-            type="primary"
+    <Modal
+      title="Edit Asset Category"
+      open={open}
+      onCancel={close}
+      onOk={handleSubmit}
+      confirmLoading={loading}
+      okText="Update"
+      cancelText="Cancel"
+      width={600}
+      maskClosable
+      destroyOnClose
+    >
+      <Form layout="vertical" form={form}>
+        <Form.Item
+          label="Asset category name"
+          name="name"
+          rules={[{ required: true, message: "Asset category name is required!" }]}
+        >
+          <AutoComplete
             size="large"
-            className="mt-3"
-            loading={loading}
-            disabled={disabled}
-            block
-            onClick={handleFormSubmit}
-          >
-            Update asset category
-          </Button>
-        </Form>
-      </Modal>
-    </>
+            placeholder="Select category"
+            filterOption={(inputValue, option) =>
+              option?.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+            }
+            showSearch
+            options={[
+              { label: "LAPTOP", value: "LAPTOP" },
+              { label: "DESKTOP", value: "DESKTOP" },
+              { label: "HEADSET", value: "HEADSET" },
+              { label: "PRINTER", value: "PRINTER" },
+              { label: "KEYBOARD", value: "KEYBOARD" },
+              { label: "MOUSE", value: "MOUSE" },
+              { label: "MONITOR", value: "MONITOR" },
+              { label: "TABLET", value: "TABLET" },
+              { label: "SMARTPHONE", value: "SMARTPHONE" },
+              { label: "PROJECTOR", value: "PROJECTOR" },
+              { label: "WEBCAM", value: "WEBCAM" },
+              { label: "SCANNER", value: "SCANNER" },
+              { label: "SERVER", value: "SERVER" },
+              { label: "ROUTER", value: "ROUTER" },
+              { label: "SWITCH", value: "SWITCH" },
+              { label: "UPS", value: "UPS" },
+              { label: "EXTERNAL HARD DRIVE", value: "EXTERNAL_HARD_DRIVE" },
+              { label: "USB FLASH DRIVE", value: "USB_FLASH_DRIVE" },
+              { label: "DOCKING STATION", value: "DOCKING_STATION" },
+              { label: "MICROPHONE", value: "MICROPHONE" },
+              { label: "SPEAKERS", value: "SPEAKERS" },
+              { label: "NETWORK CABLE", value: "NETWORK_CABLE" },
+              { label: "HEADPHONES", value: "HEADPHONES" },
+              { label: "SMART WATCH", value: "SMART_WATCH" },
+              { label: "VIRTUAL REALITY HEADSET", value: "VR_HEADSET" },
+              { label: "DRONE", value: "DRONE" },
+              { label: "CCTV CAMERA", value: "CCTV_CAMERA" },
+              { label: "ACCESS CONTROL DEVICE", value: "ACCESS_CONTROL_DEVICE" },
+              { label: "3D PRINTER", value: "3D_PRINTER" },
+              { label: "E-READER", value: "E_READER" },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: "Description is required!" }]}
+        >
+          <Input.TextArea rows={3} placeholder="Enter a brief description" />
+        </Form.Item>
+      </Form>
+    </Modal>
   );
+};
+
+EditAssetCategory.propTypes = {
+  open: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  selectedRecord: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    description: PropTypes.string,
+  }),
+};
+
+EditAssetCategory.defaultProps = {
+  selectedRecord: null,
 };
 
 export default EditAssetCategory;

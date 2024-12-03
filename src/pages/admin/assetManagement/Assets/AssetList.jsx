@@ -3,41 +3,38 @@ import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import authService from "../../../../services/auth.service";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
-import NewAssetItem from "./NewAssetItem";
-import EditAssetItem from "./EditAssetItems";
-import BackButton from "../../../../utils/BackButton";
+// import NewAssetItem from "./NewAsset";
+import EditAssetItem from "./EditAsset";
+import authService from "../../../../services/auth.service";
 
-export const assetItemsLoader = async ({ params }) => {
+export const assetLoader = async () => {
     try {
-        const category_id = params?.id
-        const response = await assetsServices.getAllByCategoryId(category_id);
+        const response = await assetsServices.getAllByOrganisationId(authService.getUserOrganisationId());
 
         if (response?.status !== 200) {
-            message.error("No asset items found.");
+            message.error("No assets found.");
         }
 
         return {
-            assetItemsList: response?.data,
+            assetData: response?.data,
         };
     } catch (e) {
         console.log(e);
-        return { assetItemsList: [] };
+        return { assetData: [] };
     }
 };
 
-const AssetItemsList = () => {
-    const { id } = useParams();
-    const { assetItemsList } = useLoaderData();
+const AssetList = () => {
+    const { assetData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
     const navigate = useNavigate();
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
 
-    const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -50,7 +47,7 @@ const AssetItemsList = () => {
     ].map((status) => ({ text: status, value: status }));
 
     const handleSearch = () => {
-        return assetItemsList.filter((item) =>
+        return assetData.filter((item) =>
             item.asset_number.toLowerCase().includes(searchText.toLowerCase())
         );
     };
@@ -190,7 +187,6 @@ const AssetItemsList = () => {
 
     return (
         <>
-            <BackButton />
             <div className="flex justify-between items-center mt-2">
                 <div>
                     <Input
@@ -203,16 +199,22 @@ const AssetItemsList = () => {
                         Search
                     </Button>
                 </div>
-                <Button
-                    type="primary"
-                    style={{ marginRight: "25px" }}
-                    onClick={() => setNewAssetModalVisible(true)}
+                <Popconfirm
+                    title="Only bulky upload is done here. To add a single asset, go through asset categories."
+                    // onConfirm={() => setNewAssetModalVisible(true)}
+                    okText="OK"
+                    cancelText="Cancel"
                 >
-                    <Space>
-                        New Asset
-                        <PlusCircleOutlined />
-                    </Space>
-                </Button>
+                    <Button
+                        type="primary"
+                        style={{ marginRight: "25px" }}
+                    >
+                        <Space>
+                            Bulk Upload Assets
+                            <PlusCircleOutlined />
+                        </Space>
+                    </Button>
+                </Popconfirm>
             </div>
 
             <Table
@@ -222,12 +224,11 @@ const AssetItemsList = () => {
                 rowKey={(record) => record.id}
             />
 
-            <NewAssetItem
+            {/* <NewAssetItem
                 visible={newAssetModalVisible}
                 onClose={() => setNewAssetModalVisible(false)}
                 onSuccess={() => refreshPage()}
-                category={id}
-            />
+            /> */}
 
             <EditAssetItem
                 visible={EditAssetModalState}
@@ -239,4 +240,4 @@ const AssetItemsList = () => {
     );
 };
 
-export default AssetItemsList;
+export default AssetList;

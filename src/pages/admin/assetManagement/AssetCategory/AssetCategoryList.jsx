@@ -1,62 +1,80 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Popconfirm, Space, Table, Tooltip, Divider, message, Alert } from "antd";
+import { Button, Popconfirm, Space, Table, Tooltip, message, Alert } from "antd";
+import { Edit3, LucideView, Trash2 } from 'lucide-react';
+
 import {
-    DeleteOutlined,
-    EditOutlined,
-    EyeOutlined,
     PlusCircleOutlined,
-} from "@ant-design/icons";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-// import NewAssetCategory from "./NewAssetCategory";
-// import EditAssetCategory from "./EditAssetCategory";
+}
+    from "@ant-design/icons";
+import { useState } from "react";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import NewAssetCategory from "./NewAssetCategory";
 import authService from "../../../../services/auth.service";
+import assetCategoriesServices from "../../../../services/asset-categories.services";
+import EditAssetCategory from "./EditAssetCategory";
+import { refreshPage } from "../../../../common";
+
+export const assetCategoryLoader = async () => {
+    try {
+        const response = await assetCategoriesServices.getAllByOrganisationId(authService.getUserOrganisationId());
+
+        if (response?.status !== 200) {
+            message.error("No asset categories found.");
+        }
+
+        return {
+            assetCategoryList: response?.data,
+        };
+    } catch (e) {
+        console.log(e);
+        return { assetCategoryList: [] };
+    }
+};
 
 const AssetCategoryList = () => {
+    const { assetCategoryList } = useLoaderData()
     const [EditAssetCategoryModalState, setEditAssetCategoryModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
-    const [assetCategoryList, setAssetCategoryList] = useState([]);
 
     const navigate = useNavigate();
 
-    const id = authService.getUserOrganisationId();
-
     const [newAssetCategoryModalState, setNewAssetCategoryModalState] = useState(false);
-
-
-    const fetchAssetCategories = async () => {
-        try {
-            const response = await generalAssetsServices.getAllAssetCategories(id);
-
-            if (response?.status === 200) {
-                setAssetCategoryList(response?.data);
-            } else {
-                console.log("Request was not successful. Status:", response.status);
-            }
-        } catch (error) {
-            console.error("Error occurred during fetching asset categories", error);
-        }
-    };
-
-    useEffect(() => {
-        fetchAssetCategories();
-    }, []);
 
     const assetCategoryTableColumns = [
         {
             title: "Asset Category ID",
             dataIndex: "id",
             key: "id",
+            sorter: (a, b) => a.id - b.id,
         },
         {
-            title: "Asset Category name",
+            title: "Asset Category Name",
             dataIndex: "name",
             key: "name",
             render: (dataIndex) => (
-                <strong>
-                    {dataIndex}
-                </strong>
-            )
+                <strong>{dataIndex}</strong>
+            ),
+            sorter: (a, b) => a.name.localeCompare(b.name),
+        },
+        {
+            title: "Organisation",
+            dataIndex: ["organisation", "organisation_name"],
+            key: "organisation_name",
+        },
+        {
+            title: "Date Created",
+            dataIndex: "created_at",
+            key: "created_at",
+            render: (date) =>
+                new Date(date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "short",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: false,
+                }),
+            sorter: (a, b) => new Date(a.date_created) - new Date(b.date_created),
         },
         {
             title: "Action",
@@ -66,26 +84,25 @@ const AssetCategoryList = () => {
                 <Space size="middle">
                     <Tooltip title="View Asset Items">
                         <Button
-                            type="primary"
-                            icon={<EyeOutlined />}
+                            className="p-1 border-0 text-light"
+                            icon={<LucideView size={18} />}
                             onClick={() => {
                                 navigate(
-                                    `/admin/general-assets/asset-items/${record.id}`
+                                    `/admin/asset-category/${record.id}/asset-items`
                                 );
                             }}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Asset Category">
                         <Button
-                            className="text-light border-0"
-                            style={{ background: 'green' }}
-                            icon={<EditOutlined />}
-                            // onClick={() => editAssetCategory(record)}
+                            className="p-1 border-0 text-light"
+                            icon={<Edit3 size={18} />}
+                            onClick={() => editAssetCategory(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Delete Asset Category">
                         <Popconfirm
-                            title="Delete Asset Category"
+                            title="Delete Employee"
                             description="Are you sure you want to delete this asset category?"
                             onConfirm={() => deleteAssetCategory(record)}
                             okText="Yes"
@@ -93,8 +110,7 @@ const AssetCategoryList = () => {
                         >
                             <Button
                                 type="danger"
-                                icon={<DeleteOutlined />}
-                                style={{ color: 'yellow' }}
+                                icon={<Trash2 size={18} color='red' />}
                             />
                         </Popconfirm>
                     </Tooltip>
@@ -105,11 +121,11 @@ const AssetCategoryList = () => {
 
     const deleteAssetCategory = async (record) => {
         try {
-            const response = await generalAssetsServices.deleteAssetCategory(record.id)
+            const response = await assetCategoriesServices.delete(record.id)
 
-            if (response.status === 204) {
+            if (response?.status === 204) {
                 message.info("Asset category deleted successfully")
-                fetchAssetCategories()
+                refreshPage()
             } else {
                 message.error("Asset category could not be deleted")
             }
@@ -124,27 +140,25 @@ const AssetCategoryList = () => {
         setEditAssetCategoryModalState(true)
     }
 
-
     return (
         <>
-            <div className='d-flex justify-content-between align-items-center'>
-                <h3>General Assets Data</h3>
+            <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold"></h3>
 
                 <Button
-                    className='border-0 px-3 text-white'
-                    style={{ background: '#39b54a' }}
+                    type="primary"
+                    style={{ marginRight: '25px' }}
                     onClick={() => setNewAssetCategoryModalState(true)}
                 >
                     <Space>
-                        Add new asset category
+                        New asset category
                         <PlusCircleOutlined />
                     </Space>
                 </Button>
             </div>
-            <Divider type={"horizontal"} />
 
             <Space
-                className="mb-3"
+                className="mb-3 mt-3"
                 direction="vertical"
                 style={{
                     width: '100%',
@@ -159,11 +173,10 @@ const AssetCategoryList = () => {
                 />
             </Space>
 
-            <Table dataSource={assetCategoryList} columns={assetCategoryTableColumns} />
+            <Table className='table-responsive' dataSource={assetCategoryList} columns={assetCategoryTableColumns} />
 
-            {/* <NewAssetCategory open={newAssetCategoryModalState} close={() => setNewAssetCategoryModalState(false)} /> */}
-            {/* <EditAssetCategory open={EditAssetCategoryModalState} close={() => setEditAssetCategoryModalState(false)} record={selectedRecord} /> */}
-
+            <NewAssetCategory open={newAssetCategoryModalState} close={() => setNewAssetCategoryModalState(false)} />
+            <EditAssetCategory open={EditAssetCategoryModalState} close={() => setEditAssetCategoryModalState(false)} selectedRecord={selectedRecord} />
         </>
     );
 };

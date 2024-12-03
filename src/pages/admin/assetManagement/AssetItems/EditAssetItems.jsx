@@ -1,189 +1,176 @@
+import PropTypes from "prop-types";
 import {
-  Button,
-  DatePicker,
+  Modal,
   Form,
   Input,
-  Modal,
-  message,
   Select,
+  InputNumber,
+  DatePicker,
+  Button,
+  message,
 } from "antd";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import authenticationService from "../../../../../services/authentication.service";
-import generalAssetsServices from "../../../../../services/general-assets.services";
-import TextArea from "antd/es/input/TextArea";
+import moment from "moment";
+import assetsServices from "../../../../services/assets.services";
+import authService from "../../../../services/auth.service";
 
-const EditAssetItem = ({ open, close, record }) => {
+const { Option } = Select;
+
+const EditAssetItem = ({ visible, onClose, asset, onSuccess }) => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [category, setCategory] = useState([]);
-  const{id} = useParams()
-  
-  const [formData, setFormData] = useState({
-    purchase_date: record ? record?.purchase_date : null,
-    asset_no: record ? record?.asset_no : null,
-    price: record ? record?.price : '',
-    serial_number: record ? record?.serial_number: '',
-    status: record ? record?.status : '',
-    description: record ? record?.description : '',
-  });
-
-  const tenant = authenticationService.getUserTenantId();
-
-  const handleFormChange = (field, value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [field]: value,
-    }));
-  };
-
-  const handleFormSubmit = async () => {
-    try {
-      setLoading(true);
-      setDisabled(true);
-
-      const { purchase_date, asset_no, price, serial_number, status, description} = formData;
-      const data = {
-        purchase_date: purchase_date || record?.purchase_date,
-        asset_no: asset_no || record?.asset_no,
-        price: price || record?.price,
-        serial_number: serial_number || record?.serial_number,
-        tenant,
-        category: category?.id || category?.id,
-        status: status || record?.status,
-        description: description || record?.description,
-      };
-
-      const id = record?.id;
-      console.log("form data: ", data, record?.status, "asset_no", record?.asset_no);
-
-      const response = await generalAssetsServices.updateAssetItem(id, data);
-
-      if (response.status === 200) {
-        message.success("Asset item updated successfully");
-        window.location.reload();
-      } else {
-        message.error("An error occurred, please check your network.");
-      }
-    } catch (error) {
-      console.error("Error updating asset item:", error);
-      message.error(error ? error?.response?.data?.error : "An error occured while updating asset item, please check your network");
-    } finally {
-      setLoading(false);
-      setDisabled(false);
-      close();
-    }
-  };
 
   useEffect(() => {
-    getData();
-  }, []);
+    if (asset) {
+      form.setFieldsValue({
+        ...asset,
+        acquired_date: asset.acquired_date
+          ? moment(asset.acquired_date, "YYYY-MM-DD")
+          : null,
+      });
+    }
+  }, [asset, form]);
 
-  const getData = async () => {
+  const handleFormSubmit = async (values) => {
+    setLoading(true);
     try {
-      console.log("category id is: ", id)
-      const response = await generalAssetsServices.getAssetCategory(id);
+      const payload = {
+        ...values,
+        category: asset.category.id,
+        organisation: authService.getUserOrganisationId(),
+        acquired_date: values.acquired_date
+          ? values.acquired_date.format("YYYY-MM-DD")
+          : null,
+      };
 
-      if (response.status === 200) {
-          setCategory(response.data);
+      const response = await assetsServices.update(asset.id, payload);
+
+      if (response?.status === 200) {
+        message.success("Asset updated successfully!");
+        onSuccess();
+        onClose();
       } else {
-        console.log("Error occured during fetching asset item")
+        message.error("Failed to update asset, please try again.");
       }
     } catch (error) {
-      console.error("Error occured during fetching asset item:", error);
+      message.error("An error occurred while updating the asset.");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <>
-      <Modal
-        title="Update Asset Item"
-        visible={open}
-        onCancel={close}
-        okButtonProps={{
-          className: "d-none",
-        }}
-        cancelButtonProps={{
-          className: "d-none",
-        }}
-      >
-        <Form layout="vertical">
-          <Form.Item label="Asset Category">
-            <Select
-              size="large"
-              // onChange={(value) => handleFormChange("name", value)}
-              defaultValue={category ? category?.name : "please select category"}
-              options={[
-                { label: category?.name, value: category?.id },
-              ]}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Purchase date"
-            name="purchase_date"
-          >
-            <DatePicker
-              className="w-100"
-              size="large"
-              onChange={(date, dateString) => {
-                handleFormChange("purchase_date", dateString);
-              }}
-              // defaultValue={record ? record?.purchase_date: "Select purchase date"}
-            />
-          </Form.Item>
-          <Form.Item
-            label="status"
-            name="status"
-          >
-            <Select
-              size="large"
-              onChange={(value) => handleFormChange("status", value)}
-              defaultValue={record ? record?.status: "Select status"}
-              options={[
-                { label: "WORKING", value: "WORKING" },
-                { label: "DAMAGED", value: "DAMAGED" },
-                { label: "DISCARDED", value: "DISCARDED" },
-                { label: "INSTORE", value: "INSTORE" },
-                { label: "STOLEN", value: "STOLEN" },
-              ]}
-            />
-          </Form.Item>
+    <Modal
+      title="Edit Asset"
+      open={visible}
+      onCancel={onClose}
+      footer={null}
+      width={800}
+    >
+      <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
+        <Form.Item
+          label="Model Name"
+          name="model_name"
+          rules={[{ required: true, message: "Please enter the model name!" }]}
+        >
+          <Input placeholder="e.g., Lenovo ThinkPad" />
+        </Form.Item>
 
-          <Form.Item label="Description">
-            <TextArea style={{ height: "200px" }}
-              onChange={(e) => handleFormChange("description", e.target.value)} 
-              defaultValue={record ? record?.description: "Enter new description"}
-            />
-          </Form.Item>
+        <Form.Item
+          label="Serial Number"
+          name="serial_number"
+          rules={[
+            { required: true, message: "Please enter the serial number!" },
+          ]}
+        >
+          <Input placeholder="e.g., T2637M0" />
+        </Form.Item>
 
-          <Form.Item label="Serial number">
-            <Input
-              defaultValue={record ? record?.serial_number: "Enter new serial number"}
-              onChange={(e) => handleFormChange("serial_number", e.target.value)} />
-          </Form.Item>
+        <Form.Item label="Description" name="description">
+          <Input.TextArea placeholder="Additional details about the asset" />
+        </Form.Item>
 
-          <Form.Item label="Price">
-            <Input
-              onChange={(e) => handleFormChange("price", e.target.value)} 
-              defaultValue={record ? record?.price: "Enter new price"}
-            />
-          </Form.Item>
+        <Form.Item
+          label="Status"
+          name="status"
+          rules={[
+            { required: true, message: "Please select the asset status!" },
+          ]}
+        >
+          <Select placeholder="Select asset status">
+            <Option value="AVAILABLE">Available</Option>
+            <Option value="ALLOCATED">Allocated</Option>
+            <Option value="UNDER_MAINTENANCE">Under Maintenance</Option>
+            <Option value="RESERVED">Reserved</Option>
+            <Option value="LOST">Lost</Option>
+            <Option value="DISCARDED">Discarded</Option>
+            <Option value="TRANSFERRED">Transferred</Option>
+            <Option value="OBSOLETE">Obsolete</Option>
+          </Select>
+        </Form.Item>
 
-          <Button
-            type="primary"
-            size="large"
-            className="mt-3"
-            loading={loading}
-            disabled={disabled}
-            block
-            onClick={handleFormSubmit}
-          >
-            Update asset item
+        <Form.Item
+          label="Purchase Price"
+          name="purchase_price"
+          rules={[
+            { required: true, message: "Please enter the purchase price!" },
+          ]}
+        >
+          <InputNumber
+            min={0}
+            placeholder="e.g., 550.00"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Current Value"
+          name="current_value"
+          rules={[
+            { required: true, message: "Please enter the current value!" },
+          ]}
+        >
+          <InputNumber
+            min={0}
+            placeholder="e.g., 500.00"
+            style={{ width: "100%" }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Location"
+          name="location"
+          rules={[{ required: true, message: "Please enter the location!" }]}
+        >
+          <Input placeholder="e.g., Graniteside" />
+        </Form.Item>
+
+        <Form.Item
+          label="Acquired Date"
+          name="acquired_date"
+          rules={[
+            { required: true, message: "Please select the acquired date!" },
+          ]}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} block>
+            Update Asset
           </Button>
-        </Form>
-      </Modal>
-    </>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
+};
+
+EditAssetItem.propTypes = {
+  visible: PropTypes.bool.isRequired, // Modal visibility state
+  onClose: PropTypes.func.isRequired, // Function to handle closing the modal
+  asset: PropTypes.object, // Current asset data to prefill the form
+  onSuccess: PropTypes.func.isRequired, // Callback function after successful asset update
 };
 
 export default EditAssetItem;
