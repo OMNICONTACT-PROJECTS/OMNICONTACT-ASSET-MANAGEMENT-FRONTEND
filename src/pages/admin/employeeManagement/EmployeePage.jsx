@@ -1,13 +1,13 @@
 import employeeService from "../../../services/employee.service";
 import {
-    ArrowLeftOutlined,
     CheckCircleOutlined,
     CloseCircleOutlined,
     EyeOutlined,
     UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Divider, Space, Table, Tag, Tooltip } from "antd";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import BackButton from "../../../utils/BackButton";
 
 export const EmployeePageLoader = async ({ params }) => {
     const id = params.id;
@@ -32,10 +32,9 @@ export const EmployeePageLoader = async ({ params }) => {
 
 const EmployeePage = () => {
     const { userData, assetRequests, assetAllocations, allocatedAssets } = useLoaderData();
-    const navigate = useNavigate();
 
     const profilePicture = userData?.profile_picture;
-
+    console.log("profilePicture: " + profilePicture);
     const requestTableColumns = [
         {
             title: "Category",
@@ -175,18 +174,9 @@ const EmployeePage = () => {
 
     return (
         <>
-            <Link
-                to=".."
-                onClick={(e) => {
-                    e.preventDefault();
-                    navigate(-1);
-                }}
-                className="text-gray-600 hover:text-gray-800 mb-4 flex items-center gap-2"
-            >
-                <ArrowLeftOutlined /> Back
-            </Link>
+            <BackButton />
 
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 mt-1">
                 <h1 className="text-2xl font-semibold text-gray-800">Employee Details</h1>
             </div>
             <Divider />

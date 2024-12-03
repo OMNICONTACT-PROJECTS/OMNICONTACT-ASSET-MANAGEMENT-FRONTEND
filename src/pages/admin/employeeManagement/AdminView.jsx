@@ -1,7 +1,6 @@
 import { Space, Table, Input, Button, Popconfirm, Tooltip, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
-import { ArrowUp, ArrowDown } from 'lucide-react';
 import employeeService from '../../../services/employee.service';
 import authService from '../../../services/auth.service';
 import { useNavigate } from 'react-router-dom';
