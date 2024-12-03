@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Edit3, Trash2 } from 'lucide-react';
 import departmentService from "../../../services/department.service";
 import authService from "../../../services/auth.service";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import AddDepartment from './AddDepartment';
 import EditDepartment from './EditDepartment';
 import { refreshPage } from "../../../common";
@@ -28,7 +28,6 @@ export async function AllDepartmentsViewLoader() {
 }
 
 const AllDepartmentsView = () => {
-  const navigate = useNavigate();
   const { departmentData } = useLoaderData();
   const [searchText, setSearchText] = useState("");
   const [addDepartmentModal, setAddDepartmentModal] = useState(false);

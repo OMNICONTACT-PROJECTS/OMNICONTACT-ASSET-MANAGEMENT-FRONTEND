@@ -48,6 +48,14 @@ class EmployeeService {
         return formsRequestInstance.postForm(`users/upload-user-profile-picture/${id}/`)
     }
 
+    enableAAssetAllocationPermissions(user_id, data) {
+        return instance.put(`users/${user_id}/enable-asset-allocation-permissions/`, data);
+    }
+
+    enableAssetApprovalPermissions(user_id, data) {
+        return instance.put(`users/${user_id}/enable-asset-approval-permissions/`, data);
+    }
+
 }
 
 export default new EmployeeService();
