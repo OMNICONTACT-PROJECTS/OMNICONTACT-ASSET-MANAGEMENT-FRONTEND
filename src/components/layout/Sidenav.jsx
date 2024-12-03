@@ -103,24 +103,40 @@ const Sidenav = ({ color }) => {
               </NavLink>
             </Menu.Item>
 
-            {/* Request Management */}
+            {/* Request and allocations */}
             <Menu.Item className="menu-item-header" key="14">
-              Ticket Management
+              Requests & Allocations
             </Menu.Item>
             <Menu.Item key="15">
               <NavLink to="/admin/request-asset">
                 <span className="icon" style={{ background: page === "request-asset" ? color : "" }}>
                   <Users color={color} />
                 </span>
-                <span className="label">Request Asset</span>
+                <span className="label">Asset Requests</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="16">
+            <Menu.Item key="166">
               <NavLink to="/admin/approval-workflow">
                 <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
                   <CheckCircle color={color} />
                 </span>
-                <span className="label">Approval Workflow</span>
+                <span className="label">Asset Allocations</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="167">
+              <NavLink to="/admin/approval-workflow">
+                <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
+                  <CheckCircle color={color} />
+                </span>
+                <span className="label">My Requests</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="168">
+              <NavLink to="/admin/approval-workflow">
+                <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
+                  <CheckCircle color={color} />
+                </span>
+                <span className="label">My Allocations</span>
               </NavLink>
             </Menu.Item>
 

@@ -15,6 +15,7 @@ import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmpl
 import { AllDepartmentsViewLoader } from "./pages/admin/departments/Departments";
 import EmployeePage, { EmployeePageLoader } from "./pages/admin/employeeManagement/EmployeePage";
 import UserProfile, { userProfileLoader } from "./pages/admin/employeeManagement/UserProfile";
+import AssetCategoryList from "./pages/admin/assetManagement/AssetCategory/AssetCategoryList";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
         path: "/admin/profile",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
         loader: userProfileLoader
+      },
+      {
+        path: "/admin/asset-categories",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetCategoryList />,
       },
     ],
   },
