@@ -66,7 +66,7 @@ const Header = ({
 
   const items = [
     {
-      key: '0',
+      key: "0",
       label: (
         <Link to="/profile">
           <UserOutlined /> Profile
@@ -74,7 +74,7 @@ const Header = ({
       ),
     },
     {
-      key: '1',
+      key: "1",
       label: (
         <Link onClick={() => showDrawer()}>
           <SettingOutlined /> Settings
@@ -82,7 +82,7 @@ const Header = ({
       ),
     },
     {
-      key: '2',
+      key: "2",
       label: (
         <Link onClick={() => authService.logout()}>
           <LogoutOutlined /> Logout
@@ -94,22 +94,29 @@ const Header = ({
   const breadcrumbItems = [
     {
       title: <NavLink to="/">Pages</NavLink>,
-      key: 'pages',
+      key: "pages",
     },
     {
       title: name.replace("/", " / "),
-      key: 'name',
+      key: "name",
     },
   ];
-  const fullName = authService.getFullName()
+  const fullName = authService.getFullName();
   return (
     <>
-      <Row style={{ marginTop: "-20px", marginLeft: "-10px" }} className="bg-[#ffffff] py-2 rounded-lg" gutter={[24, 0]}>
+      <Row
+        style={{ marginTop: "-20px", marginLeft: "-10px" }}
+        className="bg-[#ffffff] py-2 rounded-lg"
+        gutter={[24, 0]}
+      >
         <Col span={24} md={6}>
           <Breadcrumb items={breadcrumbItems} />
           <div className="ant-page-header-heading">
-            <span className="ant-page-header-heading-title" style={{ textTransform: "capitalize" }}>
-              {subName.replace("/", " ")}
+            <span
+              className="ant-page-header-heading-title"
+              style={{ textTransform: "capitalize" }}
+            >
+              {subName.split("/").filter(Boolean).pop()}
             </span>
           </div>
         </Col>
@@ -134,11 +141,36 @@ const Header = ({
                 <Title level={5}>Sidebar Color</Title>
                 <div className="mb-2 theme-color">
                   <ButtonContainer>
-                    <Button type="primary" onClick={() => handleSidenavColor("#1890ff")}>1</Button>
-                    <Button type="success" onClick={() => handleSidenavColor("#52c41a")}>1</Button>
-                    <Button type="danger" onClick={() => handleSidenavColor("#d9363e")}>1</Button>
-                    <Button type="yellow" onClick={() => handleSidenavColor("#fadb14")}>1</Button>
-                    <Button type="black" onClick={() => handleSidenavColor("#111")}>1</Button>
+                    <Button
+                      type="primary"
+                      onClick={() => handleSidenavColor("#1890ff")}
+                    >
+                      1
+                    </Button>
+                    <Button
+                      type="success"
+                      onClick={() => handleSidenavColor("#52c41a")}
+                    >
+                      1
+                    </Button>
+                    <Button
+                      type="danger"
+                      onClick={() => handleSidenavColor("#d9363e")}
+                    >
+                      1
+                    </Button>
+                    <Button
+                      type="yellow"
+                      onClick={() => handleSidenavColor("#fadb14")}
+                    >
+                      1
+                    </Button>
+                    <Button
+                      type="black"
+                      onClick={() => handleSidenavColor("#111")}
+                    >
+                      1
+                    </Button>
                   </ButtonContainer>
                 </div>
                 <div className="mb-2 fixed-nav">
@@ -149,15 +181,23 @@ const Header = ({
             </div>
           </Drawer>
           <Dropdown menu={{ items }} trigger={["click"]}>
-            <Button style={{ boxShadow: "20px", color: "#FFFFFF", fontSize: "16px" }} type="link" className="header-dropdown-btn px-3 py-1 bg-[#163d69]">
+            <Button
+              style={{ boxShadow: "20px", color: "#FFFFFF", fontSize: "16px" }}
+              type="link"
+              className="header-dropdown-btn px-3 py-1 bg-[#163d69]"
+            >
               {fullName}
-              <UserOutlined color="#FFFFF" className="py-2 mr-0"/>
+              <UserOutlined color="#FFFFF" className="py-2 mr-0" />
             </Button>
           </Dropdown>
           {/* <div className="border-spacing-3">
             <Button type="link" icon={<MessageOutlined />} />
           </div> */}
-          <Input className="header-search" placeholder="Type here..." prefix={<SearchOutlined />} />
+          <Input
+            className="header-search"
+            placeholder="Type here..."
+            prefix={<SearchOutlined />}
+          />
         </Col>
       </Row>
     </>
