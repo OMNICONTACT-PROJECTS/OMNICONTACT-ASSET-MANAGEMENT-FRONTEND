@@ -14,6 +14,7 @@ import UsersTab from "./pages/admin/employeeManagement/UsersTab";
 import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmployeesView";
 import { AllDepartmentsViewLoader } from "./pages/admin/departments/Departments";
 import EmployeePage, { EmployeePageLoader } from "./pages/admin/employeeManagement/EmployeePage";
+import UserProfile, { userProfileLoader } from "./pages/admin/employeeManagement/UserProfile";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,11 @@ const router = createBrowserRouter([
         path: "/admin/employees/:id/details",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeePage />,
         loader: EmployeePageLoader
+      },
+      {
+        path: "/admin/profile",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
+        loader: userProfileLoader
       },
     ],
   },
