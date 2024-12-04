@@ -87,40 +87,48 @@ const Sidenav = ({ color }) => {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="8">
-              <NavLink to="/admin/asset-items">
-                <span className="icon" style={{ background: page === "asset-items" ? color : "" }}>
+              <NavLink to="/admin/assets">
+                <span className="icon" style={{ background: page === "assets" ? color : "" }}>
                   <Table color={color} />
                 </span>
-                <span className="label">Asset Items</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="10">
-              <NavLink to="/admin/asset-tracking">
-                <span className="icon" style={{ background: page === "asset-tracking" ? color : "" }}>
-                  <Users color={color} />
-                </span>
-                <span className="label">Asset Tracking</span>
+                <span className="label">All Assets</span>
               </NavLink>
             </Menu.Item>
 
-            {/* Request Management */}
+            {/* Request and allocations */}
             <Menu.Item className="menu-item-header" key="14">
-              Ticket Management
+              Requests & Allocations
             </Menu.Item>
             <Menu.Item key="15">
-              <NavLink to="/admin/request-asset">
-                <span className="icon" style={{ background: page === "request-asset" ? color : "" }}>
+              <NavLink to="/admin/asset-request">
+                <span className="icon" style={{ background: page === "asset-request" ? color : "" }}>
                   <Users color={color} />
                 </span>
-                <span className="label">Request Asset</span>
+                <span className="label">Asset Requests</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="16">
+            <Menu.Item key="166">
               <NavLink to="/admin/approval-workflow">
                 <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
                   <CheckCircle color={color} />
                 </span>
-                <span className="label">Approval Workflow</span>
+                <span className="label">Asset Allocations</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="167">
+              <NavLink to="/admin/approval-workflow">
+                <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
+                  <CheckCircle color={color} />
+                </span>
+                <span className="label">My Requests</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="168">
+              <NavLink to="/admin/approval-workflow">
+                <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
+                  <CheckCircle color={color} />
+                </span>
+                <span className="label">My Allocations</span>
               </NavLink>
             </Menu.Item>
 

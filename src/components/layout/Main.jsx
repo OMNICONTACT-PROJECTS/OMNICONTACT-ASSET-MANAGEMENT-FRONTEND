@@ -127,7 +127,10 @@ function Main() {
               )}
               <Content className="content-ant bg-[#ffffff] px-5 rounded-t-lg">
                 <div className="p-5">
-                  {navigation.state === "loading" ? <Loader /> : <Outlet />}
+                  {navigation.state === "loading" ?
+                    <div className="p-5 flex justify-center items-center min-h-[500px]">
+                      <Loader />
+                    </div> : <Outlet />}
                 </div>
               </Content>
             </Layout>
