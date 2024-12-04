@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Avatar,
     Button,
@@ -6,7 +6,6 @@ import {
     Space,
     Tag,
     Tooltip,
-    notification,
     Table,
 } from "antd";
 import { UserOutlined, MailOutlined, PhoneOutlined, EyeOutlined } from "@ant-design/icons";
@@ -14,9 +13,8 @@ import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import employeeService from "../../../services/employee.service";
 import authService from "../../../services/auth.service";
 
-export const userProfileLoader = async () => {
+export const UserProfileLoader = async () => {
     const id = authService.getUserId()
-    console.log("id: ", id)
     try {
         const response = await employeeService.get(id)
         return {user: response?.data}

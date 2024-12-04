@@ -13,7 +13,7 @@ import assetCategoriesServices from "../../../../services/asset-categories.servi
 import EditAssetCategory from "./EditAssetCategory";
 import { refreshPage } from "../../../../common";
 
-export const assetCategoryLoader = async () => {
+export const AssetCategoryLoader = async () => {
     try {
         const response = await assetCategoriesServices.getAllByOrganisationId(authService.getUserOrganisationId());
 

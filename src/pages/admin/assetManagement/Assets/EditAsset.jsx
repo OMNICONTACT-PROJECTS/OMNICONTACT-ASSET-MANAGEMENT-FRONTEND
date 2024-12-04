@@ -167,10 +167,10 @@ const EditAsset = ({ visible, onClose, asset, onSuccess }) => {
 };
 
 EditAsset.propTypes = {
-  visible: PropTypes.bool.isRequired, // Modal visibility state
-  onClose: PropTypes.func.isRequired, // Function to handle closing the modal
-  asset: PropTypes.object, // Current asset data to prefill the form
-  onSuccess: PropTypes.func.isRequired, // Callback function after successful asset update
+  visible: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired, 
+  asset: PropTypes.object, 
+  onSuccess: PropTypes.func.isRequired, 
 };
 
 export default EditAsset;

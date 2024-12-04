@@ -14,10 +14,11 @@ import UsersTab from "./pages/admin/employeeManagement/UsersTab";
 import { AllEmployeesViewLoader } from "./pages/admin/employeeManagement/AllEmployeesView";
 import { AllDepartmentsViewLoader } from "./pages/admin/departments/Departments";
 import EmployeePage, { EmployeePageLoader } from "./pages/admin/employeeManagement/EmployeePage";
-import UserProfile, { userProfileLoader } from "./pages/admin/employeeManagement/UserProfile";
-import AssetCategoryList, { assetCategoryLoader } from "./pages/admin/assetManagement/AssetCategory/AssetCategoryList";
-import AssetItemsList, { assetItemsLoader } from "./pages/admin/assetManagement/AssetItems/AssetItemsList";
-import AssetList, { assetLoader } from "./pages/admin/assetManagement/Assets/AssetList";
+import UserProfile, { UserProfileLoader } from "./pages/admin/employeeManagement/UserProfile";
+import AssetCategoryList, { AssetCategoryLoader } from "./pages/admin/assetManagement/assetCategory/AssetCategoryList";
+import AssetItemsList, { AssetItemsLoader } from "./pages/admin/assetManagement/assetItems/AssetItemsList";
+import AssetList, { AssetLoader } from "./pages/admin/assetManagement/assets/AssetList";
+import AssetRequestList, { AssetRequestListLoader } from "./pages/admin/assetManagement/assetRequest/AssetRequestList";
 
 const router = createBrowserRouter([
   {
@@ -62,22 +63,27 @@ const router = createBrowserRouter([
       {
         path: "/admin/profile",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
-        loader: userProfileLoader
+        loader: UserProfileLoader
       },
       {
         path: "/admin/asset-categories",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetCategoryList />,
-        loader: assetCategoryLoader
+        loader: AssetCategoryLoader
       },
       {
         path: "/admin/asset-category/:id/asset-items",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetItemsList />,
-        loader: assetItemsLoader
+        loader: AssetItemsLoader
       },
       {
         path: "/admin/assets",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetList />,
-        loader: assetLoader
+        loader: AssetLoader
+      },
+      {
+        path: "/admin/asset-request",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetRequestList />,
+        loader: AssetRequestListLoader
       },
     ],
   },
