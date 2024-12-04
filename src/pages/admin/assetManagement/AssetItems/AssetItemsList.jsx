@@ -1,17 +1,15 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useLoaderData, useNavigate, useParams } from "react-router-dom";
-import authService from "../../../../services/auth.service";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
 import NewAssetItem from "./NewAssetItem";
 import EditAssetItem from "./EditAssetItems";
 import BackButton from "../../../../utils/BackButton";
 
-export const assetItemsLoader = async ({ params }) => {
+export const AssetItemsLoader = async ({ params }) => {
     try {
         const category_id = params?.id
         const response = await assetsServices.getAllByCategoryId(category_id);

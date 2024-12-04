@@ -88,18 +88,10 @@ const Sidenav = ({ color }) => {
             </Menu.Item>
             <Menu.Item key="8">
               <NavLink to="/admin/assets">
-                <span className="icon" style={{ background: page === "asset-items" ? color : "" }}>
+                <span className="icon" style={{ background: page === "assets" ? color : "" }}>
                   <Table color={color} />
                 </span>
                 <span className="label">All Assets</span>
-              </NavLink>
-            </Menu.Item>
-            <Menu.Item key="10">
-              <NavLink to="/admin/asset-tracking">
-                <span className="icon" style={{ background: page === "asset-tracking" ? color : "" }}>
-                  <Users color={color} />
-                </span>
-                <span className="label">Asset Tracking</span>
               </NavLink>
             </Menu.Item>
 
@@ -108,8 +100,8 @@ const Sidenav = ({ color }) => {
               Requests & Allocations
             </Menu.Item>
             <Menu.Item key="15">
-              <NavLink to="/admin/request-asset">
-                <span className="icon" style={{ background: page === "request-asset" ? color : "" }}>
+              <NavLink to="/admin/asset-request">
+                <span className="icon" style={{ background: page === "asset-request" ? color : "" }}>
                   <Users color={color} />
                 </span>
                 <span className="label">Asset Requests</span>

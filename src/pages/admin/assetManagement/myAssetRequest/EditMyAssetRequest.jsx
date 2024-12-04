@@ -16,7 +16,7 @@ import authService from "../../../../services/auth.service";
 
 const { Option } = Select;
 
-const EditAssetItem = ({ visible, onClose, asset, onSuccess }) => {
+const EditMyAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -166,11 +166,11 @@ const EditAssetItem = ({ visible, onClose, asset, onSuccess }) => {
   );
 };
 
-EditAssetItem.propTypes = {
+EditMyAssetRequest.propTypes = {
   visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired, 
-  asset: PropTypes.object, 
-  onSuccess: PropTypes.func.isRequired, 
+  onClose: PropTypes.func.isRequired,
+  asset: PropTypes.object,
+  onSuccess: PropTypes.func.isRequired,
 };
 
-export default EditAssetItem;
+export default EditMyAssetRequest;

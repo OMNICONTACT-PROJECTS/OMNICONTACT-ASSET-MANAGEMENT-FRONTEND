@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
@@ -10,7 +9,7 @@ import assetsServices from "../../../../services/assets.services";
 import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
 
-export const assetLoader = async () => {
+export const AssetLoader = async () => {
     try {
         const response = await assetsServices.getAllByOrganisationId(authService.getUserOrganisationId());
 
