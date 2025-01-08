@@ -4,7 +4,7 @@ import authService from "../../../services/auth.service";
 import departmentService from "../../../services/department.service";
 import { refreshPage } from "../../../common";
 
-const AddDepartment = ({ open, close, onAdd }) => {
+const AddDepartment = ({ open, close }) => {
   const [form] = Form.useForm();
 
   const handleClear = () => {

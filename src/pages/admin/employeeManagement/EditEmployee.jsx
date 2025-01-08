@@ -3,25 +3,24 @@ import { useEffect, useState } from 'react';
 import { Form, Input, Modal, Select, message } from 'antd';
 import authService from "../../../services/auth.service";
 import employeeService from "../../../services/employee.service"; 
-import departmentService from "../../../services/department.service";  // Assuming the department service is available
+import departmentService from "../../../services/department.service";
 import { refreshPage } from "../../../common";
 
 const { Option } = Select;
 
 const EditEmployee = ({ open, close, selectedEmployee }) => {
     const [form] = Form.useForm();
-    const [departmentData, setDepartmentData] = useState([]); // State to hold department data
+    const [departmentData, setDepartmentData] = useState([]);
 
     useEffect(() => {
         getDepartmentData();
     }, []);
 
-    // Fetch departments
     const getDepartmentData = async () => {
         try {
             const response = await departmentService.getAllByOrganisationId(authService.getUserOrganisationId());
             if (response.status === 200) {
-                setDepartmentData(response.data);
+                setDepartmentData(response?.data);
             }
         } catch (e) {
             message.error("Failed to load department data");
@@ -79,38 +78,65 @@ const EditEmployee = ({ open, close, selectedEmployee }) => {
                     department: selectedEmployee?.department?.id,
                 }}
             >
-                <Form.Item label="First Name" name="first_name" rules={[{ required: true, message: 'Please input the first name!' }]} >
+                <Form.Item label="First Name" name="first_name" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Last Name" name="last_name" rules={[{ required: true, message: 'Please input the last name!' }]} >
+                <Form.Item label="Last Name" name="last_name" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Role" name="role" rules={[{ required: true, message: 'Please input the role!' }]} >
+                <Form.Item label="Job Title" name="job_title" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Gender" name="gender" rules={[{ required: true, message: 'Please input the gender!' }]} >
+                <Form.Item label="Gender" name="gender" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Phone Number" name="phone_number" rules={[{ required: true, message: 'Please input the phone number!' }]} >
+                <Form.Item label="Phone Number" name="phone_number" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Email" name="company_email" rules={[{ required: true, message: 'Please input the email!' }]} >
+                <Form.Item label="Company Email" name="company_email" >
                     <Input />
                 </Form.Item>
 
-                <Form.Item label="Province" name="current_location" rules={[{ required: true, message: 'Please input the province!' }]} >
+                <Form.Item label="Personal Email" name="personal_email" >
                     <Input />
+                </Form.Item>
+
+                <Form.Item label="Current Location" name="current_location" >
+                    <Input />
+                </Form.Item>
+
+                <Form.Item 
+                    label="Employee Status" 
+                    name="employee_status" 
+                >
+                    <Select placeholder="Select Employee Status">
+                        <Option value="ACTIVE">Active</Option>
+                        <Option value="ON_LEAVE">On Leave</Option>
+                        <Option value="ON_PAUSE">On Pause</Option>
+                        <Option value="BUFFER">Buffer</Option>
+                        <Option value="SECONDMENT">Secondment</Option>
+                        <Option value="TERMINATED">Terminated</Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item 
+                    label="Account Status" 
+                    name="account_status" 
+                >
+                    <Select placeholder="Select Employee Status">
+                        <Option value="ACTIVE">Active</Option>
+                        <Option value="IN_ACTIVE">In Active</Option>
+                    </Select>
                 </Form.Item>
 
                 <Form.Item
                     label="Department"
                     name='department'
-                    rules={[{ required: true, message: 'Please select the department!' }]}
                 >
                     <Select placeholder="Select Department">
                         {departmentData.map((department) => (

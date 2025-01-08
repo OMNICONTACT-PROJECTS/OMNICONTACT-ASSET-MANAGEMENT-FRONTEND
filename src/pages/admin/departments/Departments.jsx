@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Edit3, Trash2 } from 'lucide-react';
 import departmentService from "../../../services/department.service";
 import authService from "../../../services/auth.service";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import AddDepartment from './AddDepartment';
 import EditDepartment from './EditDepartment';
 import { refreshPage } from "../../../common";
@@ -28,7 +28,6 @@ export async function AllDepartmentsViewLoader() {
 }
 
 const AllDepartmentsView = () => {
-  const navigate = useNavigate();
   const { departmentData } = useLoaderData();
   const [searchText, setSearchText] = useState("");
   const [addDepartmentModal, setAddDepartmentModal] = useState(false);
@@ -40,12 +39,14 @@ const AllDepartmentsView = () => {
       title: "ID",
       dataIndex: "id",
       key: "department_id",
+      sorter: (a, b) => a.id - b.id, // Sorting numerically by ID
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
       render: (text) => <strong>{text}</strong>,
+      sorter: (a, b) => a.name.localeCompare(b.name), // Sorting alphabetically by Name
     },
     {
       title: "Organisation",
@@ -66,6 +67,7 @@ const AllDepartmentsView = () => {
           second: "2-digit",
           hour12: false,
         }),
+      sorter: (a, b) => new Date(a.date_created) - new Date(b.date_created), // Sorting by date
     },
     {
       title: "Last Updated",
@@ -89,7 +91,7 @@ const AllDepartmentsView = () => {
         <Space size="small">
           <Tooltip title="Edit Department">
             <Button
-              className="text-light border-0 p-1"
+              className="p-1 border-0 text-light"
               icon={<Edit3 size={18} />}
               onClick={() => editDepartment(record)}
             />

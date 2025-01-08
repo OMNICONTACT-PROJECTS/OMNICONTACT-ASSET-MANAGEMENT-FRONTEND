@@ -15,36 +15,46 @@ const GeneralEmployeeView = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [employeeData, setEmployeeData] = useState([])
 
-  const fetchGeneralEmployeeData = async() => {
-   try {
-     const employeeResponse = await employeeService.getAllGeneralUsersByOrganisationId(
-       authService.getUserOrganisationId()
-     );
- 
-     if (employeeResponse.status == 200) {
-       setEmployeeData(employeeResponse?.data)
-     }
-   } catch (e) {
-     console.log(e);
-     message.error("No employees found")
-   }
- }
+  const fetchGeneralEmployeeData = async () => {
+    try {
+      const employeeResponse = await employeeService.getAllGeneralUsersByOrganisationId(
+        authService.getUserOrganisationId()
+      );
 
-   useEffect(() => {
+      if (employeeResponse.status == 200) {
+        setEmployeeData(employeeResponse?.data)
+      }
+    } catch (e) {
+      console.log(e);
+      message.error("No employees found")
+    }
+  }
+
+  useEffect(() => {
     fetchGeneralEmployeeData()
-   }, [])
-   
+  }, [])
+
   const columns = [
     {
-      title: 'First Name',
+      title: (
+        <>
+          First Name{' '}
+        </>
+      ),
       dataIndex: 'first_name',
       key: 'first_name',
       render: (text) => <strong>{text}</strong>,
+      sorter: (a, b) => a.first_name.localeCompare(b.first_name),
     },
     {
-      title: 'Last Name',
+      title: (
+        <>
+          Last Name{' '}
+        </>
+      ),
       dataIndex: 'last_name',
       key: 'last_name',
+      sorter: (a, b) => a.last_name.localeCompare(b.last_name),
     },
     {
       title: 'Job Title',
@@ -67,6 +77,11 @@ const GeneralEmployeeView = () => {
       title: 'Gender',
       dataIndex: 'gender',
       key: 'gender',
+      filters: [
+        { text: 'MALE', value: 'MALE' },
+        { text: 'FEMALE', value: 'FEMALE' },
+      ],
+      onFilter: (value, record) => record.gender === value,
     },
     {
       title: 'Phone Number',
@@ -119,11 +134,7 @@ const GeneralEmployeeView = () => {
             <Button
               className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
-              onClick={() => {
-                navigate(
-                  `#`
-                );
-              }}
+              onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
             />
           </Tooltip>
           <Tooltip title="Edit Employee">
