@@ -9,7 +9,7 @@ import authService from "../../../../services/auth.service";
 import assetRequestsServices from "../../../../services/asset-requests.services";
 import NewMyAssetRequest from "./NewMyAssetRequest";
 
-export const MyAssetRequestListLoader = async () => {
+export const MyAssetAllocationListLoader = async () => {
     try {
         const response = await assetRequestsServices.getAllByUserId(authService.getUserId());
 
@@ -26,7 +26,7 @@ export const MyAssetRequestListLoader = async () => {
     }
 };
 
-const MyAssetRequestList = () => {
+const MyAssetAllocationList = () => {
     const { id } = useParams();
     const { assetRequestData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
@@ -198,4 +198,4 @@ const MyAssetRequestList = () => {
     );
 };
 
-export default MyAssetRequestList;
+export default MyAssetAllocationList;

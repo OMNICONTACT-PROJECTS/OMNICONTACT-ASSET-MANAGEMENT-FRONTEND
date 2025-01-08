@@ -19,6 +19,8 @@ import AssetCategoryList, { AssetCategoryLoader } from "./pages/admin/assetManag
 import AssetItemsList, { AssetItemsLoader } from "./pages/admin/assetManagement/assetItems/AssetItemsList";
 import AssetList, { AssetLoader } from "./pages/admin/assetManagement/assets/AssetList";
 import AssetRequestList, { AssetRequestListLoader } from "./pages/admin/assetManagement/assetRequest/AssetRequestList";
+import MyAssetRequestList, { MyAssetRequestListLoader } from "./pages/admin/assetManagement/myAssetRequest/MyAssetRequestList";
+import MyAssetAllocationList, { MyAssetAllocationListLoader } from "./pages/admin/assetManagement/myAssetAllocation/MyAssetAllocationList";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +86,16 @@ const router = createBrowserRouter([
         path: "/admin/asset-request",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetRequestList />,
         loader: AssetRequestListLoader
+      },
+      {
+        path: "/admin/my-asset-requests",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <MyAssetRequestList />,
+        loader: MyAssetRequestListLoader
+      },
+      {
+        path: "/admin/my-asset-allocation",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <MyAssetAllocationList />,
+        loader: MyAssetAllocationListLoader
       },
     ],
   },
