@@ -108,7 +108,7 @@ const Sidenav = ({ color }) => {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="166">
-              <NavLink to="/admin/approval-workflow">
+              <NavLink to="/admin/asset-allocations">
                 <span className="icon" style={{ background: page === "approval-workflow" ? color : "" }}>
                   <CheckCircle color={color} />
                 </span>
