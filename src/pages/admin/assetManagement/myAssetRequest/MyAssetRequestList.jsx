@@ -1,18 +1,17 @@
-import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
-import { Edit3, LucideView, SquareCheckBig, Trash2 } from 'lucide-react';
+import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
+import { Edit3, LucideView } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { refreshPage } from "../../../../common";
-import assetsServices from "../../../../services/assets.services";
-// import NewAssetItem from "./NewAsset";
 import EditAssetRequestItem from "./EditMyAssetRequest";
 import authService from "../../../../services/auth.service";
 import assetRequestsServices from "../../../../services/asset-requests.services";
+import NewMyAssetRequest from "./NewMyAssetRequest";
 
 export const MyAssetRequestListLoader = async () => {
     try {
-        const response = await assetRequestsServices.getAllByOrganisationId(authService.getUserOrganisationId());
+        const response = await assetRequestsServices.getAllByUserId(authService.getUserId());
 
         if (response?.status !== 200) {
             message.error("No assets found.");
@@ -28,11 +27,13 @@ export const MyAssetRequestListLoader = async () => {
 };
 
 const MyAssetRequestList = () => {
+    const { id } = useParams();
     const { assetRequestData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
     const navigate = useNavigate();
     const [EditAssetRequestModalState, setEditAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
+    const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
 
     const handleSearch = () => {
         return assetRequestData.filter((item) => {
@@ -137,71 +138,10 @@ const MyAssetRequestList = () => {
                             onClick={() => EditAssetRequest(record)}
                         />
                     </Tooltip>
-                    <Tooltip title="Approve Request">
-                        <Popconfirm
-                            title="Approve Request"
-                            description="Are you sure you want to approve this request?"
-                            onConfirm={() => approveAssetRequest(record)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button
-                                className="p-1 border-0 text-light"
-                                icon={<SquareCheckBig size={18} />}
-                            />
-                        </Popconfirm>
-                    </Tooltip>
-                    <Tooltip title="Delete Request">
-                        <Popconfirm
-                            title="Delete Request"
-                            description="Are you sure you want to delete this request?"
-                            onConfirm={() => deleteAssetRequest(record)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button
-                                type="danger"
-                                icon={<Trash2 size={18} color="red" />}
-                            />
-                        </Popconfirm>
-                    </Tooltip>
                 </Space>
             ),
         },
     ];
-
-    const deleteAssetRequest = async (record) => {
-        try {
-            const response = await assetsServices.delete(record.id);
-            if (response?.status === 204) {
-                message.success("Request deleted successfully.");
-                refreshPage();
-            } else {
-                message.error("Failed to delete request.");
-            }
-        } catch (error) {
-            message.error("Failed to delete request.");
-            console.error(error);
-        }
-    };
-
-    const approveAssetRequest = async (record) => {
-        const data = {
-            approved_by: authService.getUserId(),
-        }
-        try {
-            const response = await assetRequestsServices.approveRequest(record.id, data);
-            if (response?.status === 200) {
-                message.success("Request approved successfully.");
-                refreshPage();
-            } else {
-                message.error("Failed to approve request.");
-            }
-        } catch (error) {
-            message.error("Failed to approve request.");
-            console.error(error);
-        }
-    };
 
     const EditAssetRequest = (record) => {
         setSelectedRecord(record);
@@ -222,18 +162,16 @@ const MyAssetRequestList = () => {
                         Search
                     </Button>
                 </div>
-                <Popconfirm
-                    title="Only bulky upload is done here. To add a single asset, go through asset categories."
-                    okText="OK"
-                    cancelText="Cancel"
+                <Button
+                    type="primary"
+                    style={{ marginRight: "25px" }}
+                    onClick={() => setNewAssetModalVisible(true)}
                 >
-                    <Button type="primary" style={{ marginRight: "25px" }}>
-                        <Space>
-                            Bulk Upload Assets
-                            <PlusCircleOutlined />
-                        </Space>
-                    </Button>
-                </Popconfirm>
+                    <Space>
+                        New Asset Request
+                        <PlusCircleOutlined />
+                    </Space>
+                </Button>
             </div>
 
             <Table
@@ -241,6 +179,13 @@ const MyAssetRequestList = () => {
                 dataSource={handleSearch()}
                 columns={assetRequestTableColumns}
                 rowKey={(record) => record.id}
+            />
+
+            <NewMyAssetRequest
+                visible={newAssetModalVisible}
+                onClose={() => setNewAssetModalVisible(false)}
+                onSuccess={() => refreshPage()}
+                category={id}
             />
 
             <EditAssetRequestItem
