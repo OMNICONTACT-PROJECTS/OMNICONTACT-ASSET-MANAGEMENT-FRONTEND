@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
-import { LucideView, SquareCheckBig, Trash2 } from 'lucide-react';
+import { CircleCheckBig, LucideView, SquareCheckBig, Trash2 } from 'lucide-react';
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
@@ -7,6 +7,7 @@ import assetsServices from "../../../../services/assets.services";
 import authService from "../../../../services/auth.service";
 import assetRequestsServices from "../../../../services/asset-requests.services";
 import ViewAssetRequestDetails from "./ViewAssetRequestDetails";
+import NewAssetAllocation from "./NewAssetAllocation";
 
 export const AssetRequestListLoader = async () => {
     try {
@@ -30,6 +31,7 @@ const AssetRequestList = () => {
     const [searchText, setSearchText] = useState("");
     const [viewAssetRequestModalState, setViewAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
+    const [allocateAssetModalState, setAllocateAssetModalState] = useState(false);
 
     const handleSearch = () => {
         return assetRequestData.filter((item) => {
@@ -46,6 +48,8 @@ const AssetRequestList = () => {
                 return <Tag color="blue">{status}</Tag>;
             case "REJECTED":
                 return <Tag color="red">{status}</Tag>;
+            case "ALLOCATED":
+                return <Tag color="green">{status}</Tag>;
             default:
                 return <Tag>{status}</Tag>;
         }
@@ -141,6 +145,20 @@ const AssetRequestList = () => {
                             />
                         </Popconfirm>
                     </Tooltip>
+                    <Tooltip title="Allocate Asset">
+                        <Popconfirm
+                            title="Allocate Asset"
+                            description="Are you sure you want to perform the allocation?"
+                            onConfirm={() => allocateAsset(record)}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button
+                                className="p-1 border-0 text-light"
+                                icon={<CircleCheckBig size={18} />}
+                            />
+                        </Popconfirm>
+                    </Tooltip>
                     <Tooltip title="Delete Request">
                         <Popconfirm
                             title="Delete Request"
@@ -198,6 +216,11 @@ const AssetRequestList = () => {
         setViewAssetRequestModalState(true);
     };
 
+    const allocateAsset = (record) => {
+        setSelectedRecord(record);
+        setAllocateAssetModalState(true);
+    };
+
     return (
         <>
             <div className="flex justify-between items-center mt-2">
@@ -225,6 +248,13 @@ const AssetRequestList = () => {
                 visible={viewAssetRequestModalState}
                 onClose={() => setViewAssetRequestModalState(false)}
                 asset={selectedRecord}
+                onSuccess={() => refreshPage()}
+            />
+
+            <NewAssetAllocation
+                visible={allocateAssetModalState}
+                onClose={() => setAllocateAssetModalState(false)}
+                selectedRecord={selectedRecord}
                 onSuccess={() => refreshPage()}
             />
         </>
