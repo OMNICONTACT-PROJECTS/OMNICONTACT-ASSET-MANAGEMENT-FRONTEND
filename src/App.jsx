@@ -21,6 +21,7 @@ import AssetList, { AssetLoader } from "./pages/admin/assetManagement/assets/Ass
 import AssetRequestList, { AssetRequestListLoader } from "./pages/admin/assetManagement/assetRequest/AssetRequestList";
 import MyAssetRequestList, { MyAssetRequestListLoader } from "./pages/admin/assetManagement/myAssetRequest/MyAssetRequestList";
 import MyAssetAllocationList, { MyAssetAllocationListLoader } from "./pages/admin/assetManagement/myAssetAllocation/MyAssetAllocationList";
+import AssetAllocationList, { AssetAllocationListLoader } from "./pages/admin/assetManagement/assetAllocation/assetAllocationList";
 
 const router = createBrowserRouter([
   {
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
         path: "/admin/asset-request",
         element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetRequestList />,
         loader: AssetRequestListLoader
+      },
+      {
+        path: "/admin/asset-allocations",
+        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetAllocationList />,
+        loader: AssetAllocationListLoader
       },
       {
         path: "/admin/my-asset-requests",
