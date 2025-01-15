@@ -107,7 +107,7 @@ const MyAssetAllocationList = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by Allocated To"
@@ -122,7 +122,7 @@ const MyAssetAllocationList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={allocationTableColumns}
                 rowKey={(record) => record.id}
