@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import authService from "../../../../services/auth.service";
 import assetAllocationsServices from "../../../../services/asset-allocations.services";
+import ViewMyAssetAllocationDetails from "./ViewMyAssetAllocationDetails";
 
 export const MyAssetAllocationListLoader = async () => {
     try {
@@ -25,7 +26,10 @@ export const MyAssetAllocationListLoader = async () => {
 const MyAssetAllocationList = () => {
     const { allocationData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
+    const [selectedRecord, setSelectedRecord] = useState(null);
     const navigate = useNavigate();
+    const [viewMyAssetAllocationModalState, setViewMyAssetAllocationModalState] =
+    useState(false);
 
     const handleSearch = () => {
         return allocationData.filter((item) => {
@@ -91,19 +95,24 @@ const MyAssetAllocationList = () => {
             title: "Action",
             dataIndex: "",
             key: "action",
-            render: () => (
+            render: (_, record) => (
                 <Space size="middle">
                     <Tooltip title="View Details">
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewMyAssetAllocation(record)}
                         />
                     </Tooltip>
                 </Space>
             ),
         },
     ];
+
+    const viewMyAssetAllocation = (record) => {
+        setSelectedRecord(record);
+        setViewMyAssetAllocationModalState(true);
+      };
 
     return (
         <>
@@ -126,6 +135,13 @@ const MyAssetAllocationList = () => {
                 dataSource={handleSearch()}
                 columns={allocationTableColumns}
                 rowKey={(record) => record.id}
+            />
+            
+            <ViewMyAssetAllocationDetails
+                visible={viewMyAssetAllocationModalState}
+                onClose={() => setViewMyAssetAllocationModalState(false)}
+                asset={selectedRecord}
+                onSuccess={() => refreshPage()}
             />
         </>
     );
