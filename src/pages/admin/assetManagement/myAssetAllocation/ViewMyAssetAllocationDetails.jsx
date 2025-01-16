@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import { Modal, Form, Input, Row, Col, Divider } from "antd";
 
-const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
+const ViewMyAssetAllocationDetails = ({ visible, onClose, asset }) => {
   return (
     <Modal
       title={
         <h2 className="text-xl font-bold text-center text-blue-600">
-          Asset Request Details
+          My Asset Allocation Details
         </h2>
       }
       open={visible}
@@ -19,19 +19,13 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
         layout="vertical"
         className="p-6 space-y-4 bg-white border border-blue-100 rounded-lg shadow-lg"
       >
-        {/* <h3 className="mb-6 text-lg font-bold text-center text-blue-500">
-          Request Information
-        </h3> */}
+        {/* <h3 className="mb-6 text-lg font-bold text-center">Request Information</h3> */}
 
         {asset ? (
           <>
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Request ID</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Request ID</span>}>
                   <Input
                     value={asset.id || "N/A"}
                     readOnly
@@ -43,13 +37,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Category</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Model Name</span>}>
                   <Input
-                    value={asset?.category?.name || "N/A"}
+                    value={asset?.asset?.model_name || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -62,15 +52,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Requested By</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Asset Number</span>}>
                   <Input
-                    value={`${asset?.requested_by?.first_name || ""} ${
-                      asset?.requested_by?.last_name || "N/A"
-                    }`}
+                    value={asset?.asset?.asset_number || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -80,15 +64,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">
-                      Requester Organisation
-                    </span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Serial Number</span>}>
                   <Input
-                    value={asset?.requested_by?.organisation?.organisation_name || "N/A"}
+                    value={asset?.asset?.serial_number || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -101,15 +79,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">
-                      Asset Requested
-                    </span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Asset Requested</span>}>
                   <Input
-                    value={asset.asset_requested || "N/A"}
+                    value={asset?.asset_request?.asset_requested || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -119,57 +91,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">
-                      Request Description
-                    </span>
-                  }
-                >
-                  <Input.TextArea
-                    value={asset.request_description || "N/A"}
-                    readOnly
-                    rows={4}
-                    style={{
-                      backgroundColor: "#f0f7ff",
-                      borderColor: "#cce4ff",
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Request Date</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Allocated By</span>}>
                   <Input
-                    value={
-                      asset?.request_date
-                        ? new Date(asset.request_date).toLocaleDateString("en-GB")
-                        : "N/A"
-                    }
-                    readOnly
-                    style={{
-                      backgroundColor: "#f0f7ff",
-                      borderColor: "#cce4ff",
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">
-                      Request Status
-                    </span>
-                  }
-                >
-                  <Input
-                    value={asset.request_status || "N/A"}
+                    value={`${asset?.allocated_by?.first_name} ${asset?.allocated_by?.last_name || ""}`}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -182,17 +106,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Approved By</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Allocated To</span>}>
                   <Input
-                    value={
-                      asset?.approved_by
-                        ? `${asset.approved_by.first_name} ${asset.approved_by.last_name}`
-                        : "Not Approved"
-                    }
+                    value={`${asset?.allocated_to?.first_name} ${asset?.allocated_to?.last_name || ""}`}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -202,17 +118,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Approval Date</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Organisation (Allocated By)</span>}>
                   <Input
-                    value={
-                      asset?.date_approved
-                        ? new Date(asset.date_approved).toLocaleDateString("en-GB")
-                        : "N/A"
-                    }
+                    value={asset?.allocated_by?.organisation?.organisation_name || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -225,17 +133,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Allocated By</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Organisation (Allocated To)</span>}>
                   <Input
-                    value={
-                      asset?.allocated_by
-                        ? `${asset.allocated_by.first_name} ${asset.allocated_by.last_name}`
-                        : "Not Allocated"
-                    }
+                    value={asset?.allocated_to?.organisation?.organisation_name || "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -245,15 +145,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">
-                      Allocation Status
-                    </span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Date Allocated</span>}>
                   <Input
-                    value={asset.allocation_status || "N/A"}
+                    value={asset?.date_allocated ? new Date(asset.date_allocated).toLocaleDateString("en-GB") : "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -266,17 +160,9 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
 
             <Row gutter={[16, 16]}>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Created At</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Return Date</span>}>
                   <Input
-                    value={
-                      asset?.created_at
-                        ? new Date(asset.created_at).toLocaleString("en-GB")
-                        : "N/A"
-                    }
+                    value={asset?.return_date ? new Date(asset.return_date).toLocaleDateString("en-GB") : "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -286,17 +172,24 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item
-                  label={
-                    <span className="font-semibold text-blue-500">Updated At</span>
-                  }
-                >
+                <Form.Item label={<span className="font-semibold text-blue-500">Created At</span>}>
                   <Input
-                    value={
-                      asset?.updated_at
-                        ? new Date(asset.updated_at).toLocaleString("en-GB")
-                        : "N/A"
-                    }
+                    value={asset?.created_at ? new Date(asset.created_at).toLocaleString("en-GB") : "N/A"}
+                    readOnly
+                    style={{
+                      backgroundColor: "#f0f7ff",
+                      borderColor: "#cce4ff",
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+
+            <Row gutter={[16, 16]}>
+              <Col span={12}>
+                <Form.Item label={<span className="font-semibold text-blue-500">Updated At</span>}>
+                  <Input
+                    value={asset?.updated_at ? new Date(asset.updated_at).toLocaleString("en-GB") : "N/A"}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",
@@ -317,10 +210,10 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
   );
 };
 
-ViewAssetRequestDetails.propTypes = {
+ViewMyAssetAllocationDetails.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   asset: PropTypes.object,
 };
 
-export default ViewAssetRequestDetails;
+export default ViewMyAssetAllocationDetails;
