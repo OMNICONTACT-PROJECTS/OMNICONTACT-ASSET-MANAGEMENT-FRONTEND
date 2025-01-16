@@ -3,64 +3,61 @@ import {
   Form,
   Input,
   Select,
-  InputNumber,
-  DatePicker,
   Button,
   message,
 } from "antd";
 import { useState, useEffect } from "react";
-import assetsServices from "../../../../services/assets.services";
-import authService from "../../../../services/auth.service";
 import PropTypes from "prop-types";
-import employeeService from "../../../../services/employee.service";
+import authService from "../../../../services/auth.service";
+import assetCategoriesServices from "../../../../services/asset-categories.services";
+import assetRequestsServices from "../../../../services/asset-requests.services";
 
 const { Option } = Select;
 
-const NewMyAssetRequest = ({ visible, onClose, onSuccess, category }) => {
+const NewMyAssetRequest = ({ visible, onClose, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [status, setStatus] = useState("");
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchCategories = async () => {
       try {
-        const response = await employeeService.getAll();
-        if (response?.data) {
-          setUsers(response?.data);
+        const categoryResponse = await assetCategoriesServices.getAllByOrganisationId(authService.getUserOrganisationId());
+
+        if (categoryResponse?.status === 200) {
+          setCategories(categoryResponse?.data);
         }
       } catch (error) {
-        message.error("Failed to fetch users.");
+        message.error("Failed to fetch data.");
         console.error(error);
       }
     };
 
-    fetchUsers();
+    fetchCategories();
   }, []);
 
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      const organisationId = authService.getUserOrganisationId();
       const payload = {
-        ...values,
-        category: category,
-        organisation: organisationId,
-        acquired_date: values.acquired_date.format("YYYY-MM-DD"),
+        asset_requested: values.asset_requested,
+        request_description: values.request_description,
+        category: values.category,
+        requested_by: authService.getUserId(),
       };
 
-      const response = await assetsServices.create(payload);
+      const response = await assetRequestsServices.create(payload);
 
       if (response?.status === 201) {
-        message.success("Asset added successfully!");
+        message.success("Asset request submitted successfully!");
         onSuccess();
         form.resetFields();
         onClose();
       } else {
-        message.error("Failed to add asset, please try again");
+        message.error("Failed to submit request, please try again.");
       }
     } catch (error) {
-      message.error("An error occurred while adding the asset.");
+      message.error("An error occurred while submitting the request.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -69,109 +66,45 @@ const NewMyAssetRequest = ({ visible, onClose, onSuccess, category }) => {
 
   return (
     <Modal
-      title="Add New Asset"
+      title="Request New Asset"
       open={visible}
       onCancel={onClose}
       footer={null}
-      width={750}
+      width={550}
     >
       <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
         <Form.Item
-          label="Model Name"
-          name="model_name"
-          rules={[{ required: true, message: "Please enter the model name!" }]}
+          label="Category"
+          name="category"
+          rules={[{ required: true, message: "Please select the asset category!" }]}
         >
-          <Input placeholder="e.g., Lenovo ThinkPad" />
-        </Form.Item>
-
-        <Form.Item
-          label="Serial Number"
-          name="serial_number"
-          rules={[{ required: true, message: "Please enter the serial number!" }]}
-        >
-          <Input placeholder="e.g., T2637M0" />
-        </Form.Item>
-
-        <Form.Item label="Description" name="description">
-          <Input.TextArea placeholder="Additional details about the asset" />
-        </Form.Item>
-
-        <Form.Item
-          label="Status"
-          name="status"
-          rules={[{ required: true, message: "Please select the asset status!" }]}
-        >
-          <Select
-            placeholder="Select asset status"
-            onChange={(value) => setStatus(value)}
-          >
-            <Option value="AVAILABLE">Available</Option>
-            <Option value="ALLOCATED">Allocated</Option>
-            <Option value="UNDER_MAINTENANCE">Under Maintenance</Option>
-            <Option value="RESERVED">Reserved</Option>
-            <Option value="LOST">Lost</Option>
-            <Option value="DISCARDED">Discarded</Option>
-            <Option value="TRANSFERRED">Transferred</Option>
-            <Option value="OBSOLETE">Obsolete</Option>
+          <Select placeholder="Select category">
+            {categories.map((category) => (
+              <Option key={category.id} value={category.id}>
+                {category.name}
+              </Option>
+            ))}
           </Select>
         </Form.Item>
-        {status === "ALLOCATED" && (
-          <Form.Item
-            label="Allocated To"
-            name="allocated_to"
-            rules={[{ required: true, message: "Please select the user allocated the asset!" }]}
-          >
-            <Select placeholder="Select user with the asset">
-              {users.map((user) => (
-                <Option key={user.id} value={user.id}>
-                  {user.first_name} {user.last_name}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        )}
+
         <Form.Item
-          label="Purchase Price"
-          name="purchase_price"
-          rules={[{ required: true, message: "Please enter the purchase price!" }]}
+          label="Asset Requested"
+          name="asset_requested"
+          rules={[{ required: true, message: "Please enter the asset name!" }]}
         >
-          <InputNumber
-            min={0}
-            placeholder="e.g., 550.00"
-            style={{ width: "100%" }}
-          />
+          <Input placeholder="e.g., Laptop" />
         </Form.Item>
 
         <Form.Item
-          label="Current Value"
-          name="current_value"
-          rules={[{ required: true, message: "Please enter the current value!" }]}
+          label="Request Description"
+          name="request_description"
         >
-          <InputNumber
-            min={0}
-            placeholder="e.g., 500.00"
-            style={{ width: "100%" }}
-          />
+          <Input.TextArea placeholder="Provide details about the request" />
         </Form.Item>
 
-        <Form.Item
-          label="Location"
-          name="location"
-          rules={[{ required: true, message: "Please enter the location!" }]}
-        >
-          <Input placeholder="e.g., Graniteside" />
-        </Form.Item>
-
-        <Form.Item
-          label="Acquired Date"
-          name="acquired_date"
-          rules={[{ required: true, message: "Please select the acquired date!" }]}
-        >
-          <DatePicker style={{ width: "100%" }} />
-        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>
-            Add Asset
+            Submit Request
           </Button>
         </Form.Item>
       </Form>
@@ -183,7 +116,6 @@ NewMyAssetRequest.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onSuccess: PropTypes.func.isRequired,
-  category: PropTypes.string.isRequired,
 };
 
 export default NewMyAssetRequest;

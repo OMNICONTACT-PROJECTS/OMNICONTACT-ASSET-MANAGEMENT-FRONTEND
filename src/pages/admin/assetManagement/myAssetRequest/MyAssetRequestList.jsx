@@ -2,7 +2,7 @@ import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import EditAssetRequestItem from "./EditMyAssetRequest";
 import authService from "../../../../services/auth.service";
@@ -31,7 +31,6 @@ const MyAssetRequestList = () => {
     const { id } = useParams();
     const { assetRequestData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetRequestModalState, setEditAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
@@ -48,13 +47,35 @@ const MyAssetRequestList = () => {
     const requestStatusTag = (status) => {
         switch (status) {
             case "PENDING":
-                return <Tag color="gold">{status}</Tag>;
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "APPROVED":
-                return <Tag color="blue">{status}</Tag>;
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "REJECTED":
-                return <Tag color="red">{status}</Tag>;
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            case "ALLOCATED":
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             default:
-                return <Tag>{status}</Tag>;
+                return <Tag>
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
         }
     };
 

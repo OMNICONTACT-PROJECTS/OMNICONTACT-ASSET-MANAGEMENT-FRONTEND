@@ -61,15 +61,35 @@ const AssetRequestList = () => {
   const requestStatusTag = (status) => {
     switch (status) {
       case "PENDING":
-        return <Tag color="gold">{status}</Tag>;
+        return <Tag color="gold">
+          <strong className="border-0 text-light">
+            {status}
+          </strong>
+        </Tag>;
       case "APPROVED":
-        return <Tag color="blue">{status}</Tag>;
+        return <Tag color="blue">
+          <strong className="border-0 text-light">
+            {status}
+          </strong>
+        </Tag>;
       case "REJECTED":
-        return <Tag color="red">{status}</Tag>;
+        return <Tag color="red">
+          <strong className="border-0 text-light">
+            {status}
+          </strong>
+        </Tag>;
       case "ALLOCATED":
-        return <Tag color="green">{status}</Tag>;
+        return <Tag color="green">
+          <strong className="border-0 text-light">
+            {status}
+          </strong>
+        </Tag>;
       default:
-        return <Tag>{status}</Tag>;
+        return <Tag>
+          <strong className="border-0 text-light">
+            {status}
+          </strong>
+        </Tag>;
     }
   };
 
@@ -230,7 +250,7 @@ const AssetRequestList = () => {
     } catch (error) {
       message.error(
         error?.response.data.message ||
-          "Failed to approve request, please try again later"
+        "Failed to approve request, please try again later"
       );
       console.error(error);
     }
