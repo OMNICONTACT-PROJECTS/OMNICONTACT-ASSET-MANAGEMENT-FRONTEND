@@ -1,5 +1,5 @@
 import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
-import { CircleCheckBig, LucideView, SquareCheckBig, Trash2 } from 'lucide-react';
+import { CircleCheckBig, LucideView, SquareCheckBig, Trash2, X } from 'lucide-react';
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
@@ -43,15 +43,35 @@ const AssetRequestList = () => {
     const requestStatusTag = (status) => {
         switch (status) {
             case "PENDING":
-                return <Tag color="gold">{status}</Tag>;
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "APPROVED":
-                return <Tag color="blue">{status}</Tag>;
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "REJECTED":
-                return <Tag color="red">{status}</Tag>;
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "ALLOCATED":
-                return <Tag color="green">{status}</Tag>;
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             default:
-                return <Tag>{status}</Tag>;
+                return <Tag>
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
         }
     };
 
@@ -116,7 +136,7 @@ const AssetRequestList = () => {
             dataIndex: "date_approved",
             key: "date_approved",
             render: (date) =>
-                date ? new Date(date).toLocaleDateString("en-GB") : "Not Approved",
+                date ? new Date(date).toLocaleDateString("en-GB") : <X size={18} />,
         },
         {
             title: "Action",

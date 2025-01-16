@@ -1,4 +1,4 @@
-import { Button, Space, Table, Tooltip, message, Input } from "antd";
+import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { LucideView } from 'lucide-react';
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -80,11 +80,13 @@ const MyAssetAllocationList = () => {
             dataIndex: "",
             key: "status",
             render: () => (
-                <strong
-                    className="p-1 border-0 text-light"
-                >
-                    Allocated
-                </strong>
+                <Tag color="green" className="p-1">
+                    <strong
+                        className="p-1 border-0 text-light"
+                    >
+                        ALLOCATED
+                    </strong>
+                </Tag>
             ),
         },
         {
