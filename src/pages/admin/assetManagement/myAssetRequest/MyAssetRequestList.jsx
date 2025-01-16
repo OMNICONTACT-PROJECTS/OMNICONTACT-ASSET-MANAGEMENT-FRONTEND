@@ -2,7 +2,7 @@ import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import EditAssetRequestItem from "./EditMyAssetRequest";
 import authService from "../../../../services/auth.service";
@@ -31,7 +31,6 @@ const MyAssetRequestList = () => {
     const { id } = useParams();
     const { assetRequestData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetRequestModalState, setEditAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);

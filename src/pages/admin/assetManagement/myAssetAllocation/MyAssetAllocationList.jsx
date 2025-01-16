@@ -1,7 +1,7 @@
 import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { LucideView } from 'lucide-react';
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import authService from "../../../../services/auth.service";
 import assetAllocationsServices from "../../../../services/asset-allocations.services";
 import ViewMyAssetAllocationDetails from "./ViewMyAssetAllocationDetails";
@@ -27,9 +27,7 @@ const MyAssetAllocationList = () => {
     const { allocationData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const navigate = useNavigate();
-    const [viewMyAssetAllocationModalState, setViewMyAssetAllocationModalState] =
-    useState(false);
+    const [viewMyAssetAllocationModalState, setViewMyAssetAllocationModalState] = useState(false);
 
     const handleSearch = () => {
         return allocationData.filter((item) => {
@@ -114,7 +112,7 @@ const MyAssetAllocationList = () => {
     const viewMyAssetAllocation = (record) => {
         setSelectedRecord(record);
         setViewMyAssetAllocationModalState(true);
-      };
+    };
 
     return (
         <>
@@ -138,12 +136,11 @@ const MyAssetAllocationList = () => {
                 columns={allocationTableColumns}
                 rowKey={(record) => record.id}
             />
-            
+
             <ViewMyAssetAllocationDetails
                 visible={viewMyAssetAllocationModalState}
                 onClose={() => setViewMyAssetAllocationModalState(false)}
                 asset={selectedRecord}
-                onSuccess={() => refreshPage()}
             />
         </>
     );
