@@ -8,6 +8,7 @@ import EditAssetRequestItem from "./EditMyAssetRequest";
 import authService from "../../../../services/auth.service";
 import assetRequestsServices from "../../../../services/asset-requests.services";
 import NewMyAssetRequest from "./NewMyAssetRequest";
+import ViewMyAssetRequestDetails from "./ViewMyAssetRequestDetails";
 
 export const MyAssetRequestListLoader = async () => {
     try {
@@ -34,6 +35,8 @@ const MyAssetRequestList = () => {
     const [EditAssetRequestModalState, setEditAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [viewMyAssetRequestModalState, setViewMyAssetRequestModalState] =
+    useState(false);
 
     const handleSearch = () => {
         return assetRequestData.filter((item) => {
@@ -128,7 +131,7 @@ const MyAssetRequestList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewMyAssetRequest(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Request">
@@ -143,6 +146,11 @@ const MyAssetRequestList = () => {
         },
     ];
 
+    const viewMyAssetRequest = (record) => {
+        setSelectedRecord(record);
+        setViewMyAssetRequestModalState(true);
+      };
+
     const EditAssetRequest = (record) => {
         setSelectedRecord(record);
         setEditAssetRequestModalState(true);
@@ -150,7 +158,7 @@ const MyAssetRequestList = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by Requested By"
@@ -175,10 +183,17 @@ const MyAssetRequestList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={assetRequestTableColumns}
                 rowKey={(record) => record.id}
+            />
+            
+            <ViewMyAssetRequestDetails
+                visible={viewMyAssetRequestModalState}
+                onClose={() => setViewMyAssetRequestModalState(false)}
+                asset={selectedRecord}
+                onSuccess={() => refreshPage()}
             />
 
             <NewMyAssetRequest

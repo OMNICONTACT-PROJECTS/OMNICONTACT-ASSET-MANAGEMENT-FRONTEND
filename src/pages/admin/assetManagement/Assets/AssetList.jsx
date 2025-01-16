@@ -8,6 +8,7 @@ import assetsServices from "../../../../services/assets.services";
 // import NewAssetItem from "./NewAsset";
 import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
+import ViewAssetDetails from "./ViewAssetDetails";
 
 export const AssetLoader = async () => {
     try {
@@ -32,6 +33,8 @@ const AssetList = () => {
     const navigate = useNavigate();
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
+    const [viewAssetModalState, setViewAssetModalState] =
+    useState(false);
 
     // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
@@ -135,7 +138,7 @@ const AssetList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewAsset(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Asset">
@@ -179,6 +182,11 @@ const AssetList = () => {
         }
     };
 
+    const viewAsset = (record) => {
+        setSelectedRecord(record);
+        setViewAssetModalState(true);
+      };
+
     const editAsset = (record) => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
@@ -186,7 +194,7 @@ const AssetList = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by asset number"
@@ -217,10 +225,16 @@ const AssetList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+            />
+            <ViewAssetDetails
+                visible={viewAssetModalState}
+                onClose={() => setViewAssetModalState(false)}
+                asset={selectedRecord}
+                onSuccess={() => refreshPage()}
             />
 
             {/* <NewAssetItem
