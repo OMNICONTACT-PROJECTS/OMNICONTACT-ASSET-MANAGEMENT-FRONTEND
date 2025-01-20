@@ -45,14 +45,13 @@ const NewAssetAllocation = ({ visible, onClose, onSuccess, selectedRecord }) => 
     fetchData();
   }, []);
 
-  console.log("selectedRecord: ", selectedRecord)
   const handleCategoryChange = (categoryId) => {
     // Filter assets based on selected category
     const matchingAssets = assets.filter(
       (asset) => asset.category.id === categoryId && asset.status === "AVAILABLE"
     );
     setFilteredAssets(matchingAssets);
-    form.setFieldsValue({ asset: null }); // Reset the asset field
+    form.setFieldsValue({ asset: null });
   };
 
   const handleFormSubmit = async (values) => {
@@ -78,7 +77,7 @@ const NewAssetAllocation = ({ visible, onClose, onSuccess, selectedRecord }) => 
         message.error("Failed to allocate asset, please try again.");
       }
     } catch (error) {
-      message.error("An error occurred while allocating the asset.");
+      message.error(error?.response.data.message || "An error occurred while allocating the asset.");
       console.error(error);
     } finally {
       setLoading(false);

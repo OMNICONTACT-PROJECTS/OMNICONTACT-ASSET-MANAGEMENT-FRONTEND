@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import { Modal, Form, Input, Row, Col, Divider } from "antd";
 
-const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
+const ViewMyAssetRequestDetails = ({ visible, onClose, asset }) => {
   return (
     <Modal
       title={
         <h2 className="text-xl font-bold text-center text-blue-600">
-          Asset Request Details
+          My Asset Request Details
         </h2>
       }
       open={visible}
@@ -317,10 +317,10 @@ const ViewAssetRequestDetails = ({ visible, onClose, asset }) => {
   );
 };
 
-ViewAssetRequestDetails.propTypes = {
+ViewMyAssetRequestDetails.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   asset: PropTypes.object,
 };
 
-export default ViewAssetRequestDetails;
+export default ViewMyAssetRequestDetails;

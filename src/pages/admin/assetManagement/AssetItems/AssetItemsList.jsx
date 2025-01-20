@@ -2,12 +2,13 @@ import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
 import NewAssetItem from "./NewAssetItem";
 import EditAssetItem from "./EditAssetItems";
 import BackButton from "../../../../utils/BackButton";
+import ViewAssetItemsDetails from "./ViewAssetItemsDetails";
 
 export const AssetItemsLoader = async ({ params }) => {
     try {
@@ -31,11 +32,12 @@ const AssetItemsList = () => {
     const { id } = useParams();
     const { assetItemsList } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
 
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [viewAssetItemsModalState, setViewAssetItemsModalState] =
+    useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -56,15 +58,31 @@ const AssetItemsList = () => {
     const getStatusTag = (status) => {
         switch (status) {
             case "AVAILABLE":
-                return <Tag color="blue">{status}</Tag>;
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "ALLOCATED":
-                return <Tag color="green">{status}</Tag>;
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "UNDER_MAINTENANCE":
             case "RESERVED":
             case "TRANSFERRED":
-                return <Tag color="gold">{status}</Tag>;
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             default:
-                return <Tag color="red">{status}</Tag>;
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
         }
     };
 
@@ -137,7 +155,7 @@ const AssetItemsList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewAssetItems(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Asset">
@@ -181,6 +199,11 @@ const AssetItemsList = () => {
         }
     };
 
+    const viewAssetItems = (record) => {
+        setSelectedRecord(record);
+        setViewAssetItemsModalState(true);
+      };
+
     const editAsset = (record) => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
@@ -189,7 +212,7 @@ const AssetItemsList = () => {
     return (
         <>
             <BackButton />
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by asset number"
@@ -214,10 +237,16 @@ const AssetItemsList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+            />
+            <ViewAssetItemsDetails
+                visible={viewAssetItemsModalState}
+                onClose={() => setViewAssetItemsModalState(false)}
+                asset={selectedRecord}
+                 onSuccess={() => refreshPage()}
             />
 
             <NewAssetItem
