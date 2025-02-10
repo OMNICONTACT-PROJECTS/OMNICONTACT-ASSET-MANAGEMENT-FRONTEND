@@ -14,6 +14,10 @@ class AssetService {
         return instance.get(`assets/get-all-by-category-id/${category_id}/`)
     }
 
+    getAllocatedByUserId(user_id) {
+        return instance.get(`assets/get-allocated-by-user-id/${user_id}/`)
+    }
+
     getAll() {
         return instance.get('assets/get-all/')
     }

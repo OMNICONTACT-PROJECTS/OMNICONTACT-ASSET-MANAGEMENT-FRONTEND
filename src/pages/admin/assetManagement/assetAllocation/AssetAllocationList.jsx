@@ -1,12 +1,11 @@
 import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView } from 'lucide-react';
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import authService from "../../../../services/auth.service";
 import assetAllocationsServices from "../../../../services/asset-allocations.services";
 import EditAssetAllocation from "./EditAssetAllocation";
-import NewAssetAllocation from "../assetRequest/NewAssetAllocation";
 import ViewAssetAllocationDetails from "./ViewAssetAllocationDetails";
 
 export const AssetAllocationListLoader = async () => {
@@ -29,12 +28,10 @@ export const AssetAllocationListLoader = async () => {
 const AssetAllocationList = () => {
     const { allocationData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [newAllocationModalVisible, setNewAllocationModalVisible] = useState(false);
     const [viewAssetAllocationModalState, setViewAssetAllocationModalState] =
-    useState(false);
+        useState(false);
 
     const handleSearch = () => {
         return allocationData.filter((item) => {
@@ -121,12 +118,12 @@ const AssetAllocationList = () => {
             ),
         },
     ];
-    
-    
+
+
     const viewAssetAllocation = (record) => {
         setSelectedRecord(record);
         setViewAssetAllocationModalState(true);
-      };
+    };
 
     const editAllocation = (record) => {
         setSelectedRecord(record);
@@ -156,15 +153,9 @@ const AssetAllocationList = () => {
                 rowKey={(record) => record.id}
             />
             <ViewAssetAllocationDetails
-            visible={viewAssetAllocationModalState}
-            onClose={() => setViewAssetAllocationModalState(false)}
-            asset={selectedRecord}
-            onSuccess={() => refreshPage()}
-            />
-
-            <NewAssetAllocation
-                visible={newAllocationModalVisible}
-                onClose={() => setNewAllocationModalVisible(false)}
+                visible={viewAssetAllocationModalState}
+                onClose={() => setViewAssetAllocationModalState(false)}
+                asset={selectedRecord}
                 onSuccess={() => refreshPage()}
             />
 

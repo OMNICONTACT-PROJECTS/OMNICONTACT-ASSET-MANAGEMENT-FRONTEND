@@ -34,7 +34,7 @@ const AssetList = () => {
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
     const [viewAssetModalState, setViewAssetModalState] =
-    useState(false);
+        useState(false);
 
     // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
@@ -200,7 +200,7 @@ const AssetList = () => {
     const viewAsset = (record) => {
         setSelectedRecord(record);
         setViewAssetModalState(true);
-      };
+    };
 
     const editAsset = (record) => {
         setSelectedRecord(record)

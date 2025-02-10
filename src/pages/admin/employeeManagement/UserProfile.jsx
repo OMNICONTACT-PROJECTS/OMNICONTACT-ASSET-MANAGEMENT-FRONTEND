@@ -1,15 +1,11 @@
-import { useState } from "react";
 import {
     Avatar,
     Button,
     Divider,
-    Space,
     Tag,
-    Tooltip,
-    Table,
 } from "antd";
-import { UserOutlined, MailOutlined, PhoneOutlined, EyeOutlined } from "@ant-design/icons";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { UserOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import employeeService from "../../../services/employee.service";
 import authService from "../../../services/auth.service";
 
@@ -17,84 +13,20 @@ export const UserProfileLoader = async () => {
     const id = authService.getUserId()
     try {
         const response = await employeeService.get(id)
-        return {user: response?.data}
+        return { user: response?.data }
     } catch (error) {
         console.log(error)
-        return {user: []}
+        return { user: [] }
     }
 };
 
 
 const UserProfile = () => {
-    const {user} = useLoaderData()
-    const [assetRequests, setAssetRequests] = useState([]);
-    const [assetAllocations, setAssetAllocations] = useState([]);
-    const [allocatedAssets, setAllocatedAssets] = useState([]);
-    const { id } = useParams();
+    const { user } = useLoaderData()
     const navigate = useNavigate();
 
     const profilePicture = user?.profile_picture;
     console.log("user: ", user)
-    const requestTableColumns = [
-        { title: "Category", dataIndex: ["category", "name"], key: "category" },
-        { title: "Request Date", dataIndex: "request_date", key: "request_date" },
-        { title: "Request Status", dataIndex: "request_status", key: "request_status" },
-        { title: "Description", dataIndex: "request_description", key: "request_description" },
-        { title: "Allocation Status", dataIndex: "allocation_status", key: "allocation_status" },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Request">
-                        <Button type="primary" icon={<EyeOutlined />} />
-                    </Tooltip>
-                </Space>
-            ),
-        },
-    ];
-
-    const allocationTableColumns = [
-        { title: "Asset Name", dataIndex: ["asset", "model_name"], key: "asset" },
-        { title: "Asset Number", dataIndex: ["asset", "asset_number"], key: "asset_number" },
-        { title: "Serial Number", dataIndex: ["asset", "serial_number"], key: "serial_number" },
-        { title: "Date Allocated", dataIndex: "date_allocated", key: "date_allocated" },
-        { title: "Return Date", dataIndex: "return_date", key: "return_date" },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Allocation">
-                        <Button type="primary" icon={<EyeOutlined />} />
-                    </Tooltip>
-                </Space>
-            ),
-        },
-    ];
-
-    const allocatedAssetsTableColumns = [
-        { title: "Category", dataIndex: ["category", "name"], key: "category" },
-        { title: "Asset Name", dataIndex: "model_name", key: "asset" },
-        { title: "Asset Number", dataIndex: "asset_number", key: "asset_number" },
-        { title: "Serial Number", dataIndex: "serial_number", key: "serial_number" },
-        { title: "Date Allocated", dataIndex: "date_allocated", key: "date_allocated" },
-        { title: "Location", dataIndex: "location", key: "location" },
-        { title: "Purchase Price", dataIndex: "purchase_price", key: "purchase_price" },
-        { title: "Current Value", dataIndex: "current_value", key: "current_value" },
-        { title: "Acquired Date", dataIndex: "acquired_date", key: "acquired_date" },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (record) => (
-                <Space size="middle">
-                    <Tooltip title="View Allocation">
-                        <Button type="primary" icon={<EyeOutlined />} />
-                    </Tooltip>
-                </Space>
-            ),
-        },
-    ];
 
     return (
         <div className="p-6">
@@ -143,7 +75,7 @@ const UserProfile = () => {
                         { label: "Email", value: user?.company_email, icon: <MailOutlined /> },
                         { label: "Phone Number", value: user?.phone_number, icon: <PhoneOutlined /> },
                         { label: "Personal Email", value: user?.personal_email, icon: <MailOutlined /> },
-                        
+
                     ].map(({ label, value, icon }, idx) => (
                         <div key={idx} className="flex items-center py-2 border-b">
                             <div className="mr-4 text-blue-500">{icon}</div>
@@ -185,40 +117,6 @@ const UserProfile = () => {
                         </div>
                     ))}
                 </div>
-            </div>
-
-            {/* Asset Details Section */}
-            <div className="p-6 mt-6 bg-white rounded-md shadow-lg">
-                <h3 className="mb-4 text-xl font-semibold text-gray-800">Asset Details</h3>
-                <Divider />
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                    <div>
-                        <h4 className="mb-4 text-lg font-medium text-gray-700">Asset Request History</h4>
-                        <Table
-                            columns={requestTableColumns}
-                            dataSource={assetRequests}
-                            rowKey="id"
-                            pagination={{ pageSize: 5 }}
-                        />
-                    </div>
-                    <div>
-                        <h4 className="mb-4 text-lg font-medium text-gray-700">Asset Allocation History</h4>
-                        <Table
-                            columns={allocationTableColumns}
-                            dataSource={assetAllocations}
-                            rowKey="id"
-                            pagination={{ pageSize: 5 }}
-                        />
-                    </div>
-                </div>
-                <Divider />
-                <h4 className="mb-4 text-lg font-medium text-gray-700">Currently Allocated Assets</h4>
-                <Table
-                    columns={allocatedAssetsTableColumns}
-                    dataSource={allocatedAssets}
-                    rowKey="id"
-                    pagination={{ pageSize: 5 }}
-                />
             </div>
 
             {/* Back Button */}
