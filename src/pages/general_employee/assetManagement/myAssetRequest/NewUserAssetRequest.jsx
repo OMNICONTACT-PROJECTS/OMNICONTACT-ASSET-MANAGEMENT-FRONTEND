@@ -1,17 +1,23 @@
-import PropTypes from "prop-types";
-import { Modal, Form, Input, Select, Button, message } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Button,
+  message,
+} from "antd";
 import { useState, useEffect } from "react";
-import assetCategoriesServices from "../../../../services/asset-categories.services";
+import PropTypes from "prop-types";
 import authService from "../../../../services/auth.service";
+import assetCategoriesServices from "../../../../services/asset-categories.services";
 import assetRequestsServices from "../../../../services/asset-requests.services";
 
 const { Option } = Select;
 
-const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
+const NewUserAssetRequest = ({ visible, onClose, onSuccess }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -30,37 +36,28 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    if (asset) {
-      form.setFieldsValue({
-        category: asset.category?.id,
-        asset_requested: asset.asset_requested,
-        request_description: asset.request_description,
-      });
-    }
-  }, [asset, form]);
-
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
       const payload = {
-        category: values.category,
         asset_requested: values.asset_requested,
         request_description: values.request_description,
-        requested_by: asset?.requested_by?.id
+        category: values.category,
+        requested_by: authService.getUserId(),
       };
 
-      const response = await assetRequestsServices.update(asset.id, payload);
+      const response = await assetRequestsServices.create(payload);
 
-      if (response?.status === 200) {
-        message.success("Asset request updated successfully!");
+      if (response?.status === 201) {
+        message.success("Asset request submitted successfully!");
         onSuccess();
+        form.resetFields();
         onClose();
       } else {
-        message.error("Failed to update request, please try again.");
+        message.error("Failed to submit request, please try again.");
       }
     } catch (error) {
-      message.error("An error occurred while updating the request.");
+      message.error("An error occurred while submitting the request.");
       console.error(error);
     } finally {
       setLoading(false);
@@ -69,11 +66,11 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
 
   return (
     <Modal
-      title="Edit Asset Request"
+      title="Request New Asset"
       open={visible}
       onCancel={onClose}
       footer={null}
-      width={600}
+      width={550}
     >
       <Form form={form} layout="vertical" onFinish={handleFormSubmit}>
         <Form.Item
@@ -107,7 +104,7 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading} block>
-            Update Request
+            Submit Request
           </Button>
         </Form.Item>
       </Form>
@@ -115,11 +112,10 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
   );
 };
 
-EditUserAssetRequest.propTypes = {
+NewUserAssetRequest.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  asset: PropTypes.object,
   onSuccess: PropTypes.func.isRequired,
 };
 
-export default EditUserAssetRequest;
+export default NewUserAssetRequest;

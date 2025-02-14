@@ -1,16 +1,12 @@
-import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "antd";
-import { Edit3, LucideView, Trash2 } from 'lucide-react';
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
+import { LucideView } from 'lucide-react';
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
-// import NewAssetItem from "./NewAsset";
-import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
-import ViewAssetDetails from "./ViewAssetDetails";
+import ViewAssetDetails from "./UserViewAssetDetails";
 
-export const AssetLoader = async () => {
+export const UserAssetLoader = async () => {
     try {
         const response = await assetsServices.getAllByOrganisationId(authService.getUserOrganisationId());
 
@@ -27,15 +23,13 @@ export const AssetLoader = async () => {
     }
 };
 
-const AssetList = () => {
+const UserAssetList = () => {
     const { assetData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
     const [viewAssetModalState, setViewAssetModalState] =
         useState(false);
 
-    // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -155,55 +149,14 @@ const AssetList = () => {
                             onClick={() => viewAsset(record)}
                         />
                     </Tooltip>
-                    <Tooltip title="Edit Asset">
-                        <Button
-                            className="p-1 border-0 text-light"
-                            icon={<Edit3 size={18} />}
-                            onClick={() => editAsset(record)}
-                        />
-                    </Tooltip>
-                    <Tooltip title="Delete Asset">
-                        <Popconfirm
-                            title="Delete Asset"
-                            description="Are you sure you want to delete this asset?"
-                            onConfirm={() => deleteAsset(record)}
-                            okText="Yes"
-                            cancelText="No"
-                        >
-                            <Button
-                                type="danger"
-                                icon={<Trash2 size={18} color="red" />}
-                            />
-                        </Popconfirm>
-                    </Tooltip>
                 </Space>
             ),
         },
     ];
 
-    const deleteAsset = async (record) => {
-        try {
-            const response = await assetsServices.delete(record.id);
-            if (response?.status === 204) {
-                message.success("Asset deleted successfully.");
-                refreshPage();
-            } else {
-                message.error("Failed to delete asset.");
-            }
-        } catch (error) {
-            message.error("Failed to delete asset.");
-            console.error(error);
-        }
-    };
-
     const viewAsset = (record) => {
         setSelectedRecord(record);
         setViewAssetModalState(true);
-    };
-
-    const editAsset = (record) => {
-        setSelectedRecord(record)
-        setEditAssetModalState(true)
     };
 
     return (
@@ -220,22 +173,6 @@ const AssetList = () => {
                         Search
                     </Button>
                 </div>
-                <Popconfirm
-                    title="Only bulky upload is done here. To add a single asset, go through asset categories."
-                    // onConfirm={() => setNewAssetModalVisible(true)}
-                    okText="OK"
-                    cancelText="Cancel"
-                >
-                    <Button
-                        type="primary"
-                        style={{ marginRight: "25px" }}
-                    >
-                        <Space>
-                            Bulk Upload Assets
-                            <PlusCircleOutlined />
-                        </Space>
-                    </Button>
-                </Popconfirm>
             </div>
 
             <Table
@@ -248,23 +185,9 @@ const AssetList = () => {
                 visible={viewAssetModalState}
                 onClose={() => setViewAssetModalState(false)}
                 asset={selectedRecord}
-                onSuccess={() => refreshPage()}
-            />
-
-            {/* <NewAssetItem
-                visible={newAssetModalVisible}
-                onClose={() => setNewAssetModalVisible(false)}
-                onSuccess={() => refreshPage()}
-            /> */}
-
-            <EditAssetItem
-                visible={EditAssetModalState}
-                onClose={() => setEditAssetModalState(false)}
-                asset={selectedRecord}
-                onSuccess={() => refreshPage()}
             />
         </>
     );
 };
 
-export default AssetList;
+export default UserAssetList;

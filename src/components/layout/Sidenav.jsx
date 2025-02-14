@@ -23,7 +23,7 @@ const Sidenav = ({ color }) => {
   return (
     <>
       {
-        ROLE === "ADMIN" && (
+        (ROLE === "ADMIN" || ROLE === "IS_SUPPORT") && (
           <Menu className="top-0 left-0" theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
               <span to="/">
@@ -162,7 +162,7 @@ const Sidenav = ({ color }) => {
       }
 
       {
-        ROLE === "IS_SUPPORT" && (
+        ROLE === "USER" && (
           <Menu theme="light" mode="inline" defaultSelectedKeys={["2"]}>
             <Menu.Item className="menu-item-header" key="0">
               <span to="/">
@@ -188,7 +188,7 @@ const Sidenav = ({ color }) => {
               Asset Management
             </Menu.Item>
             <Menu.Item key="9">
-              <NavLink to="/admin/asset-categories">
+              <NavLink to="/user/asset-categories">
                 <span className="icon" style={{ background: page === "asset-categories" ? color : "" }}>
                   <CreditCard color={color} />
                 </span>
@@ -196,11 +196,19 @@ const Sidenav = ({ color }) => {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="8">
-              <NavLink to="/admin/asset-items">
+              <NavLink to="/user/all-assets">
                 <span className="icon" style={{ background: page === "asset-items" ? color : "" }}>
                   <Table color={color} />
                 </span>
-                <span className="label">Asset Items</span>
+                <span className="label">All Assets</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="8">
+              <NavLink to="/user/asset-allocation">
+                <span className="icon" style={{ background: page === "asset-items" ? color : "" }}>
+                  <Table color={color} />
+                </span>
+                <span className="label">Asset Allocations</span>
               </NavLink>
             </Menu.Item>
 
@@ -209,7 +217,7 @@ const Sidenav = ({ color }) => {
               Ticket Management
             </Menu.Item>
             <Menu.Item key="15">
-              <NavLink to="/admin/request-asset">
+              <NavLink to="/user/asset-request">
                 <span className="icon" style={{ background: page === "request-asset" ? color : "" }}>
                   <Users color={color} />
                 </span>
@@ -222,7 +230,7 @@ const Sidenav = ({ color }) => {
               Account Pages
             </Menu.Item>
             <Menu.Item key="21">
-              <NavLink to="/admin/profile">
+              <NavLink to="/user/profile">
                 <span className="icon" style={{ background: page === "profile" ? color : "" }}>
                   <User color={color} />
                 </span>
