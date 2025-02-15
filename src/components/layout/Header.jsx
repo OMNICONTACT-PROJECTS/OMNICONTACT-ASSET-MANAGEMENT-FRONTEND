@@ -93,7 +93,7 @@ const Header = ({
 
   const breadcrumbItems = [
     {
-      title: <NavLink to="/">Pages</NavLink>,
+      title: <NavLink to="/"><strong>Pages</strong></NavLink>,
       key: "pages",
     },
     {

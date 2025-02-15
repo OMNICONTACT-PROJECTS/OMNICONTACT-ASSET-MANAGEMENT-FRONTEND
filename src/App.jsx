@@ -72,8 +72,8 @@ const router = createBrowserRouter([
         loader: EmployeePageLoader
       },
       {
-        path: "/admin/profile",
-        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
+        path: "/profile",
+        element: <UserProfile />,
         loader: UserProfileLoader
       },
       {

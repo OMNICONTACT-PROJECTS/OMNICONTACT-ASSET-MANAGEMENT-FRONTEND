@@ -17,6 +17,10 @@ class EmployeeService {
         return instance.get(`users/get-by-organisation-id/${organisation_id}/`)
     }
 
+    getStatsByOrganisationId(organisation_id) {
+        return instance.get(`users/stats/users/${organisation_id}/`)
+    }
+
     getAllAdministratorsByOrganisationId(organisation_id) {
         return instance.get(`users/administrators/get-by-organisation-id/${organisation_id}/`)
     }

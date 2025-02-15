@@ -9,6 +9,14 @@ class AssetRequestService {
         return instance.get(`asset-requests/get-all-by-organisation-id/${organisation_id}/`)
     }
 
+    getAllStatsByOrganisationId(organisation_id) {
+        return instance.get(`asset-requests/stats/requests/${organisation_id}/`)
+    }
+
+    getGraphStatsByOrganisationIdAndYear(organisation_id, year) {
+        return instance.get(`asset-requests/stats/requests/${organisation_id}/${year}/`)
+    }
+
     getAllByUserId(user_id) {
         return instance.get(`asset-requests/get-all-by-user-id/${user_id}/`)
     }

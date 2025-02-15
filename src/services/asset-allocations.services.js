@@ -9,6 +9,10 @@ class AssetAllocationService {
         return instance.get(`asset-allocations/get-all-by-organisation-id/${organisation_id}/`)
     }
 
+    getAllStatsByOrganisationId(organisation_id) {
+        return instance.get(`asset-allocations/stats/allocations/monthly/${organisation_id}/`)
+    }
+
     getAllByUserId(user_id) {
         return instance.get(`asset-allocations/get-all-by-user-id/${user_id}/`)
     }
