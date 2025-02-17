@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { Card, Col, Row, Typography, Spin } from "antd";
 import { DollarSign, User, ShoppingCart, CheckCircle, Clock, User2Icon, User2, GitPullRequestArrow } from "lucide-react";
-import axios from "axios";  // Import axios
+import employeeService from "../../services/employee.service";
+import authService from "../../services/auth.service";
+import assetsServices from "../../services/assets.services";
+import assetRequestsServices from "../../services/asset-requests.services";
+import assetAllocationsServices from "../../services/asset-allocations.services";
+import EChart from "../../components/chart/EChart";
+import LineChart from "../../components/chart/LineChart";
 
 const { Title } = Typography;
 
@@ -16,11 +22,12 @@ const Home = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
+      const organisation_id = authService.getUserOrganisationId()
       try {
-        const usersRes = await axios.get("https://omni-asset-management-backend.onrender.com/api/v1/users/stats/users/");
-        const assetsRes = await axios.get("https://omni-asset-management-backend.onrender.com/api/v1/assets/stats/assets/");
-        const requestsRes = await axios.get("https://omni-asset-management-backend.onrender.com/api/v1/asset-requests/stats/requests/");
-        const allocationsRes = await axios.get("https://omni-asset-management-backend.onrender.com/api/v1/asset-allocations/stats/allocations/monthly/2025/");
+        const usersRes = await employeeService.getStatsByOrganisationId(organisation_id)
+        const assetsRes = await assetsServices.getAllStatsByOrganisationId(organisation_id)
+        const requestsRes = await assetRequestsServices.getAllStatsByOrganisationId(organisation_id)
+        const allocationsRes = await assetAllocationsServices.getAllStatsByOrganisationId(organisation_id)
 
         setStats({
           users: usersRes.data,
@@ -71,12 +78,15 @@ const Home = () => {
     {
       label: "ALLOCATIONS",
       value: stats.allocations?.reduce((sum, item) => sum + item.total_allocations, 0),
-      details: stats.allocations?.map(item => ({ label: item.month, value: item.total_allocations, icon: <ShoppingCart size={16} /> })) || [],
+      details: stats.allocations?.map(item => ({
+        label: `Year ${item.year}`,
+        value: item.total_allocations,
+        icon: <ShoppingCart size={16} />,
+      })),
       icon: <ShoppingCart size={40} />,
       className: "bnb2",
     }
   ];
-
   return (
     <div>
       {loading ? (
@@ -84,53 +94,50 @@ const Home = () => {
           <Spin size="large" />
         </div>
       ) : (
-        <Row className="rowgap-vbox" gutter={[24, 0]}>
-          {counts.map((count, index) => (
-            <Col key={index} xs={24} sm={24} md={12} lg={6} xl={6} className="mb-24">
-              <Card style={{ backgroundColor: "#002147", color: "red", height: "120px" }} bordered={false} className="criclebox">
-                <div className="number" style={{ marginTop: "-18px" }}>
-                  <Row align="middle" gutter={[24, 0]}>
-                    <Col xs={16} style={{ display: "block" }}>
-                      <span style={{ color: "#cfcbcb" }}>{count.label}</span>
-                      <Title style={{ color: "white", fontWeight: "900" }} level={3}>{count.value}</Title>
-                    </Col>
-                    <Col xs={8}>
-                      <div className="icon-box">{count.icon}</div>
-                    </Col>
-                  </Row>
-                </div>
-                <div style={{ marginTop: "3px", color: "#cfcbcb", display: "flex", justifyContent: "space-between" }}>
-                  {count.details.map((detail, idx) => (
-                    <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      {detail.icon}
-                      <span>{detail.label}:</span><Title style={{ color: "white", fontSize: "20px", fontWeight: "400", marginTop: "8px" }}> {detail.value}</Title>
-                    </div>
-                  ))}
-                </div>
+        <>
+          <Row className="rowgap-vbox" gutter={[15, 0]}>
+            {counts.map((count, index) => (
+              <Col key={index} xs={24} sm={24} md={12} lg={6} xl={6} className="mb-24">
+                <Card style={{ backgroundColor: "#002147", color: "red", height: "120px" }} bordered={false} className="criclebox">
+                  <div className="number" style={{ marginTop: "-18px" }}>
+                    <Row align="middle" gutter={[24, 0]}>
+                      <Col xs={16} style={{ display: "block" }}>
+                        <span style={{ color: "#cfcbcb" }}>{count.label}</span>
+                        <Title style={{ color: "white", fontWeight: "900" }} level={3}>{count.value}</Title>
+                      </Col>
+                      <Col xs={8}>
+                        <div className="icon-box">{count.icon}</div>
+                      </Col>
+                    </Row>
+                  </div>
+                  <div style={{ marginTop: "3px", color: "#cfcbcb", display: "flex", justifyContent: "space-between" }}>
+                    {count.details.map((detail, idx) => (
+                      <div key={idx} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        {detail.icon}
+                        <span>{detail.label}:</span><Title style={{ color: "white", fontSize: "20px", fontWeight: "400", marginTop: "8px" }}> {detail.value}</Title>
+                      </div>
+                    ))}
+                  </div>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+          <Row gutter={[24, 0]} style={{ marginTop: "-10px" }}>
+            <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-10">
+              <Card bordered={false} className="criclebox">
+                <EChart />
               </Card>
             </Col>
-          ))}
-        </Row>
+            <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-10">
+              <Card bordered={false} className="criclebox">
+                <LineChart />
+              </Card>
+            </Col>
+          </Row>
+        </>
       )}
     </div>
   );
 };
 
 export default Home;
-
-
-
-
-{/* <Row gutter={[24, 0]}>
-  <Col xs={24} sm={24} md={12} lg={12} xl={10} className="mb-24">
-    <Card bordered={false} className="h-full criclebox">
-      <Echart />
-    </Card>
-  </Col>
-  <Col xs={24} sm={24} md={12} lg={12} xl={14} className="mb-24">
-    <Card bordered={false} className="h-full criclebox">
-      <LineChart />
-    </Card>
-  </Col>
-</Row> */}
-
