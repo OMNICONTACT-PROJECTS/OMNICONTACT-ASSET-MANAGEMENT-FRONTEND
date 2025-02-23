@@ -15,6 +15,10 @@ class AuthService {
         return instance.post('accounts/change-password/', data)
     }
 
+    ResetPassword(data) {
+        return instance.post('accounts/reset-password/', data)
+    }
+
     verifyToken(data) {
         return instance.post('accounts/token/verify/', data);
     }

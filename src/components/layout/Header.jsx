@@ -17,10 +17,12 @@ import {
   UserOutlined,
   SettingOutlined,
   LogoutOutlined,
+  LockOutlined,
 } from "@ant-design/icons";
 import { NavLink, Link } from "react-router-dom";
 import styled from "styled-components";
 import authService from "../../services/auth.service";
+import ChangePasswordModal from "../../pages/auth/ChangePasswordModal";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -56,6 +58,7 @@ const Header = ({
   const { Title, Text } = Typography;
 
   const [visible, setVisible] = useState(false);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   useEffect(() => {
     console.clear();
@@ -83,7 +86,15 @@ const Header = ({
       ),
     },
     {
-      key: "2",
+      key: '2',
+      label: (
+        <Link onClick={() => setShowChangePasswordModal(true)}>
+          <LockOutlined /> Change Password
+        </Link>
+      ),
+    },
+    {
+      key: "3",
       label: (
         <Link onClick={() => authService.logout()}>
           <LogoutOutlined /> Logout
@@ -201,6 +212,12 @@ const Header = ({
           />
         </Col>
       </Row>
+      <ChangePasswordModal
+        visible={showChangePasswordModal}
+        onCancel={() => {
+          setShowChangePasswordModal(false);
+        }}
+      />
     </>
   );
 };

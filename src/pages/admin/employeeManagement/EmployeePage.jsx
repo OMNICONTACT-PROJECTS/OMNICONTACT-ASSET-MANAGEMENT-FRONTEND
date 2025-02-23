@@ -3,9 +3,11 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined,
     EyeOutlined,
+    LockOutlined,
+    PictureOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Divider, Space, Table, Tag, Tooltip } from "antd";
+import { Avatar, Button, Divider, Dropdown, Menu, message, Popconfirm, Space, Table, Tag, Tooltip } from "antd";
 import { useLoaderData } from "react-router-dom";
 import BackButton from "../../../utils/BackButton";
 import assetRequestsServices from "../../../services/asset-requests.services";
@@ -15,6 +17,8 @@ import { useState } from "react";
 import ViewAssetRequestDetails from "../assetManagement/AssetRequest/ViewAssetRequestDetails";
 import ViewAssetAllocationDetails from "../assetManagement/assetAllocation/ViewAssetAllocationDetails";
 import ViewAssetDetails from "../assetManagement/assets/ViewAssetDetails";
+import authService from "../../../services/auth.service";
+import { ArrowDown } from "lucide-react";
 
 export const EmployeePageLoader = async ({ params }) => {
     const id = params.id;
@@ -269,12 +273,53 @@ const EmployeePage = () => {
         },
     ];
 
+    const handleResetPassword = async () => {
+        try {
+            const response = await authService.ResetPassword({ username: userData?.username });
+            if (response.status === 200) {
+                message.success("Password reset successfully, Please notify user to check email for new password");
+            }
+
+        } catch (error) {
+            console.log(error)
+            message.error("Failed to reset password");
+        }
+    };
+
+    const menu = (
+        <Menu>
+            <Menu.Item icon={<LockOutlined />}>
+                <Popconfirm
+                    title="Are you sure you want to reset the password for the user?"
+                    onConfirm={() => handleResetPassword()}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <a>Reset Password</a>
+                </Popconfirm>
+            </Menu.Item>
+            <Menu.Item icon={<PictureOutlined />}>
+                Change Profile Pic
+            </Menu.Item>
+        </Menu>
+    );
+
+
     return (
         <>
             <BackButton />
 
             <div className="flex justify-between items-center mb-6 mt-1">
                 <h1 className="text-2xl font-semibold text-gray-800">Employee Details</h1>
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <Button
+                        type="primary"
+                        style={{ marginRight: "25px" }}
+                    >
+                        More Actions
+                        <ArrowDown />
+                    </Button>
+                </Dropdown>
             </div>
             <Divider />
 

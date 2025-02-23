@@ -103,77 +103,75 @@ const AuditLogs = () => {
         },
     ];
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
-            <div className="max-w-7xl mx-auto">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6">Audit Logs</h1>
+        <div className="max-w-7xl mx-auto">
+            {/* <h1 className="text-2xl font-bold text-gray-800 mb-6">Audit Logs</h1> */}
 
-                <div className="bg-white rounded-lg shadow-sm p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                        <div className="col-span-1">
-                            <Segmented
-                                options={[
-                                    { label: 'My Audit Logs', value: 'my' },
-                                    { label: 'Other Users Logs', value: 'others' },
-                                ]}
-                                value={filterType}
-                                onChange={(value) => {
-                                    setFilterType(value);
-                                    if (value === 'my') setSelectedUser(null);
-                                }}
-                                block
-                                className="h-10"
-                                style={{ fontWeight: "600" }}
-                            />
-                        </div>
-
-                        <Select
-                            placeholder="Select User"
-                            options={users}
-                            onChange={setSelectedUser}
-                            allowClear
-                            showSearch
-                            disabled={filterType === 'my'}
-                            className="w-full h-10"
-                        />
-
-                        <RangePicker
-                            showTime
-                            onChange={(dates) => setDateRange(dates)}
-                            className="w-full h-10"
-                        />
-
-                        <Search
-                            placeholder="Search actions..."
-                            allowClear
-                            onChange={(e) => setSearchText(e.target.value)}
-                            className="w-full"
-                            size="large"
-                            style={{
-                                height: 15,
+            <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div className="col-span-1">
+                        <Segmented
+                            options={[
+                                { label: 'My Audit Logs', value: 'my' },
+                                { label: 'Other Users Logs', value: 'others' },
+                            ]}
+                            value={filterType}
+                            onChange={(value) => {
+                                setFilterType(value);
+                                if (value === 'my') setSelectedUser(null);
                             }}
+                            block
+                            className="h-10"
+                            style={{ fontWeight: "600" }}
                         />
                     </div>
 
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        rowKey="id"
-                        pagination={{
-                            current: pagination.currentPage,
-                            pageSize: pagination.pageSize,
-                            pageSizeOptions: ['10', '50', '100', '500'],
-                            showSizeChanger: true,
-                            onChange: (page, pageSize) => {
-                                setPagination({
-                                    currentPage: page,
-                                    pageSize: pageSize
-                                });
-                            },
+                    <Select
+                        placeholder="Select User"
+                        options={users}
+                        onChange={setSelectedUser}
+                        allowClear
+                        showSearch
+                        disabled={filterType === 'my'}
+                        className="w-full h-10"
+                    />
+
+                    <RangePicker
+                        showTime
+                        onChange={(dates) => setDateRange(dates)}
+                        className="w-full h-10"
+                    />
+
+                    <Search
+                        placeholder="Search actions..."
+                        allowClear
+                        onChange={(e) => setSearchText(e.target.value)}
+                        className="w-full"
+                        size="large"
+                        style={{
+                            height: 15,
                         }}
-                        scroll={{ x: true }}
-                        bordered
                     />
                 </div>
+
+                <Table
+                    columns={columns}
+                    dataSource={filteredData}
+                    rowKey="id"
+                    pagination={{
+                        current: pagination.currentPage,
+                        pageSize: pagination.pageSize,
+                        pageSizeOptions: ['10', '50', '100', '500'],
+                        showSizeChanger: true,
+                        onChange: (page, pageSize) => {
+                            setPagination({
+                                currentPage: page,
+                                pageSize: pageSize
+                            });
+                        },
+                    }}
+                    scroll={{ x: true }}
+                    bordered
+                />
             </div>
         </div>
     );
