@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
-// import NewAssetItem from "./NewAsset";
+import AssetBulkyUpload from "./AssetBulkyUpload";
 import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
 import ViewAssetDetails from "./ViewAssetDetails";
@@ -35,7 +35,7 @@ const AssetList = () => {
     const [viewAssetModalState, setViewAssetModalState] =
         useState(false);
 
-    // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -222,7 +222,7 @@ const AssetList = () => {
                 </div>
                 <Popconfirm
                     title="Only bulky upload is done here. To add a single asset, go through asset categories."
-                    // onConfirm={() => setNewAssetModalVisible(true)}
+                    onConfirm={() => setNewAssetModalVisible(true)}
                     okText="OK"
                     cancelText="Cancel"
                 >
@@ -251,11 +251,11 @@ const AssetList = () => {
                 onSuccess={() => refreshPage()}
             />
 
-            {/* <NewAssetItem
+            <AssetBulkyUpload
                 visible={newAssetModalVisible}
                 onClose={() => setNewAssetModalVisible(false)}
                 onSuccess={() => refreshPage()}
-            /> */}
+            />
 
             <EditAssetItem
                 visible={EditAssetModalState}

@@ -27,7 +27,6 @@ import UserAssetItemsList, { UserAssetItemsLoader } from "./pages/general_employ
 import UserAssetList, { UserAssetLoader } from "./pages/general_employee/assetManagement/assets/UserAssetList";
 import UserAssetAllocationList, { UserAssetAllocationListLoader } from "./pages/general_employee/assetManagement/myAssetAllocation/UserAssetAllocationList";
 import UserAssetRequestList, { UserAssetRequestListLoader } from "./pages/general_employee/assetManagement/myAssetRequest/UserAssetRequestList";
-import GeneralUserProfile, { GeneralUserProfileLoader } from "./pages/general_employee/GeneralUserProfile";
 
 const router = createBrowserRouter([
   {
@@ -73,7 +72,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <UserProfile />,
+        element: (authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' && authService.getUserRole() !== 'USER') ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
         loader: UserProfileLoader
       },
       {
@@ -139,11 +138,6 @@ const router = createBrowserRouter([
         path: "/user/asset-request",
         element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetRequestList />,
         loader: UserAssetRequestListLoader
-      },
-      {
-        path: "/user/profile",
-        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <GeneralUserProfile />,
-        loader: GeneralUserProfileLoader
       },
     ],
   },

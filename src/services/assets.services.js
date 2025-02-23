@@ -6,6 +6,10 @@ class AssetService {
         return instance.post('assets/', data)
     }
 
+    bulkUploadAssets(data) {
+        return instance.postForm('assets/bulk-upload/', data)
+    }
+
     getAllByOrganisationId(organisation_id) {
         return instance.get(`assets/get-all-by-organisation-id/${organisation_id}/`)
     }

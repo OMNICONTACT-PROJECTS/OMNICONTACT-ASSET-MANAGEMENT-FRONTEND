@@ -150,7 +150,7 @@ const Sidenav = ({ color }) => {
               Account Pages
             </Menu.Item>
             <Menu.Item key="21">
-              <NavLink to="/admin/profile">
+              <NavLink to="/profile">
                 <span className="icon" style={{ background: page === "profile" ? color : "" }}>
                   <User color={color} />
                 </span>
@@ -230,7 +230,7 @@ const Sidenav = ({ color }) => {
               Account Pages
             </Menu.Item>
             <Menu.Item key="21">
-              <NavLink to="/user/profile">
+              <NavLink to="/profile">
                 <span className="icon" style={{ background: page === "profile" ? color : "" }}>
                   <User color={color} />
                 </span>

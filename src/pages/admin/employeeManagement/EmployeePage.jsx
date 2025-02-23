@@ -14,7 +14,7 @@ import assetsServices from "../../../services/assets.services";
 import { useState } from "react";
 import ViewAssetRequestDetails from "../assetManagement/AssetRequest/ViewAssetRequestDetails";
 import ViewAssetAllocationDetails from "../assetManagement/assetAllocation/ViewAssetAllocationDetails";
-import ViewAssetDetails from "../assetManagement/Assets/ViewAssetDetails";
+import ViewAssetDetails from "../assetManagement/assets/ViewAssetDetails";
 
 export const EmployeePageLoader = async ({ params }) => {
     const id = params.id;

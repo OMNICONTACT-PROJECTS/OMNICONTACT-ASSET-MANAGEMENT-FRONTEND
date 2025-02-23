@@ -1,11 +1,10 @@
 import {
     Avatar,
-    Button,
     Divider,
     Tag,
 } from "antd";
 import { UserOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import employeeService from "../../../services/employee.service";
 import authService from "../../../services/auth.service";
 
@@ -23,7 +22,6 @@ export const UserProfileLoader = async () => {
 
 const UserProfile = () => {
     const { user } = useLoaderData()
-    const navigate = useNavigate();
 
     const profilePicture = user?.profile_picture;
     console.log("user: ", user)
@@ -117,13 +115,6 @@ const UserProfile = () => {
                         </div>
                     ))}
                 </div>
-            </div>
-
-            {/* Back Button */}
-            <div className="mt-6">
-                <Button type="primary" onClick={() => navigate(-1)}>
-                    Back
-                </Button>
             </div>
         </div>
     );
