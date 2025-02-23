@@ -87,4 +87,5 @@ const UserHome = () => {
   );
 };
 
+console.clear();
 export default UserHome;

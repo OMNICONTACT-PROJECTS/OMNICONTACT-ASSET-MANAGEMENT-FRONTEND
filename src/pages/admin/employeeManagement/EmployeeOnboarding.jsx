@@ -14,6 +14,7 @@ const EmployeeOnboarding = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.clear();
     getDepartmentData();
   }, []);
 
@@ -169,4 +170,5 @@ const EmployeeOnboarding = () => {
   );
 }
 
+console.clear();
 export default EmployeeOnboarding;

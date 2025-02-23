@@ -212,4 +212,5 @@ const AllDepartmentsView = () => {
   );
 };
 
+console.clear();
 export default AllDepartmentsView;

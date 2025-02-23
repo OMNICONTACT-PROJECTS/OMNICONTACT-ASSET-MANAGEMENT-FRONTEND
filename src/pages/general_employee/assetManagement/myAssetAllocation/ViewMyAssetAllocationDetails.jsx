@@ -216,4 +216,5 @@ ViewUserAssetAllocationDetails.propTypes = {
   asset: PropTypes.object,
 };
 
+console.clear();
 export default ViewUserAssetAllocationDetails;

@@ -234,4 +234,5 @@ const UserAssetRequestList = () => {
     );
 };
 
+console.clear();
 export default UserAssetRequestList;

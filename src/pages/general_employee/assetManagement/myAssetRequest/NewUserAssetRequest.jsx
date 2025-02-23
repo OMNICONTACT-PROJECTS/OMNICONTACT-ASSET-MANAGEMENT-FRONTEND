@@ -20,6 +20,7 @@ const NewUserAssetRequest = ({ visible, onClose, onSuccess }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    console.clear();
     const fetchCategories = async () => {
       try {
         const categoryResponse = await assetCategoriesServices.getAllByOrganisationId(authService.getUserOrganisationId());

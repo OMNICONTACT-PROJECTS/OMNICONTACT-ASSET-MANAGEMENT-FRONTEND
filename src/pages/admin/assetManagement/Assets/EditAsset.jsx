@@ -21,6 +21,7 @@ const EditAsset = ({ visible, onClose, asset, onSuccess }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.clear();
     if (asset) {
       form.setFieldsValue({
         ...asset,

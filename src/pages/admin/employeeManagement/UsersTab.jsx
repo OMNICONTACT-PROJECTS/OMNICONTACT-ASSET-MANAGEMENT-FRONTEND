@@ -35,4 +35,5 @@ const UsersTab = () => {
         </>
     );
 }
+console.clear();
 export default UsersTab;

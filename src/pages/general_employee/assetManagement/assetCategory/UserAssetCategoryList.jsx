@@ -91,4 +91,5 @@ const UserAssetCategoryList = () => {
     );
 };
 
+console.clear();
 export default UserAssetCategoryList;

@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { Modal, Form, Input, Row, Col, Divider } from "antd";
 
 const ViewAssetDetails = ({ visible, onClose, asset }) => {
+  console.clear();
   return (
     <Modal
       title={

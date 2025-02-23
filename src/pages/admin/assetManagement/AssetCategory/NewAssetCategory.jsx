@@ -34,6 +34,7 @@ const NewAssetCategory = ({ open, close }) => {
     }
   };
 
+  console.clear();
   return (
     <Modal
       title="Add New Asset Category"

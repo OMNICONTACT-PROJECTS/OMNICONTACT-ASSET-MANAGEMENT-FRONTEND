@@ -28,6 +28,10 @@ export const AssetLoader = async () => {
 };
 
 const AssetList = () => {
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        pageSize: 10
+    });
     const { assetData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
@@ -205,7 +209,7 @@ const AssetList = () => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
     };
-
+    console.clear();
     return (
         <>
             <div className="flex items-center justify-between mt-2">
@@ -243,6 +247,18 @@ const AssetList = () => {
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+                pagination={{
+                    current: pagination.currentPage,
+                    pageSize: pagination.pageSize,
+                    pageSizeOptions: ['10', '50', '100', '500'],
+                    showSizeChanger: true,
+                    onChange: (page, pageSize) => {
+                        setPagination({
+                            currentPage: page,
+                            pageSize: pageSize
+                        });
+                    },
+                }}
             />
             <ViewAssetDetails
                 visible={viewAssetModalState}

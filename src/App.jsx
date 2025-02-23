@@ -27,6 +27,7 @@ import UserAssetItemsList, { UserAssetItemsLoader } from "./pages/general_employ
 import UserAssetList, { UserAssetLoader } from "./pages/general_employee/assetManagement/assets/UserAssetList";
 import UserAssetAllocationList, { UserAssetAllocationListLoader } from "./pages/general_employee/assetManagement/myAssetAllocation/UserAssetAllocationList";
 import UserAssetRequestList, { UserAssetRequestListLoader } from "./pages/general_employee/assetManagement/myAssetRequest/UserAssetRequestList";
+import AuditLogs from "./pages/admin/audit_logs/AuditLogs";
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,11 @@ const router = createBrowserRouter([
         element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <MyAssetAllocationList />,
         loader: MyAssetAllocationListLoader
       },
+      {
+        path: "/admin/audit-logs",
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AuditLogs />,
+        // loader: AssetLoader
+      },
 
 
       // GENERAL USERS ROUTES
@@ -149,4 +155,5 @@ function App() {
   );
 }
 
+console.clear();
 export default App;

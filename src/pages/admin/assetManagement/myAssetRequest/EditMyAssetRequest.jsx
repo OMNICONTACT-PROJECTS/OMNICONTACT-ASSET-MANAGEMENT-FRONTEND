@@ -122,4 +122,5 @@ EditUserAssetRequest.propTypes = {
   onSuccess: PropTypes.func.isRequired,
 };
 
+console.clear();
 export default EditUserAssetRequest;

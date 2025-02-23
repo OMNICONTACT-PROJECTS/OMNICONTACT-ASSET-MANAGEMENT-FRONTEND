@@ -8,6 +8,7 @@ export const LandingPage = () => {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
+    console.clear();
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };

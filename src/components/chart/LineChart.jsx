@@ -8,7 +8,7 @@ function LineChart() {
 
   return (
     <>
-      <div className="linechart">
+      <div className="linechart" style={{ marginInline: "-15px", marginTop: "-17px", marginBottom: "0px" }}>
         <div>
           <Title level={5}>Active Requests</Title>
           <Paragraph className="lastweek">

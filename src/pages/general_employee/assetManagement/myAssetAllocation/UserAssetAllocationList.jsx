@@ -146,4 +146,5 @@ const UserAssetAllocationList = () => {
     );
 };
 
+console.clear();
 export default UserAssetAllocationList;

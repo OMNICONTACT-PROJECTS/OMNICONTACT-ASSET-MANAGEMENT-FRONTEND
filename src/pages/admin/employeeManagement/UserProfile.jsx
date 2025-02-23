@@ -24,7 +24,6 @@ const UserProfile = () => {
     const { user } = useLoaderData()
 
     const profilePicture = user?.profile_picture;
-    console.log("user: ", user)
 
     return (
         <div className="p-6">
@@ -120,4 +119,5 @@ const UserProfile = () => {
     );
 };
 
+console.clear();
 export default UserProfile;

@@ -217,4 +217,5 @@ const GeneralEmployeeView = () => {
   );
 };
 
+console.clear();
 export default GeneralEmployeeView;

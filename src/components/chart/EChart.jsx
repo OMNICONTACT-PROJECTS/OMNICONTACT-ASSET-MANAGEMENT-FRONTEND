@@ -71,7 +71,7 @@ function EChart() {
   }, []);
 
   return (
-    <div id="chart" style={{ marginInline: "-15px", marginTop: "-17px", marginBottom: "0px", height: "400px" }}>
+    <div id="chart" style={{ marginInline: "-15px", marginTop: "-17px", marginBottom: "0px", height: "425px" }}>
       <Title level={4} style={{ fontWeight: "900" }}><strong>All Assets ({new Date().getFullYear()})</strong></Title>
       {loading ? (
         <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>

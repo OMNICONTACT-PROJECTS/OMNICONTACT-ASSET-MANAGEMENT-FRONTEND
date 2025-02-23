@@ -195,4 +195,5 @@ const UserAssetItemsList = () => {
     );
 };
 
+console.clear();
 export default UserAssetItemsList;

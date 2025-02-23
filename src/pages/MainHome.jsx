@@ -12,4 +12,5 @@ const MainHome = () => {
     )
 }
 
+console.clear();
 export default MainHome;

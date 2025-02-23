@@ -58,7 +58,7 @@ const AssetBulkyUpload = ({ visible, onClose, onSuccess }) => {
     },
     onRemove: () => setFile(null),
   };
-
+  console.clear();
   return (
     <Modal
       title="Bulk Upload Assets"

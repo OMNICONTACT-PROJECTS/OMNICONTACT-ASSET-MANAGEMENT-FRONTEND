@@ -140,4 +140,5 @@ const Home = () => {
   );
 };
 
+console.clear();
 export default Home;

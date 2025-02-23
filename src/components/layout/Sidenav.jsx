@@ -137,11 +137,11 @@ const Sidenav = ({ color }) => {
               Audit Trails
             </Menu.Item>
             <Menu.Item key="18">
-              <NavLink to="/admin/audit-trails">
-                <span className="icon" style={{ background: page === "audit-trails" ? color : "" }}>
+              <NavLink to="/admin/audit-logs">
+                <span className="icon" style={{ background: page === "audit-logs" ? color : "" }}>
                   <FileSearch color={color} />
                 </span>
-                <span className="label">Audit Trails</span>
+                <span className="label">Audit Logs</span>
               </NavLink>
             </Menu.Item>
 
@@ -248,4 +248,5 @@ Sidenav.propTypes = {
   color: PropTypes.string.isRequired,
 };
 
+console.clear();
 export default Sidenav;

@@ -322,4 +322,5 @@ ViewUserAssetRequestDetails.propTypes = {
   asset: PropTypes.object,
 };
 
+console.clear();
 export default ViewUserAssetRequestDetails;

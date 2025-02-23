@@ -430,4 +430,5 @@ const EmployeePage = () => {
     );
 };
 
+console.clear();
 export default EmployeePage;

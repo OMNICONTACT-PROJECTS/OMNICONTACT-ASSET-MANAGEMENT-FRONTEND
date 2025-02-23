@@ -58,6 +58,7 @@ const Header = ({
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    console.clear();
     window.scrollTo(0, 0);
   }, []);
 

@@ -190,4 +190,5 @@ const UserAssetList = () => {
     );
 };
 
+console.clear();
 export default UserAssetList;

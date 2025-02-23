@@ -120,4 +120,5 @@ const GeneralUserProfile = () => {
     );
 };
 
+console.clear();
 export default GeneralUserProfile;

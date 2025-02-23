@@ -305,4 +305,5 @@ UserViewAssetDetails.propTypes = {
   asset: PropTypes.object,
 };
 
+console.clear();
 export default UserViewAssetDetails;

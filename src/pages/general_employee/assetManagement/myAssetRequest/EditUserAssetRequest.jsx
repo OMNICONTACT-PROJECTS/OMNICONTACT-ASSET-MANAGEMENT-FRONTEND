@@ -14,6 +14,7 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
 
 
   useEffect(() => {
+    console.clear();
     const fetchCategories = async () => {
       try {
         const categoryResponse = await assetCategoriesServices.getAllByOrganisationId(authService.getUserOrganisationId());
@@ -31,6 +32,7 @@ const EditUserAssetRequest = ({ visible, onClose, asset, onSuccess }) => {
   }, []);
 
   useEffect(() => {
+    console.clear();
     if (asset) {
       form.setFieldsValue({
         category: asset.category?.id,
