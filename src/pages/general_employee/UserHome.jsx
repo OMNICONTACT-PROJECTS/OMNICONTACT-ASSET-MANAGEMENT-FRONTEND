@@ -18,29 +18,29 @@ const { Title } = Typography;
 const UserHome = () => {
   const counts = [
     {
-      label: "Today’s Tickets",
-      value: "25",
+      label: "Tickets",
+      value: "5",
       change: "+30%",
       icon: <DollarSign />,
       className: "bnb2",
     },
     {
-      label: "Employees",
-      value: "1200",
+      label: "Requests",
+      value: "2",
       change: "+20%",
       icon: <User />,
       className: "bnb2",
     },
     {
-      label: "New Assets",
-      value: "+1,200",
+      label: "Allocations",
+      value: "3",
       change: "-20%",
       icon: <Heart />,
       className: "redtext",
     },
     {
       label: "Approvals",
-      value: "20",
+      value: "3",
       change: "10%",
       icon: <ShoppingCart />,
       className: "bnb2",

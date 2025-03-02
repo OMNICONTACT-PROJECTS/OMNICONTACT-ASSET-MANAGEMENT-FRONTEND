@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Form, Input, Select, Button, message } from 'antd';
+import { Form, Input, Select, Button, message, Popconfirm, Space } from 'antd';
 import './employeeOnboarding.css';
 import { refreshPage } from '../../../common';
 import departmentService from '../../../services/department.service';
 import employeeService from '../../../services/employee.service';
 import authService from '../../../services/auth.service';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import UserBulkyUpload from './UserBulkyUpload';
 
 const { Option } = Select;
 
@@ -12,6 +14,7 @@ const EmployeeOnboarding = () => {
   const [form] = Form.useForm();
   const [departmentData, setDepartmentData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [newUserModalVisible, setNewUserModalVisible] = useState(false);
 
   useEffect(() => {
     console.clear();
@@ -57,6 +60,26 @@ const EmployeeOnboarding = () => {
 
   return (
     <div className="formContainer">
+      <div className="flex items-center justify-between mt-2">
+        <div>
+        </div>
+        <Popconfirm
+          title="Are you sure you want to perform bulk upload of users."
+          onConfirm={() => setNewUserModalVisible(true)}
+          okText="OK"
+          cancelText="Cancel"
+        >
+          <Button
+            type="primary"
+            style={{ marginRight: "25px" }}
+          >
+            <Space>
+              Bulk Upload Users
+              <PlusCircleOutlined />
+            </Space>
+          </Button>
+        </Popconfirm>
+      </div>
       <Form
         form={form}
         layout="vertical"
@@ -166,6 +189,12 @@ const EmployeeOnboarding = () => {
           </Button>
         </Form.Item>
       </Form>
+
+      <UserBulkyUpload
+        visible={newUserModalVisible}
+        onClose={() => setNewUserModalVisible(false)}
+        onSuccess={() => refreshPage()}
+      />
     </div>
   );
 }

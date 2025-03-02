@@ -13,6 +13,10 @@ class EmployeeService {
         return instance.post('users/general-users/', data)
     }
 
+    bulkUploadUsers(data) {
+        return instance.postForm('users/bulk-upload-users/', data)
+    }
+
     getAllByOrganisationId(organisation_id) {
         return instance.get(`users/get-by-organisation-id/${organisation_id}/`)
     }
