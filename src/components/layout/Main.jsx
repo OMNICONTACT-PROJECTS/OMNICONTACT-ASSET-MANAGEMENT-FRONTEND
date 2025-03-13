@@ -141,4 +141,5 @@ function Main() {
   );
 }
 
+console.clear();
 export default Main;

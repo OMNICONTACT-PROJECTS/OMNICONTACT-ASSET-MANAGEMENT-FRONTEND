@@ -104,3 +104,5 @@ export const Error503 = () => (
     Icon={ShieldX}
   />
 );
+
+console.clear();

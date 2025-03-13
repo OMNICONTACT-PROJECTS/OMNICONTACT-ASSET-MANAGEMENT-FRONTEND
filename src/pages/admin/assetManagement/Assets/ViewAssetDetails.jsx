@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { Modal, Form, Input, Row, Col, Divider } from "antd";
 
 const ViewAssetDetails = ({ visible, onClose, asset }) => {
+  console.clear();
   return (
     <Modal
       title={
@@ -128,9 +129,8 @@ const ViewAssetDetails = ({ visible, onClose, asset }) => {
                   }
                 >
                   <Input
-                    value={`${asset?.allocated_to?.first_name || ""} ${
-                      asset?.allocated_to?.last_name || "N/A"
-                    }`}
+                    value={`${asset?.allocated_to?.first_name || ""} ${asset?.allocated_to?.last_name || "N/A"
+                      }`}
                     readOnly
                     style={{
                       backgroundColor: "#f0f7ff",

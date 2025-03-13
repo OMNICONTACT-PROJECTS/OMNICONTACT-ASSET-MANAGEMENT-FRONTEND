@@ -216,4 +216,5 @@ const IsSupportView = () => {
   );
 };
 
+console.clear();
 export default IsSupportView;

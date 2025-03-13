@@ -782,8 +782,8 @@ button.ant-btn.bell strong {
   justify-content: center;
   background: white;
   border-radius: 50%; 
-  width: 50px; 
-  height: 50px; 
+  width: 70px; 
+  height: 70px; 
   color: #002147; 
 }
 
@@ -800,7 +800,6 @@ button.ant-btn.bell strong {
     linear-gradient(62deg, #032057 0%, #013897 53%, #6746fc 100%) 0% 0%
     no-repeat padding-box;
   box-shadow: 0px 4px 6px #0000001f;
-
   border-radius: 8px;
 }
 

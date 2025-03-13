@@ -146,4 +146,5 @@ const MyAssetAllocationList = () => {
     );
 };
 
+console.clear();
 export default MyAssetAllocationList;

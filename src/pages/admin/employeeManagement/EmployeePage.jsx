@@ -3,21 +3,35 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined,
     EyeOutlined,
+    LockOutlined,
+    PictureOutlined,
     UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Divider, Space, Table, Tag, Tooltip } from "antd";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { Avatar, Button, Divider, Dropdown, Menu, message, Popconfirm, Space, Table, Tag, Tooltip } from "antd";
+import { useLoaderData } from "react-router-dom";
 import BackButton from "../../../utils/BackButton";
+import assetRequestsServices from "../../../services/asset-requests.services";
+import assetAllocationsServices from "../../../services/asset-allocations.services";
+import assetsServices from "../../../services/assets.services";
+import { useState } from "react";
+import ViewAssetRequestDetails from "../assetManagement/AssetRequest/ViewAssetRequestDetails";
+import ViewAssetAllocationDetails from "../assetManagement/assetAllocation/ViewAssetAllocationDetails";
+import ViewAssetDetails from "../assetManagement/assets/ViewAssetDetails";
+import authService from "../../../services/auth.service";
+import { ArrowDown } from "lucide-react";
 
 export const EmployeePageLoader = async ({ params }) => {
     const id = params.id;
     try {
         const userResponse = await employeeService.get(id);
+        const assetRequestResponse = await assetRequestsServices.getAllByUserId(id)
+        const assetAllocationResponse = await assetAllocationsServices.getAllByUserId(id)
+        const allocatedAssetResponse = await assetsServices.getAllocatedByUserId(id)
         return {
             userData: userResponse?.data,
-            assetRequests: [],
-            assetAllocations: [],
-            allocatedAssets: []
+            assetRequests: assetRequestResponse?.data,
+            assetAllocations: assetAllocationResponse?.data,
+            allocatedAssets: allocatedAssetResponse?.data
         };
     } catch (e) {
         console.error(e);
@@ -32,42 +46,119 @@ export const EmployeePageLoader = async ({ params }) => {
 
 const EmployeePage = () => {
     const { userData, assetRequests, assetAllocations, allocatedAssets } = useLoaderData();
+    const [viewAssetRequestModalState, setViewAssetRequestModalState] =
+        useState(false);
+    const [selectedRecord, setSelectedRecord] = useState(null);
+    const [viewAssetAllocationModalState, setViewAssetAllocationModalState] =
+        useState(false);
+    const [viewAssetModalState, setViewAssetModalState] =
+        useState(false);
 
     const profilePicture = userData?.profile_picture;
     console.log("profilePicture: " + profilePicture);
+
+    const requestStatusTag = (status) => {
+        switch (status) {
+            case "PENDING":
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            case "APPROVED":
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            case "REJECTED":
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            case "ALLOCATED":
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            default:
+                return <Tag>
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+        }
+    };
+
+    const viewAssetRequest = (record) => {
+        setSelectedRecord(record);
+        setViewAssetRequestModalState(true);
+    };
+
+    const viewAssetAllocation = (record) => {
+        setSelectedRecord(record);
+        setViewAssetAllocationModalState(true);
+    };
+
+    const viewAsset = (record) => {
+        setSelectedRecord(record);
+        setViewAssetModalState(true);
+    };
+
     const requestTableColumns = [
         {
             title: "Category",
             dataIndex: ["category", "name"],
-            key: "category",
+            key: "category_name",
+            render: (name) => <strong>{name}</strong>,
+            sorter: (a, b) => a.category.name.localeCompare(b.category.name),
         },
         {
             title: "Request Date",
             dataIndex: "request_date",
             key: "request_date",
+            sorter: (a, b) => new Date(a.request_date) - new Date(b.request_date),
+            render: (date) => new Date(date).toLocaleDateString("en-GB"),
         },
         {
             title: "Request Status",
             dataIndex: "request_status",
             key: "request_status",
+            filters: [
+                { text: "Pending", value: "PENDING" },
+                { text: "Approved", value: "APPROVED" },
+                { text: "Rejected", value: "REJECTED" },
+            ],
+            onFilter: (value, record) => record.request_status === value,
+            render: (status) => requestStatusTag(status),
         },
         {
-            title: "Description",
-            dataIndex: "request_description",
-            key: "request_description",
+            title: "Date Approved",
+            dataIndex: "date_approved",
+            key: "date_approved",
+            render: (date) =>
+                date ? new Date(date).toLocaleDateString("en-GB") : "Not Approved",
         },
         {
             title: "Allocation Status",
             dataIndex: "allocation_status",
             key: "allocation_status",
+            render: (status) => requestStatusTag(status),
         },
         {
             title: "Actions",
             key: "actions",
             render: (record) => (
                 <Space size="middle">
-                    <Tooltip title="View Request">
-                        <Button type="primary" icon={<EyeOutlined />} />
+                    <Tooltip title="View Request Details">
+                        <Button
+                            className="p-2 border-0"
+                            type="primary"
+                            icon={<EyeOutlined />}
+                            onClick={() => viewAssetRequest(record)}
+                        />
                     </Tooltip>
                 </Space>
             ),
@@ -105,8 +196,13 @@ const EmployeePage = () => {
             key: "actions",
             render: (record) => (
                 <Space size="middle">
-                    <Tooltip title="View Allocation">
-                        <Button type="primary" icon={<EyeOutlined />} />
+                    <Tooltip title="View Details">
+                        <Button
+                            className="p-2 border-0"
+                            type="primary"
+                            icon={<EyeOutlined />}
+                            onClick={() => viewAssetAllocation(record)}
+                        />
                     </Tooltip>
                 </Space>
             ),
@@ -120,7 +216,7 @@ const EmployeePage = () => {
             key: "category",
         },
         {
-            title: "Asset Name",
+            title: "Model Name",
             dataIndex: "model_name",
             key: "asset",
         },
@@ -135,9 +231,9 @@ const EmployeePage = () => {
             key: "serial_number",
         },
         {
-            title: "Date Allocated",
-            dataIndex: "date_allocated",
-            key: "date_allocated",
+            title: "Location",
+            dataIndex: "location",
+            key: "location",
         },
         {
             title: "Location",
@@ -164,13 +260,50 @@ const EmployeePage = () => {
             key: "actions",
             render: (record) => (
                 <Space size="middle">
-                    <Tooltip title="View Allocation">
-                        <Button type="primary" icon={<EyeOutlined />} />
+                    <Tooltip title="View Asset Details">
+                        <Button
+                            className="p-2 border-0"
+                            type="primary"
+                            icon={<EyeOutlined />}
+                            onClick={() => viewAsset(record)}
+                        />
                     </Tooltip>
                 </Space>
             ),
         },
     ];
+
+    const handleResetPassword = async () => {
+        try {
+            const response = await authService.ResetPassword({ username: userData?.username });
+            if (response.status === 200) {
+                message.success("Password reset successfully, Please notify user to check email for new password");
+            }
+
+        } catch (error) {
+            console.log(error)
+            message.error("Failed to reset password");
+        }
+    };
+
+    const menu = (
+        <Menu>
+            <Menu.Item icon={<LockOutlined />}>
+                <Popconfirm
+                    title="Are you sure you want to reset the password for the user?"
+                    onConfirm={() => handleResetPassword()}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <a>Reset Password</a>
+                </Popconfirm>
+            </Menu.Item>
+            <Menu.Item icon={<PictureOutlined />}>
+                Change Profile Pic
+            </Menu.Item>
+        </Menu>
+    );
+
 
     return (
         <>
@@ -178,6 +311,15 @@ const EmployeePage = () => {
 
             <div className="flex justify-between items-center mb-6 mt-1">
                 <h1 className="text-2xl font-semibold text-gray-800">Employee Details</h1>
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <Button
+                        type="primary"
+                        style={{ marginRight: "25px" }}
+                    >
+                        More Actions
+                        <ArrowDown />
+                    </Button>
+                </Dropdown>
             </div>
             <Divider />
 
@@ -284,6 +426,7 @@ const EmployeePage = () => {
                 <div>
                     <h3 className="text-lg font-medium text-gray-700 mb-4 ml-2">Asset Request History</h3>
                     <Table
+                        className='table-responsive'
                         columns={requestTableColumns}
                         dataSource={assetRequests}
                         rowKey="id"
@@ -293,6 +436,7 @@ const EmployeePage = () => {
                 <div>
                     <h3 className="text-lg font-medium text-gray-700 mb-4 ml-2">Asset Allocation History</h3>
                     <Table
+                        className='table-responsive'
                         columns={allocationTableColumns}
                         dataSource={assetAllocations}
                         rowKey="id"
@@ -304,14 +448,32 @@ const EmployeePage = () => {
             <div className="mt-8">
                 <h3 className="text-lg font-medium text-gray-700 mb-4 ml-2">Currently Allocated Assets</h3>
                 <Table
+                    className='table-responsive'
                     columns={allocatedAssetsTableColumns}
                     dataSource={allocatedAssets}
                     rowKey="id"
                     pagination={{ pageSize: 5 }}
                 />
             </div>
+
+            <ViewAssetRequestDetails
+                visible={viewAssetRequestModalState}
+                onClose={() => setViewAssetRequestModalState(false)}
+                asset={selectedRecord}
+            />
+            <ViewAssetAllocationDetails
+                visible={viewAssetAllocationModalState}
+                onClose={() => setViewAssetAllocationModalState(false)}
+                asset={selectedRecord}
+            />
+            <ViewAssetDetails
+                visible={viewAssetModalState}
+                onClose={() => setViewAssetModalState(false)}
+                asset={selectedRecord}
+            />
         </>
     );
 };
 
+console.clear();
 export default EmployeePage;

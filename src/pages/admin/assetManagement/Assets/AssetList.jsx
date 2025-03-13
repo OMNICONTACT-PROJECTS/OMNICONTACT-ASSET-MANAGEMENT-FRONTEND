@@ -2,10 +2,10 @@ import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
-// import NewAssetItem from "./NewAsset";
+import AssetBulkyUpload from "./AssetBulkyUpload";
 import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
 import ViewAssetDetails from "./ViewAssetDetails";
@@ -28,15 +28,18 @@ export const AssetLoader = async () => {
 };
 
 const AssetList = () => {
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        pageSize: 10
+    });
     const { assetData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
     const [viewAssetModalState, setViewAssetModalState] =
-    useState(false);
+        useState(false);
 
-    // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -200,13 +203,13 @@ const AssetList = () => {
     const viewAsset = (record) => {
         setSelectedRecord(record);
         setViewAssetModalState(true);
-      };
+    };
 
     const editAsset = (record) => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
     };
-
+    console.clear();
     return (
         <>
             <div className="flex items-center justify-between mt-2">
@@ -223,7 +226,7 @@ const AssetList = () => {
                 </div>
                 <Popconfirm
                     title="Only bulky upload is done here. To add a single asset, go through asset categories."
-                    // onConfirm={() => setNewAssetModalVisible(true)}
+                    onConfirm={() => setNewAssetModalVisible(true)}
                     okText="OK"
                     cancelText="Cancel"
                 >
@@ -244,6 +247,18 @@ const AssetList = () => {
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+                pagination={{
+                    current: pagination.currentPage,
+                    pageSize: pagination.pageSize,
+                    pageSizeOptions: ['10', '50', '100', '500'],
+                    showSizeChanger: true,
+                    onChange: (page, pageSize) => {
+                        setPagination({
+                            currentPage: page,
+                            pageSize: pageSize
+                        });
+                    },
+                }}
             />
             <ViewAssetDetails
                 visible={viewAssetModalState}
@@ -252,11 +267,11 @@ const AssetList = () => {
                 onSuccess={() => refreshPage()}
             />
 
-            {/* <NewAssetItem
+            <AssetBulkyUpload
                 visible={newAssetModalVisible}
                 onClose={() => setNewAssetModalVisible(false)}
                 onSuccess={() => refreshPage()}
-            /> */}
+            />
 
             <EditAssetItem
                 visible={EditAssetModalState}

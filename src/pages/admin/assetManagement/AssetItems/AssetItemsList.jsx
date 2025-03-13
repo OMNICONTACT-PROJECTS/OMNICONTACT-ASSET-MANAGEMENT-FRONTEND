@@ -35,9 +35,13 @@ const AssetItemsList = () => {
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
 
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        pageSize: 10
+    });
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const [viewAssetItemsModalState, setViewAssetItemsModalState] =
-    useState(false);
+        useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -202,13 +206,13 @@ const AssetItemsList = () => {
     const viewAssetItems = (record) => {
         setSelectedRecord(record);
         setViewAssetItemsModalState(true);
-      };
+    };
 
     const editAsset = (record) => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
     };
-
+    console.clear();
     return (
         <>
             <BackButton />
@@ -241,12 +245,24 @@ const AssetItemsList = () => {
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+                pagination={{
+                    current: pagination.currentPage,
+                    pageSize: pagination.pageSize,
+                    pageSizeOptions: ['10', '50', '100', '500'],
+                    showSizeChanger: true,
+                    onChange: (page, pageSize) => {
+                        setPagination({
+                            currentPage: page,
+                            pageSize: pageSize
+                        });
+                    },
+                }}
             />
             <ViewAssetItemsDetails
                 visible={viewAssetItemsModalState}
                 onClose={() => setViewAssetItemsModalState(false)}
                 asset={selectedRecord}
-                 onSuccess={() => refreshPage()}
+                onSuccess={() => refreshPage()}
             />
 
             <NewAssetItem

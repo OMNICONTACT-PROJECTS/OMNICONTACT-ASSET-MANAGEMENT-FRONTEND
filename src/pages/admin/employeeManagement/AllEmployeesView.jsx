@@ -31,6 +31,10 @@ const AllEmployeesView = () => {
   const [searchText, setSearchText] = useState('');
   const [editEmployeeModal, setEditEmployeeModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    pageSize: 10
+  });
 
   const columns = [
     {
@@ -132,7 +136,7 @@ const AllEmployeesView = () => {
             <Button
               className="p-1 border-0 text-light"
               icon={<LucideView size={18} />}
-            onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
+              onClick={() => navigate(`/admin/employees/${record?.id}/details`)}
             />
           </Tooltip>
           <Tooltip title="Edit Employee">
@@ -199,7 +203,18 @@ const AllEmployeesView = () => {
       <Button onClick={handleSearch} type="primary">
         Search
       </Button>
-      <Table className='table-responsive' columns={columns} dataSource={handleSearch()} />
+      <Table className='table-responsive' columns={columns} dataSource={handleSearch()} pagination={{
+        current: pagination.currentPage,
+        pageSize: pagination.pageSize,
+        pageSizeOptions: ['10', '50', '100', '500'],
+        showSizeChanger: true,
+        onChange: (page, pageSize) => {
+          setPagination({
+            currentPage: page,
+            pageSize: pageSize
+          });
+        },
+      }} />
 
       {/* Edit Employee Modal */}
       <EditEmployee
@@ -211,4 +226,5 @@ const AllEmployeesView = () => {
   );
 };
 
+console.clear();
 export default AllEmployeesView;

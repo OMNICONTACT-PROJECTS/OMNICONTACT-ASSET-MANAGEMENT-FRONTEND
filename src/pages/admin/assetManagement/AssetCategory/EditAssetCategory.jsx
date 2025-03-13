@@ -12,6 +12,7 @@ const EditAssetCategory = ({ open, close, selectedRecord }) => {
   const organisation = authService.getUserOrganisationId();
 
   useEffect(() => {
+    console.clear();
     if (selectedRecord) {
       form.setFieldsValue({
         name: selectedRecord?.name || "",
