@@ -13,6 +13,7 @@ const EditEmployee = ({ open, close, selectedEmployee }) => {
     const [departmentData, setDepartmentData] = useState([]);
 
     useEffect(() => {
+        console.clear();
         getDepartmentData();
     }, []);
 

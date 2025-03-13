@@ -21,6 +21,7 @@ const EditAsset = ({ visible, onClose, asset, onSuccess }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    console.clear();
     if (asset) {
       form.setFieldsValue({
         ...asset,
@@ -168,9 +169,9 @@ const EditAsset = ({ visible, onClose, asset, onSuccess }) => {
 
 EditAsset.propTypes = {
   visible: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired, 
-  asset: PropTypes.object, 
-  onSuccess: PropTypes.func.isRequired, 
+  onClose: PropTypes.func.isRequired,
+  asset: PropTypes.object,
+  onSuccess: PropTypes.func.isRequired,
 };
 
 export default EditAsset;

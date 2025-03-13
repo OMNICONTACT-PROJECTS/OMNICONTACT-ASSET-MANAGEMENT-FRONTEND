@@ -15,4 +15,5 @@ const UnauthorizedAccessErrorPage = () => {
   )
 }
 
+console.clear();
 export default UnauthorizedAccessErrorPage;

@@ -7,6 +7,7 @@ import authService from '../../services/auth.service';
 import useToken from '../../hooks/useToken';
 
 export const LoginPage = () => {
+  console.clear();
   const { setToken } = useToken();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');

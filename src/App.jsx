@@ -22,6 +22,12 @@ import AssetRequestList, { AssetRequestListLoader } from "./pages/admin/assetMan
 import MyAssetRequestList, { MyAssetRequestListLoader } from "./pages/admin/assetManagement/myAssetRequest/MyAssetRequestList";
 import MyAssetAllocationList, { MyAssetAllocationListLoader } from "./pages/admin/assetManagement/myAssetAllocation/MyAssetAllocationList";
 import AssetAllocationList, { AssetAllocationListLoader } from "./pages/admin/assetManagement/assetAllocation/assetAllocationList";
+import UserAssetCategoryList, { UserAssetCategoryLoader } from "./pages/general_employee/assetManagement/assetCategory/UserAssetCategoryList";
+import UserAssetItemsList, { UserAssetItemsLoader } from "./pages/general_employee/assetManagement/assetItems/UserAssetItemsList";
+import UserAssetList, { UserAssetLoader } from "./pages/general_employee/assetManagement/assets/UserAssetList";
+import UserAssetAllocationList, { UserAssetAllocationListLoader } from "./pages/general_employee/assetManagement/myAssetAllocation/UserAssetAllocationList";
+import UserAssetRequestList, { UserAssetRequestListLoader } from "./pages/general_employee/assetManagement/myAssetRequest/UserAssetRequestList";
+import AuditLogs from "./pages/admin/audit_logs/AuditLogs";
 
 const router = createBrowserRouter([
   {
@@ -44,64 +50,100 @@ const router = createBrowserRouter([
         index: true,
         element: <MainHome />
       },
+
+      // ADMIN AND IS_SUPPORT ROUTES
       {
         path: "/admin/employees",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UsersTab />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <UsersTab />,
         loader: AllEmployeesViewLoader
       },
       {
         path: "/admin/departments",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <Departments />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <Departments />,
         loader: AllDepartmentsViewLoader
       },
       {
         path: "/admin/onboarding",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeeOnboarding />
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <EmployeeOnboarding />
       },
       {
         path: "/admin/employees/:id/details",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <EmployeePage />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <EmployeePage />,
         loader: EmployeePageLoader
       },
       {
-        path: "/admin/profile",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
+        path: "/profile",
+        element: (authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' && authService.getUserRole() !== 'USER') ? <UnauthorizedAccessErrorPage /> : <UserProfile />,
         loader: UserProfileLoader
       },
       {
         path: "/admin/asset-categories",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetCategoryList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AssetCategoryList />,
         loader: AssetCategoryLoader
       },
       {
         path: "/admin/asset-category/:id/asset-items",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetItemsList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AssetItemsList />,
         loader: AssetItemsLoader
       },
       {
         path: "/admin/assets",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AssetList />,
         loader: AssetLoader
       },
       {
         path: "/admin/asset-request",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetRequestList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AssetRequestList />,
         loader: AssetRequestListLoader
       },
       {
         path: "/admin/asset-allocations",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <AssetAllocationList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AssetAllocationList />,
         loader: AssetAllocationListLoader
       },
       {
         path: "/admin/my-asset-requests",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <MyAssetRequestList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <MyAssetRequestList />,
         loader: MyAssetRequestListLoader
       },
       {
         path: "/admin/my-asset-allocation",
-        element: authService.getUserRole() !== 'ADMIN' ? <UnauthorizedAccessErrorPage /> : <MyAssetAllocationList />,
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <MyAssetAllocationList />,
         loader: MyAssetAllocationListLoader
+      },
+      {
+        path: "/admin/audit-logs",
+        element: authService.getUserRole() !== 'ADMIN' && authService.getUserRole() !== 'IS_SUPPORT' ? <UnauthorizedAccessErrorPage /> : <AuditLogs />,
+        // loader: AssetLoader
+      },
+
+
+      // GENERAL USERS ROUTES
+
+      {
+        path: "/user/asset-categories",
+        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetCategoryList />,
+        loader: UserAssetCategoryLoader
+      },
+      {
+        path: "/user/asset-category/:id/asset-items",
+        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetItemsList />,
+        loader: UserAssetItemsLoader
+      },
+      {
+        path: "/user/all-assets",
+        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetList />,
+        loader: UserAssetLoader
+      },
+      {
+        path: "/user/asset-allocation",
+        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetAllocationList />,
+        loader: UserAssetAllocationListLoader
+      },
+      {
+        path: "/user/asset-request",
+        element: authService.getUserRole() !== 'USER' ? <UnauthorizedAccessErrorPage /> : <UserAssetRequestList />,
+        loader: UserAssetRequestListLoader
       },
     ],
   },
@@ -113,4 +155,5 @@ function App() {
   );
 }
 
+console.clear();
 export default App;

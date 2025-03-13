@@ -23,6 +23,7 @@ const NewAssetItem = ({ visible, onClose, onSuccess, category }) => {
   const [status, setStatus] = useState("");
 
   useEffect(() => {
+    console.clear();
     const fetchUsers = async () => {
       try {
         const response = await employeeService.getAll();
