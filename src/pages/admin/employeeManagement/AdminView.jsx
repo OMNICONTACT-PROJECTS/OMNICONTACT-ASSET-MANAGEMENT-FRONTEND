@@ -30,6 +30,7 @@ const AdminView = () => {
   };
 
   useEffect(() => {
+    console.clear();
     fetchAdminData();
   }, []);
 

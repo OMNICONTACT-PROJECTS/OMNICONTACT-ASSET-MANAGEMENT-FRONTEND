@@ -265,7 +265,8 @@ const AssetRequestList = () => {
     setSelectedRecord(record);
     setAllocateAssetModalState(true);
   };
-
+  
+  console.clear();
   return (
     <>
       <div className="flex items-center justify-between mt-2">

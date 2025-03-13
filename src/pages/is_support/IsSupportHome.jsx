@@ -88,4 +88,5 @@ const IsSupportHome = () => {
   );
 };
 
+console.clear();
 export default IsSupportHome;

@@ -1,13 +1,13 @@
 const lineChart = {
   series: [
     {
-      name: "Mobile apps",
-      data: [350, 40, 300, 220, 500, 250, 400, 230, 500],
+      name: "Approved",
+      data: [5, 0, 0, 4, 0, 0, 3, 0, 2],
       offsetY: 0,
     },
     {
-      name: "Websites",
-      data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+      name: "Pending",
+      data: [3, 2, 4, 1, 2, 1, 4, 3, 4],
       offsetY: 0,
     },
   ],

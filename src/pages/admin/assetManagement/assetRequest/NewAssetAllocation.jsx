@@ -23,6 +23,7 @@ const NewAssetAllocation = ({ visible, onClose, onSuccess, selectedRecord }) => 
   const [filteredAssets, setFilteredAssets] = useState([]);
 
   useEffect(() => {
+    console.clear();
     const fetchData = async () => {
       try {
         const response = await assetsServices.getAllByOrganisationId(

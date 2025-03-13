@@ -1,15 +1,16 @@
 import authService from '../services/auth.service'
 import Home from './admin/Home'
-import IsSupportHome from './is_support/IsSupportHome'
+import UserHome from './general_employee/UserHome'
 
 const MainHome = () => {
     const ROLE = authService.getUserRole()
     return (
         <>
-            {ROLE === "ADMIN" && <Home />}
-            {ROLE === "IS_SUPPORT" && <IsSupportHome />}
+            {(ROLE === "ADMIN" || ROLE === "IS_SUPPORT") && <Home />}
+            {ROLE === "USER" && <UserHome />}
         </>
     )
 }
 
+console.clear();
 export default MainHome;
