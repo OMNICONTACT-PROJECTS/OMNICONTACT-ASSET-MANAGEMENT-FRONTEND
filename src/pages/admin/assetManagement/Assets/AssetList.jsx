@@ -2,12 +2,13 @@ import { Button, Popconfirm, Space, Table, Tooltip, message, Input, Tag } from "
 import { Edit3, LucideView, Trash2 } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import assetsServices from "../../../../services/assets.services";
-// import NewAssetItem from "./NewAsset";
+import AssetBulkyUpload from "./AssetBulkyUpload";
 import EditAssetItem from "./EditAsset";
 import authService from "../../../../services/auth.service";
+import ViewAssetDetails from "./ViewAssetDetails";
 
 export const AssetLoader = async () => {
     try {
@@ -27,13 +28,18 @@ export const AssetLoader = async () => {
 };
 
 const AssetList = () => {
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        pageSize: 10
+    });
     const { assetData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetModalState, setEditAssetModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null)
+    const [viewAssetModalState, setViewAssetModalState] =
+        useState(false);
 
-    // const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
     const statusFilters = [
         "AVAILABLE",
         "ALLOCATED",
@@ -54,18 +60,33 @@ const AssetList = () => {
     const getStatusTag = (status) => {
         switch (status) {
             case "AVAILABLE":
-                return <Tag color="blue">{status}</Tag>;
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "ALLOCATED":
-                return <Tag color="green">{status}</Tag>;
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "UNDER_MAINTENANCE":
             case "RESERVED":
             case "TRANSFERRED":
-                return <Tag color="gold">{status}</Tag>;
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             default:
-                return <Tag color="red">{status}</Tag>;
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
         }
     };
-
 
     const assetItemsTableColumns = [
         {
@@ -135,7 +156,7 @@ const AssetList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewAsset(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Asset">
@@ -179,14 +200,19 @@ const AssetList = () => {
         }
     };
 
+    const viewAsset = (record) => {
+        setSelectedRecord(record);
+        setViewAssetModalState(true);
+    };
+
     const editAsset = (record) => {
         setSelectedRecord(record)
         setEditAssetModalState(true)
     };
-
+    console.clear();
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by asset number"
@@ -200,7 +226,7 @@ const AssetList = () => {
                 </div>
                 <Popconfirm
                     title="Only bulky upload is done here. To add a single asset, go through asset categories."
-                    // onConfirm={() => setNewAssetModalVisible(true)}
+                    onConfirm={() => setNewAssetModalVisible(true)}
                     okText="OK"
                     cancelText="Cancel"
                 >
@@ -217,17 +243,35 @@ const AssetList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={assetItemsTableColumns}
                 rowKey={(record) => record.id}
+                pagination={{
+                    current: pagination.currentPage,
+                    pageSize: pagination.pageSize,
+                    pageSizeOptions: ['10', '50', '100', '500'],
+                    showSizeChanger: true,
+                    onChange: (page, pageSize) => {
+                        setPagination({
+                            currentPage: page,
+                            pageSize: pageSize
+                        });
+                    },
+                }}
+            />
+            <ViewAssetDetails
+                visible={viewAssetModalState}
+                onClose={() => setViewAssetModalState(false)}
+                asset={selectedRecord}
+                onSuccess={() => refreshPage()}
             />
 
-            {/* <NewAssetItem
+            <AssetBulkyUpload
                 visible={newAssetModalVisible}
                 onClose={() => setNewAssetModalVisible(false)}
                 onSuccess={() => refreshPage()}
-            /> */}
+            />
 
             <EditAssetItem
                 visible={EditAssetModalState}

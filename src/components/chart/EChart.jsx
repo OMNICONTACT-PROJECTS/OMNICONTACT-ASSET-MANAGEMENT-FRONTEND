@@ -1,62 +1,95 @@
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { Row, Col, Typography } from "antd";
-import eChart from "./configs/eChart";
+import { Typography, Spin, Alert } from "antd";
+import assetsServices from "../../services/assets.services";
+import authService from "../../services/auth.service";
+
+const { Title } = Typography;
 
 function EChart() {
-  const { Title, Paragraph } = Typography;
+  const [chartData, setChartData] = useState({
+    series: [{ name: "Assets", data: [] }],
+    options: {
+      chart: {
+        type: "bar",
+        width: "100%",
+        height: "auto",
+        toolbar: { show: false },
+      },
+      plotOptions: {
+        bar: { horizontal: false, columnWidth: "55%", borderRadius: 5 },
+      },
+      dataLabels: { enabled: false },
+      stroke: { show: true, width: 1, colors: ["transparent"] },
+      grid: { show: true, borderColor: "#ccc", strokeDashArray: 2 },
+      xaxis: {
+        categories: [],
+        title: { text: "Months", style: { color: "#fff", fontSize: "14px" } },
+        labels: { style: { colors: "#fff" } },
+      },
+      yaxis: {
+        title: { text: "Total Assets", style: { color: "#fff", fontSize: "14px" } },
+        labels: { style: { colors: "#fff" } },
+      },
+      tooltip: {
+        y: { formatter: (val) => val },
+      },
+    },
+  });
 
-  const items = [
-    {
-      Title: "1500",
-      user: "All Users",
-    },
-    {
-      Title: "Employees",
-      user: "1200",
-    },
-    {
-      Title: "10",
-      user: "aDMINS",
-    },
-    {
-      Title: "1082",
-      user: "Assets",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      const organisation_id = authService.getUserOrganisationId();
+      const year = new Date().getFullYear();
+
+      try {
+        const response = await assetsServices.getGraphStatsByOrganisationIdAndYear(organisation_id, year);
+        const data = response.data;
+
+        const months = data.map((item) => item.month);
+        const assetValues = data.map((item) => item.total_assets);
+
+        setChartData({
+          series: [{ name: "Assets", data: assetValues }],
+          options: {
+            ...chartData.options,
+            xaxis: { ...chartData.options.xaxis, categories: months },
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+        setError("Failed to load chart data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChartData();
+  }, []);
 
   return (
-    <>
-      <div id="chart">
-        <Title level={5}>All Assets</Title>
+    <div id="chart" style={{ marginInline: "-15px", marginTop: "-17px", marginBottom: "0px", height: "425px" }}>
+      <Title level={4} style={{ fontWeight: "900" }}><strong>All Assets ({new Date().getFullYear()})</strong></Title>
+      {loading ? (
+        <div style={{ display: "flex", justifyContent: "center", height: "100vh" }}>
+          <Spin size="small" />
+        </div>
+      ) : error ? (
+        <Alert message={error} type="error" showIcon />
+      ) : (
         <ReactApexChart
           className="bar-chart"
-          options={eChart.options}
-          series={eChart.series}
+          options={chartData.options}
+          series={chartData.series}
           type="bar"
           height={360}
+          style={{ marginInline: "-3px" }}
         />
-      </div>
-      {/* <div className="chart-vistior">
-        <Title level={5}>All Users</Title>
-        <Paragraph className="lastweek">
-          than last week <span className="bnb2">+30%</span>
-        </Paragraph>
-        <Paragraph className="lastweek">
-          We have created multiple options for you to put together and customise
-          into pixel perfect pages.
-        </Paragraph>
-        <Row gutter>
-          {items.map((v, index) => (
-            <Col xs={6} xl={6} sm={6} md={6} key={index}>
-              <div className="chart-visitor-count">
-                <Title level={4}>{v.Title}</Title>
-                <span>{v.user}</span>
-              </div>
-            </Col>
-          ))}
-        </Row>
-      </div> */}
-    </>
+      )}
+    </div>
   );
 }
 

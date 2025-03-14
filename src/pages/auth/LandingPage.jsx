@@ -8,6 +8,7 @@ export const LandingPage = () => {
   const [isScrolled, setIsScrolled] = React.useState(false);
 
   React.useEffect(() => {
+    console.clear();
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -51,7 +52,7 @@ export const LandingPage = () => {
             OmniContact Asset Management
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto">
-            Intelligent Asset Management System for transforming asset tracting,
+            Intelligent Asset Management System for transforming asset tracking,
             streamlining operations, reducing costs and boosting efficiency
           </p>
           <button

@@ -76,4 +76,5 @@ EditDepartment.propTypes = {
   onSave: PropTypes.func.isRequired,
 };
 
+console.clear();
 export default EditDepartment;

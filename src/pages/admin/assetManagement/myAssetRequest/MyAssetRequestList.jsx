@@ -2,12 +2,13 @@ import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView } from 'lucide-react';
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { useLoaderData, useNavigate, useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import EditAssetRequestItem from "./EditMyAssetRequest";
 import authService from "../../../../services/auth.service";
 import assetRequestsServices from "../../../../services/asset-requests.services";
 import NewMyAssetRequest from "./NewMyAssetRequest";
+import ViewMyAssetRequestDetails from "./ViewMyAssetRequestDetails";
 
 export const MyAssetRequestListLoader = async () => {
     try {
@@ -30,10 +31,11 @@ const MyAssetRequestList = () => {
     const { id } = useParams();
     const { assetRequestData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [EditAssetRequestModalState, setEditAssetRequestModalState] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [newAssetModalVisible, setNewAssetModalVisible] = useState(false);
+    const [viewMyAssetRequestModalState, setViewMyAssetRequestModalState] =
+    useState(false);
 
     const handleSearch = () => {
         return assetRequestData.filter((item) => {
@@ -45,13 +47,35 @@ const MyAssetRequestList = () => {
     const requestStatusTag = (status) => {
         switch (status) {
             case "PENDING":
-                return <Tag color="gold">{status}</Tag>;
+                return <Tag color="gold">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "APPROVED":
-                return <Tag color="blue">{status}</Tag>;
+                return <Tag color="blue">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             case "REJECTED":
-                return <Tag color="red">{status}</Tag>;
+                return <Tag color="red">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
+            case "ALLOCATED":
+                return <Tag color="green">
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
             default:
-                return <Tag>{status}</Tag>;
+                return <Tag>
+                    <strong className="border-0 text-light">
+                        {status}
+                    </strong>
+                </Tag>;
         }
     };
 
@@ -128,7 +152,7 @@ const MyAssetRequestList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewMyAssetRequest(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Request">
@@ -143,6 +167,11 @@ const MyAssetRequestList = () => {
         },
     ];
 
+    const viewMyAssetRequest = (record) => {
+        setSelectedRecord(record);
+        setViewMyAssetRequestModalState(true);
+      };
+
     const EditAssetRequest = (record) => {
         setSelectedRecord(record);
         setEditAssetRequestModalState(true);
@@ -150,7 +179,7 @@ const MyAssetRequestList = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by Requested By"
@@ -175,10 +204,17 @@ const MyAssetRequestList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={assetRequestTableColumns}
                 rowKey={(record) => record.id}
+            />
+            
+            <ViewMyAssetRequestDetails
+                visible={viewMyAssetRequestModalState}
+                onClose={() => setViewMyAssetRequestModalState(false)}
+                asset={selectedRecord}
+                onSuccess={() => refreshPage()}
             />
 
             <NewMyAssetRequest

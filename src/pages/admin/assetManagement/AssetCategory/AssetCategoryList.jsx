@@ -139,7 +139,7 @@ const AssetCategoryList = () => {
         setSelectedRecord(record)
         setEditAssetCategoryModalState(true)
     }
-
+    console.clear();
     return (
         <>
             <div className="flex justify-between items-center">

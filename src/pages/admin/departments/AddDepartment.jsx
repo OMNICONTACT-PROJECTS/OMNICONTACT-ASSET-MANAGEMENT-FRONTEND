@@ -68,4 +68,5 @@ AddDepartment.propTypes = {
   onAdd: PropTypes.func.isRequired,
 };
 
+console.clear();
 export default AddDepartment;

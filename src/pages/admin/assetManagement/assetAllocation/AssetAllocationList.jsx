@@ -1,12 +1,12 @@
-import { Button, Space, Table, Tooltip, message, Input } from "antd";
+import { Button, Space, Table, Tooltip, message, Input, Tag } from "antd";
 import { Edit3, LucideView } from 'lucide-react';
 import { useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { refreshPage } from "../../../../common";
 import authService from "../../../../services/auth.service";
 import assetAllocationsServices from "../../../../services/asset-allocations.services";
 import EditAssetAllocation from "./EditAssetAllocation";
-import NewAssetAllocation from "../assetRequest/NewAssetAllocation";
+import ViewAssetAllocationDetails from "./ViewAssetAllocationDetails";
 
 export const AssetAllocationListLoader = async () => {
     try {
@@ -28,10 +28,10 @@ export const AssetAllocationListLoader = async () => {
 const AssetAllocationList = () => {
     const { allocationData } = useLoaderData();
     const [searchText, setSearchText] = useState("");
-    const navigate = useNavigate();
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
-    const [newAllocationModalVisible, setNewAllocationModalVisible] = useState(false);
+    const [viewAssetAllocationModalState, setViewAssetAllocationModalState] =
+        useState(false);
 
     const handleSearch = () => {
         return allocationData.filter((item) => {
@@ -39,6 +39,7 @@ const AssetAllocationList = () => {
             return fullName.includes(searchText.toLowerCase());
         });
     };
+
 
     const allocationTableColumns = [
         {
@@ -86,11 +87,11 @@ const AssetAllocationList = () => {
             dataIndex: "",
             key: "status",
             render: () => (
-                <strong
-                    className="p-1 border-0 text-light"
-                >
-                    Allocated
-                </strong>
+                <Tag color="green">
+                    <strong className="border-0 text-light">
+                        ALLOCATED
+                    </strong>
+                </Tag>
             ),
         },
         {
@@ -103,7 +104,7 @@ const AssetAllocationList = () => {
                         <Button
                             className="p-1 border-0 text-light"
                             icon={<LucideView size={18} />}
-                            onClick={() => navigate("#")}
+                            onClick={() => viewAssetAllocation(record)}
                         />
                     </Tooltip>
                     <Tooltip title="Edit Allocation">
@@ -118,6 +119,12 @@ const AssetAllocationList = () => {
         },
     ];
 
+
+    const viewAssetAllocation = (record) => {
+        setSelectedRecord(record);
+        setViewAssetAllocationModalState(true);
+    };
+
     const editAllocation = (record) => {
         setSelectedRecord(record);
         setEditModalVisible(true);
@@ -125,7 +132,7 @@ const AssetAllocationList = () => {
 
     return (
         <>
-            <div className="flex justify-between items-center mt-2">
+            <div className="flex items-center justify-between mt-2">
                 <div>
                     <Input
                         placeholder="Search by Allocated To"
@@ -140,15 +147,15 @@ const AssetAllocationList = () => {
             </div>
 
             <Table
-                className="table-responsive mt-3"
+                className="mt-3 table-responsive"
                 dataSource={handleSearch()}
                 columns={allocationTableColumns}
                 rowKey={(record) => record.id}
             />
-
-            <NewAssetAllocation
-                visible={newAllocationModalVisible}
-                onClose={() => setNewAllocationModalVisible(false)}
+            <ViewAssetAllocationDetails
+                visible={viewAssetAllocationModalState}
+                onClose={() => setViewAssetAllocationModalState(false)}
+                asset={selectedRecord}
                 onSuccess={() => refreshPage()}
             />
 

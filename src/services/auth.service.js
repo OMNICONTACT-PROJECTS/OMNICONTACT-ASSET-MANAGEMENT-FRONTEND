@@ -1,10 +1,10 @@
 import instance from "../api";
 import { jwtDecode } from "jwt-decode";
-import { RENDER_URL } from "../apiConfig";
+import { API_URL } from "../apiConfig";
 
 class AuthService {
     login(data) {
-        return instance.post(`${RENDER_URL}accounts/token/`, data)
+        return instance.post(`${API_URL}accounts/token/`, data)
     }
 
     verifyPassword(data) {
@@ -13,6 +13,10 @@ class AuthService {
 
     changePassword(data) {
         return instance.post('accounts/change-password/', data)
+    }
+
+    ResetPassword(data) {
+        return instance.post('accounts/reset-password/', data)
     }
 
     verifyToken(data) {
