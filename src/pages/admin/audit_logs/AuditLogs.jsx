@@ -25,7 +25,7 @@ const AuditLogs = () => {
 
 
     useEffect(() => {
-        console.clear();
+        // console.clear();
         const fetchLogs = async () => {
             try {
                 const res = await auditLogsService.getAllByOrganisationId(authService.getUserOrganisationId());
