@@ -17,15 +17,15 @@ const AuditLogs = () => {
     const [dateRange, setDateRange] = useState(null);
     const [searchText, setSearchText] = useState('');
     const [filterType, setFilterType] = useState('my');
-    const [currentUserId] = useState(1);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         pageSize: 10
     });
 
+    const currentUserId = authService.getUserId()
 
     useEffect(() => {
-        // console.clear();
+        console.clear();
         const fetchLogs = async () => {
             try {
                 const res = await auditLogsService.getAllByOrganisationId(authService.getUserOrganisationId());
@@ -104,8 +104,6 @@ const AuditLogs = () => {
     ];
     return (
         <div className="max-w-7xl mx-auto">
-            {/* <h1 className="text-2xl font-bold text-gray-800 mb-6">Audit Logs</h1> */}
-
             <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                     <div className="col-span-1">
